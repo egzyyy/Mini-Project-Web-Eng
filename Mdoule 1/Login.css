@@ -83,7 +83,7 @@ img.avatar {
 .container label {
   font-weight: bold;
   display: block;
-  margin-bottom: 10px;
+  padding-top: 15px;
 }
 
 .container input[type="text"],
@@ -114,7 +114,7 @@ img.avatar {
 .container button {
   width: 100%;
   padding: 14px 20px;
-  background-color: #04AA6D;
+  background-color: #3571ff;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -122,7 +122,7 @@ img.avatar {
 }
 
 .container button:hover {
-  background-color: #039f5b;
+  background-color: #1c04f3;
 }
 
 .container input[type="checkbox"] {
@@ -130,8 +130,7 @@ img.avatar {
 }
 
 .container .psw {
-  float: right;
-  padding-top: 16px;
+  text-align: right;
 }
 
 

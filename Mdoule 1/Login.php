@@ -1,79 +1,59 @@
 <?php
-
+session_start();
+include('db.php');
 include('../header/home.php');
 
-// Include database connection file
-include('db.php');
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
-    // Get form data
-    $uname = $_POST['U_Username'];
-    $password = $_POST['U_Password'];
-    $type = $_POST['U_Type'];
-
-    // Prepare and execute the insert query
-    $query = "INSERT INTO user (U_Username, U_Password, U_Type)
-              VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssssssss", $uname, $password, $type);
-
-    if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>New user added successfully!</div>";
-    } else {
-        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
-    }
-
-    // Close the statement
-    $stmt->close();
+function validate($data){
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data; // Corrected variable name from 'data' to '$data'
 }
 
-// Close the database connection
-$link->close();
+if(isset($_POST['uname']) && isset($_POST['password']) && isset($_POST['type'])){
+
+    $uname = validate($_POST['uname']);
+    $password = validate($_POST['password']);
+    $type = validate($_POST['type']);
+
+    if(empty($uname)){
+        header("Location: ../index.php?error=Username is required");
+        exit();
+    }
+    else if(empty($password)){
+        header("Location: ../index.php?error=Password is required");
+        exit();
+    }
+    else if(empty($type)){
+        header("Location: ../index.php?error=Type is required");
+        exit();
+    }
+
+    $sql = "SELECT * FROM user WHERE U_Username='$uname' AND U_Password='$password' AND U_Type='$type'";
+    $result = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($result) === 1){
+        $row = mysqli_fetch_assoc($result);
+        if($row['U_Username'] === $uname && $row['U_Password'] === $password) {
+            echo "Logged in";
+            $_SESSION['U_Username'] = $row['U_Username'];
+            $_SESSION['U_Password'] = $row['U_Password'];
+            $_SESSION['U_Type'] = $row['U_Type'];
+            header("Location: index.php");
+            exit();
+        }
+        else{
+            header("Location: ../index.php?error=Incorrect Username or Password");
+            exit();
+        }
+    }
+    else{
+        header("Location: ../index.php?error=Incorrect Username or Password");
+        exit();
+    }
+}
+else {
+    header("Location: ../index.php?error=All fields are required");
+    exit();
+}
 ?>
-    <link rel="stylesheet" href="Login.css">
-
-        <section id="home">
-            <center>
-                <h1>Welcome to FKPark</h1>
-                <p>Manage your parking with ease.</p>
-            </center>
-        </section>
-
-        <div id="loginModal" class="modal">
-            <form class="modal-content animate" method="post" action="Register.php">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('loginModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-                    <img src="FKPark.jpg" alt="Avatar" class="avatar">
-                </div>
-
-                <div class="container">
-                    <?php if (isset($error)) echo "<p>$error</p>"; ?>
-                    <label for="uname"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="uname" required>
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                    <label for="type"><b>Category</b></label>
-                    <select name="type" id="type" required>
-                        <option value="admin">Admin</option>
-                        <option value="staff">Staff</option>
-                        <option value="student">Student</option>
-                    </select>
-
-                    <button type="submit" id="login">Login</button>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember"> Remember me
-                    </label>
-                </div>
-
-                <div class="container" style="background-color:#f1f1f1">
-                    <div class="psw">Forgot <a href="#">password?</a></div>
-                </div>
-            </form>
-        </div>
-
-        <?php
-            include('../footer/footer.php');
-        ?>

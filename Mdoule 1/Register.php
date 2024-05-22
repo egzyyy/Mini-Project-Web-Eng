@@ -3,7 +3,7 @@
 include('../header/home.php');
 
 // Include database connection file
-include('includes/dbconnection.php');
+include('includes/db.php');
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registerbtn'])) {

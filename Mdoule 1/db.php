@@ -18,7 +18,7 @@ if (mysqli_query($link, $sql)) {
 mysqli_select_db($link, "web_eng");
 
 // Create the users table
-$sql = "CREATE TABLE IF NOT EXISTS user (
+$sql1 = "CREATE TABLE IF NOT EXISTS user (
     U_Id INT AUTO_INCREMENT PRIMARY KEY,
     U_Username VARCHAR(50),
     U_Password VARCHAR(255),
@@ -31,7 +31,7 @@ if (mysqli_query($link, $sql)) {
 }
 
 // Create the vehicles table
-$sql = "CREATE TABLE IF NOT EXISTS vehicle (
+$sql2 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehicleID INT AUTO_INCREMENT PRIMARY KEY,
     V_plateNum VARCHAR(50),
     V_vehigrant VARCHAR(255),
@@ -39,10 +39,14 @@ $sql = "CREATE TABLE IF NOT EXISTS vehicle (
     U_Id INT,
     FOREIGN KEY (U_Id) REFERENCES user(U_Id)
 )";
+
+$sql = "INSERT INTO user (U_Username, U_Password, U_Type)
+VALUES ('Rusydan', 'rusydan040', 'staff')";
+
 if (mysqli_query($link, $sql)) {
-    echo "Table vehicles created successfully\n";
+    echo "new record created successfully\n";
 } else {
-    die('Error creating table: ' . mysqli_error($link));
+    die('Error creating new record: ' . mysqli_error($link));
 }
 
 // Close the connection

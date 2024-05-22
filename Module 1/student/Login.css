@@ -1,0 +1,136 @@
+
+
+section {
+  margin-bottom: 40px;
+}
+
+section#home {
+  text-align: center;
+  padding: 100px 20px;
+  background-color: #f4f4f4;
+}
+
+section#home h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+section#home p {
+  font-size: 1.2em;
+  color: #666;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: animatezoom 0.6s;
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+.close {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 30%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+.container label {
+  font-weight: bold;
+  display: block;
+  padding-top: 15px;
+}
+
+.container input[type="text"],
+.container input[type="password"],
+.container select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  color: #333;
+}
+
+.container select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="none" stroke="%23333" stroke-width=".6" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 8px 10px;
+  padding-right: 30px;
+}
+
+.container button {
+  width: 100%;
+  padding: 14px 20px;
+  background-color: #3571ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: #1c04f3;
+}
+
+.container input[type="checkbox"] {
+  margin-top: 16px;
+}
+
+.container .psw {
+  text-align: right;
+}
+
+

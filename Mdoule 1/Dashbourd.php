@@ -1,3 +1,14 @@
+<?php
+session_start();
+require 'db.php';
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
+    header("Location: login.php");
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +21,10 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#Dashbourd.html">Dashboard</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="#Booking">Booking</a></li>
                 <li><a href="#Traffic">Traffic Summon</a></li>
+                <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>
     </header>

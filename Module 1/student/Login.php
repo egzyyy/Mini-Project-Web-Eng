@@ -1,59 +1,55 @@
-<?php
-session_start();
-include('db.php');
-include('../header/home.php');
+<?php 
+session_start(); 
+$link = mysqli_connect("localhost", "root", "");
 
-function validate($data){
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data; // Corrected variable name from 'data' to '$data'
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-if(isset($_POST['uname']) && isset($_POST['password']) && isset($_POST['type'])){
+// Select the database
+mysqli_select_db($link, "web_eng");
 
-    $uname = validate($_POST['uname']);
-    $password = validate($_POST['password']);
-    $type = validate($_POST['type']);
+if (isset($_POST['uname']) && isset($_POST['password'])) {
 
-    if(empty($uname)){
-        header("Location: ../index.php?error=Username is required");
-        exit();
-    }
-    else if(empty($password)){
-        header("Location: ../index.php?error=Password is required");
-        exit();
-    }
-    else if(empty($type)){
-        header("Location: ../index.php?error=Type is required");
-        exit();
-    }
+	function validate($data){
+       $data = trim($data);
+	   $data = stripslashes($data);
+	   $data = htmlspecialchars($data);
+	   return $data;
+	}
 
-    $sql = "SELECT * FROM user WHERE U_Username='$uname' AND U_Password='$password' AND U_Type='$type'";
-    $result = mysqli_query($link, $sql);
+	$uname = validate($_POST['uname']);
+	$pass = validate($_POST['password']);
 
-    if(mysqli_num_rows($result) === 1){
-        $row = mysqli_fetch_assoc($result);
-        if($row['U_Username'] === $uname && $row['U_Password'] === $password) {
-            echo "Logged in";
-            $_SESSION['U_Username'] = $row['U_Username'];
-            $_SESSION['U_Password'] = $row['U_Password'];
-            $_SESSION['U_Type'] = $row['U_Type'];
-            header("Location: index.php");
-            exit();
-        }
-        else{
-            header("Location: ../index.php?error=Incorrect Username or Password");
-            exit();
-        }
-    }
-    else{
-        header("Location: ../index.php?error=Incorrect Username or Password");
-        exit();
-    }
+	if (empty($uname)) {
+		header("Location: yindex.php?error=User Name is required");
+	    exit();
+	}else if(empty($pass)){
+        header("Location: yindex.php?error=Password is required");
+	    exit();
+	}else{
+		$sql = "SELECT * FROM user WHERE U_Username='$uname' AND U_Password='$pass'";
+
+		$result = mysqli_query($link, $sql);
+
+		if (mysqli_num_rows($result) === 1) {
+			$row = mysqli_fetch_assoc($result);
+            if ($row['U_Username'] === $uname && $row['U_Password'] === $pass) {
+            	$_SESSION['U_Username'] = $row['U_Username'];
+            	$_SESSION['U_Id'] = $row['U_Id'];
+            	header("Location: Dashbourd.php");
+		        exit();
+            }else{
+				header("Location: yindex.php?error=Incorect User name or password");
+		        exit();
+			}
+		}else{
+			header("Location: yindex.php?error=Incorect User name or password");
+	        exit();
+		}
+	}
+	
+}else{
+	header("Location: yindex.php");
+	exit();
 }
-else {
-    header("Location: ../index.php?error=All fields are required");
-    exit();
-}
-?>

@@ -153,6 +153,16 @@ if (mysqli_query($link, $sql9)) {
     die('Error creating new record: ' . mysqli_error($link));
 }
 
-// Close the connection
+$tab = "INSERT INTO user (U_ID, U_Username, U_Password, U_Type) 
+        VALUES ('A100', 'fikri', 'fikri030', 'Student'), 
+               ('B100', 'rusydan', 'rusydan040', 'Staff'), 
+               ('BC100', 'iqmal', 'iqmal050', 'Administrator')";
+
+if ($link->query($tab) === TRUE) {
+    echo "New records created successfully";
+} else {
+    echo "Error: " . $tab . "<br>" . $link->error;
+}
+
 mysqli_close($link);
 ?>

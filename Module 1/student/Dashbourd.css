@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f2f2f2;
@@ -7,38 +7,6 @@ body {
     height: 100%;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 30px 20px;
-}
-
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
 /* Dashboard container */
 .avatar{
     height: 10px;
@@ -144,5 +112,3 @@ footer {
     font-size: 1.6rem;
     font-weight: 600;
   }
-
-  

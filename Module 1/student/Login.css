@@ -133,4 +133,10 @@ img.avatar {
   text-align: right;
 }
 
-
+.error{
+  background: #F2DEDE;
+  color: #A94442;
+  padding: 10px;
+  width: 95%;
+  border-radius: 5px;
+}

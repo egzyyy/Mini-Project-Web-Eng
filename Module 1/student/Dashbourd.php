@@ -1,13 +1,12 @@
 <?php
 session_start();
-if (isset($_SESSION['U_Id']) && isset($_SESSION['U_Username'])) {
     include('header.php');
 ?>
 
 <link rel="stylesheet" href="Dashbourd.css">
-
+<center>
 <h2>Hello, <?php echo $_SESSION['U_Username']; ?></h2>
-
+</center>
 <div class="dashboard-container">
     <div class="dashboard-content">
         <div class="dashboard-header">
@@ -53,8 +52,4 @@ if (isset($_SESSION['U_Id']) && isset($_SESSION['U_Username'])) {
 
 <?php
     include('../../footer/footer.php');
-} else {
-    header("Location: index.php");
-    exit();
-}
 ?>

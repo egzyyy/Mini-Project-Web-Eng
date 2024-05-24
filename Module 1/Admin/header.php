@@ -112,6 +112,7 @@
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="#user">User</a></li>
                     <li><a href="#vehicle">Vehicle</a></li>
+                    <li><a href="../../Logout.php">Vehicle</a></li>
                 </ul>
             </div>
             <div class="nav-right">

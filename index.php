@@ -1,7 +1,7 @@
 <?php
-include('../../header/home.php');
+include('header/home.php');
 ?>
-<link rel="stylesheet" href="Login.css">
+<link rel="stylesheet" href="Module 1/Student/Login.css">
 
 <section id="home">
     <center>
@@ -14,7 +14,7 @@ include('../../header/home.php');
     <form class="modal-content animate" method="post" action="login.php">
         <div class="imgcontainer">
             <span onclick="document.getElementById('loginModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="FKPark.jpg" alt="Avatar" class="avatar">
+            <img src="image/FKPark.jpg" alt="Avatar" class="avatar">
         </div>
 
         <div class="container">
@@ -30,8 +30,8 @@ include('../../header/home.php');
 
             <label for="type"><b>Category</b></label>
             <select name="type" id="type" required>
-                <option value="admin">Admin</option>
-                <option value="staff">Staff</option>
+                <option value="admin">Administrator</option>
+                <option value="staff">Staff Unit Keselamatan</option>
                 <option value="student">Student</option>
             </select>
 
@@ -48,5 +48,5 @@ include('../../header/home.php');
 </div>
 
 <?php
-include('../../footer/footer.php');
+include('footer/footer.php');
 ?>

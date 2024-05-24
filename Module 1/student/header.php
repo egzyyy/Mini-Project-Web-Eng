@@ -114,7 +114,7 @@
                     <li><a href="#user">Booking</a></li>
                     <li><a href="#vehicle">Vehicle</a></li>
                     <li><a href="#vehicle">Traffic Summon</a></li>
-                    <li><a href="Logout.php">Logout</a></li>
+                    <li><a href="../../Logout.php">Logout</a></li>
                 </ul>
             </div>
             <div class="nav-right">

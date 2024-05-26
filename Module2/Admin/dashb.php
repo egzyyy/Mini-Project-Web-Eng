@@ -1,4 +1,4 @@
-<?php
+<?php include('../../Layout/admin_layout.php');
 $link = new mysqli('localhost', 'root', '');
 
 if (!$link) {

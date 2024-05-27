@@ -1,40 +1,94 @@
-<?php include('../../Layout/admin_layout.php');
-$link = new mysqli('localhost', 'root', '');
+<?php
+include('../../Layout/admin_layout.php');
+$link = new mysqli('localhost', 'root', '', 'web_eng');
 
-if (!$link) {
-    die('Error connecting to the server: ' . mysqli_connect_error());
+if ($link->connect_error) {
+    die('Error connecting to the server: ' . $link->connect_error);
 }
 
-// Select the database
-mysqli_select_db($link, "web_eng");
+// Fetch total parking spaces
+$totalSpacesResult = $link->query("SELECT COUNT(*) AS total_spaces FROM parkingSpace");
+$totalSpaces = $totalSpacesResult->fetch_assoc()['total_spaces'];
 
-$result = $link->query("SELECT * FROM parkingSpace");
+// Fetch occupied spaces
+$occupiedSpacesResult = $link->query("SELECT COUNT(*) AS occupied_spaces FROM parkingSpace WHERE is_available = 0");
+$occupiedSpaces = $occupiedSpacesResult->fetch_assoc()['occupied_spaces'];
+
+// Calculate available spaces
+$availableSpaces = $totalSpaces - $occupiedSpaces;
+
+// Fetch temporarily closed spaces
+$closedSpacesResult = $link->query("SELECT COUNT(*) AS closed_spaces FROM parkingSpace WHERE is_closed = 1");
+$closedSpaces = $closedSpacesResult->fetch_assoc()['closed_spaces'];
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Parking Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
     <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 270px; /* Adjust this value based on the width of your sidebar */
+            margin-top: 20px; /* Adjust this value based on the height of your header */
+        }
+        .dashboard-overview {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .dashboard-overview .card {
+            flex: 1;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin-right: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .dashboard-overview .card:last-child {
+            margin-right: 0;
+        }
+        .card h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .card p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
-    <h1>Daily Available Parking Spaces</h1>
-    <table>
-        <tr>
-            <th>Space Name</th>
-            <th>Availability</th>
-            <th>QR Code</th>
-        </tr>
-        <?php while ($row = $result->fetch_assoc()): ?>
-        <tr>
-            <td><?= $row['space_name'] ?></td>
-            <td><?= $row['is_available'] ? 'Available' : 'Occupied' ?></td>
-            <td><img src="generate_qr.php?id=<?= $row['id'] ?>" alt="QR Code"></td>
-        </tr>
-        <?php endwhile; ?>
-    </table>
+    <div class="content">
+        <h1>Admin Dashboard</h1>
+        <div class="dashboard-overview">
+            <div class="card">
+                <h2>Total Parking Spaces</h2>
+                <p><?= $totalSpaces ?></p>
+            </div>
+            <div class="card">
+                <h2>Occupied Spaces</h2>
+                <p><?= $occupiedSpaces ?></p>
+            </div>
+            <div class="card">
+                <h2>Available Spaces</h2>
+                <p><?= $availableSpaces ?></p>
+            </div>
+            <div class="card">
+                <h2>Temporarily Closed Spaces</h2>
+                <p><?= $closedSpaces ?></p>
+            </div>
+        </div>
+        <!-- You can add more sections here, such as charts or recent activity -->
+    </div>
 </body>
 </html>
+
+<?php
+$link->close();
+?>

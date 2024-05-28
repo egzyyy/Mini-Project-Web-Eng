@@ -59,7 +59,7 @@ $closedSpaces = $closedSpacesResult->fetch_assoc()['closed_spaces'];
         .card p {
             margin: 10px 0 0;
             font-size: 18px;
-            color: #555;
+            color: #555;    
         }
     </style>
 </head>

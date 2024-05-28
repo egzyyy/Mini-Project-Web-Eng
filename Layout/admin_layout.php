@@ -131,7 +131,7 @@
         <div class="sidebar">
             <nav>
                 <ul>
-                    <li><a href="#">User Registeration</a><li>
+                    <li><a href="../../Module2/Admin/stuRegister.php">User Registeration</a><li>
                     <li><a href="#">Manage Parking Spaces</a></li>
                     <li><a href="#">View Daily Available Parking Area</a></li>
                     <li><a href="#">Manage Parking Area</a></li>

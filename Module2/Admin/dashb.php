@@ -37,27 +37,28 @@ $closedSpaces = $closedSpacesResult->fetch_assoc()['closed_spaces'];
         }
         .dashboard-overview {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-direction: row;
+            /* justify-content: space-between; */
+            margin-top: 20px;
         }
-        .dashboard-overview .card {
+        .card {
             flex: 1;
             background-color: #f4f4f4;
             padding: 20px;
-            margin-right: 20px;
+            margin: 20px;
             border-radius: 5px;
             text-align: center;
         }
         .dashboard-overview .card:last-child {
             margin-right: 0;
         }
-        .card h2 {
-            margin: 0;
+        .card h1 {
+            margin-top: 0;
             font-size: 24px;
             color: #333;
         }
         .card p {
-            margin: 10px 0 0;
+            margin: 0;
             font-size: 18px;
             color: #555;    
         }

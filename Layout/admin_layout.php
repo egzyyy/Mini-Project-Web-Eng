@@ -9,8 +9,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
+            /* display: flex;
+            flex-direction: column; */
             height: 100vh;
         }
         header {
@@ -81,6 +81,9 @@
             width: 250px;
             background-color: #f4f4f4;
             padding: 20px;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
         }
         .sidebar nav ul {
             list-style-type: none;
@@ -103,10 +106,10 @@
         .sidebar nav ul li a:hover {
             background-color: #ccc;
         }
-        .content {
+        /* .content {
             flex: 1;
             padding: 20px;
-        }
+        } */
     </style>
 </head>
 <body>
@@ -131,16 +134,13 @@
         <div class="sidebar">
             <nav>
                 <ul>
-                    <li><a href="../../Module2/Admin/stuRegister.php">User Registeration</a><li>
+                    <li><a href="../../Module2/Admin/stuRegister.php">User Registeration</a></li>
                     <li><a href="#">Manage Parking Spaces</a></li>
                     <li><a href="#">View Daily Available Parking Area</a></li>
                     <li><a href="#">Manage Parking Area</a></li>
                     <li><a href="#">Administration Dashboard</a></li>
                 </ul>
             </nav>
-        </div>
-        <div class="content">
-            <!-- Content goes here -->
         </div>
     </div>
 </body>

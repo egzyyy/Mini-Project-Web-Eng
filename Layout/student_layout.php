@@ -18,7 +18,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333;
+            background-color: #007B85;
             color: white;
             padding: 30px 50px;
         }
@@ -73,25 +73,22 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 200px;
-            background-color: #111;
+            width: 300px;
+            background-color: #D9DDDC;
             padding-top: 20px;
-            position: fixed;
             overflow-x: hidden;
-            color: #333;
-    border-bottom-right-radius: 25px;
-    height: 86%;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    position: absolute;
-    width: 250px;
+            color: #000000;
+            border-bottom-right-radius: 25px;    
+            left: 0;
+            overflow-x: hidden;
+            position: absolute;
         }
+
         .sidenav a, .dropdown-btn {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
+            padding: 6px 8px 30px 16px;
+            text-decoration:none ;
             font-size: 20px;
-            color: #818181;
+            color: #000000;
             display: block;
             background: none;
             width: 100%;
@@ -123,22 +120,22 @@
         }
         @media screen and (max-height: 450px) {
             .sidenav {padding-top: 15px;}
-            .sidenav a {font-size: 18px;}
+            .sidenav a {font-size: 16px;}
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-left">
-            <h1>ADMIN</h1>
+            <h1>STUDENT</h1>
         </div>
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
-                    <img src="../../image/loginIcon.png" alt="login">
+                    <img src="../image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Admin/Profile.php">View Profile</a>
+                    <a href="../Module1/Student/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -146,18 +143,9 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="#">Dashboard</a>
-            <a href="#">Profile</a>
-            <button class="dropdown-btn">User 
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-container">
-                <a href="#">Manage User</a>
-                <a href="#">Profile</a>
-                <a href="#">Registration</a>
-            </div>
-            <a href="#">Manage Parking Area</a>
-            <a href="#">Administration Dashboard</a>
+            <a href="#../Module1/Student/Dashbourd.php">Dashboard</a>
+            <a href="#../Module3/B_homepage.php">Booking</a>
+            <a href="#../">Summon</a>
         </div>
         <div class="main">
 

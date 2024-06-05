@@ -14,6 +14,8 @@ include('../Layout/admin_layout.php');
         width: 80%;
         margin: auto;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
     #main-content {
         margin: 20px;
@@ -101,15 +103,6 @@ include('../Layout/admin_layout.php');
             <h2><i class="fas fa-book"></i> View Bookings</h2>
             <a class="nav-link" href="view_booking.php"><i class="fas fa-eye"></i> View Bookings</a>
         </div>
-        <!-- Placeholder for dynamic content -->
-        <?php
-        if(isset($_GET['page'])){
-            $page = $_GET['page'];
-            include($page . '.php');
-        } else {
-            echo "<h2>Welcome to the Student Car Park Booking System</h2>";
-        }
-        ?>
     </div>
 </body>
 </html>

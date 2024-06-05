@@ -66,6 +66,7 @@
         .logo {
             height: 80px; /* Adjust the height as needed */
             width: auto; /* Maintains the aspect ratio */
+            margin-right: -70px; 
         }
 
         .dropdown {
@@ -131,7 +132,7 @@
                                 <i class="fa fa-caret-down"></i>
                                 </button>
                                 <div class="dropdown-content">
-                                <a href="../../Module1/Admin/loginPage.php">Administrator</a>
+                                <a href="loginPage.php">Administrator</a>
                                 <a href="#">Staff Unit Keselamatan</a>
                                 <a href="../../Module1/Student/loginPage.php">Student</a>
                                 </div>

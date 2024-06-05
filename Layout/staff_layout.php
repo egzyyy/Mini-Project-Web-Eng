@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
@@ -13,16 +13,14 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: #f4f4f4; /* Light grey background */
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #800000; /* Maroon header background */
+            background-color: #800000;
             color: white;
             padding: 30px 50px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
         .header-left h1 {
             margin: 0;
@@ -35,23 +33,17 @@
             display: inline-block;
         }
         .dropbtn {
-            background-color: #800000;
+            background-color: #333;
             color: white;
             border: none;
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 5px; /* Changed to rectangle shape */
-            transition: background-color 0.3s;
         }
         .dropbtn img {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            margin-right: 10px;
         }
         .dropdown-content {
             display: none;
@@ -91,6 +83,7 @@
             overflow-x: hidden;
             position: absolute;
         }
+
         .sidenav a, .dropdown-btn {
             padding: 6px 8px 30px 16px;
             text-decoration:none ;
@@ -104,15 +97,13 @@
             outline: none;
         }
         .sidenav a:hover, .dropdown-btn:hover {
-            color: #f1f1f1;/
+            color: #f1f1f1;
         }
         .main {
-            margin-left: 250px; /* Width of sidebar */
+            margin-left: 200px;
             font-size: 20px;
             padding: 20px;
             flex: 1;
-            background-color: #fff; /* White main content background */
-            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
         }
         .active {
             background-color: green;
@@ -141,11 +132,10 @@
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
-                    <img src="../../image/profileIcon.png" alt="Profile">
-                    Profile
+                    <img src="../image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Admin/Profile.php">View Profile</a>
+                    <a href="../Module1/Student/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -157,6 +147,5 @@
             <a href="#">Apply Summon</a>
             <a href="#">Manage Booking</a>
         </div>
-    </div>
-</body>
-</html>
+        <div class="main">
+

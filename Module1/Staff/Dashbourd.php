@@ -12,21 +12,21 @@ require('../../Layout/staff_layout.php');
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
-                <button class="action-btn">Add Summon</button>
-                <button class="action-btn">View Booking History</button>
+                <button class="action-btn">Add User</button>
+                <button class="action-btn">View Report</button>
             </div>
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
-                <div class="card-title">Total Warning</div>
+                <div class="card-title">Vehicles Registered</div>
                 <div class="card-content">150</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">Total Summon</div>
+                <div class="card-title">User Registered</div>
                 <div class="card-content">25</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">Traffic Summon</div>
+                <div class="card-title">Traffic Summon Report</div>
                 <div class="card-content">10</div>
             </div>
             <!-- Add more cards as needed -->
@@ -48,5 +48,8 @@ require('../../Layout/staff_layout.php');
     </div>
 </div>
 
-<script src="Dashbourd.js"></script>
+
+</main>
+</body>
+</html>
 

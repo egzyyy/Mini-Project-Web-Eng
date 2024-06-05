@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    min-height: 100vh;
+    box-sizing: border-box;
+    justify-content: center;
+} 
+
+        
+        /* Card styling */
+        .card {
+                    border: 1px solid #ddd;
+                    border-radius: 0.25rem;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+                    width: 100%;
+                    max-width: 600px; /* Adjust the max-width as needed */
+                padding: auto;
+                }
+        
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+            text-align: center;
+        }
+        
+        /* Card body styling */
+        .card-body {
+            padding: 2rem;
+            width: auto;
+            height: auto;
+            padding-bottom: auto;
+        }
+        
+        /* Form styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            border: 1px solid #ddd;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Button styling */
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .btn-warning {
+            background-color: #f0ad4e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-warning:hover {
+            background-color: #ec971f;
+            border-color: #ec971f;
+        }
+        
+        .btn-warning:active {
+            background-color: #d58512;
+        }
+        

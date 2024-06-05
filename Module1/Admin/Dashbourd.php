@@ -1,6 +1,5 @@
 <?php
-session_start();
-    include('header.php');
+    require('../../Layout/admin_layout');
 ?>
 
 <link rel="stylesheet" href="Dashbourd.css">
@@ -12,21 +11,21 @@ session_start();
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
-                <button class="action-btn">Add Vehicle</button>
-                <button class="action-btn">View Booking History</button>
+                <button class="action-btn">Add User</button>
+                <button class="action-btn">View Report</button>
             </div>
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
-                <div class="card-title">Total Vehicles</div>
+                <div class="card-title">Vehicles Registered</div>
                 <div class="card-content">150</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">Available Spaces</div>
+                <div class="card-title">User Registered</div>
                 <div class="card-content">25</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">Traffic Summon</div>
+                <div class="card-title">Traffic Summon Report</div>
                 <div class="card-content">10</div>
             </div>
             <!-- Add more cards as needed -->

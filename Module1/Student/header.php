@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FKPark Dashboard</title>
+    <title>FKPark</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,6 +55,7 @@
         nav ul li a {
             color: #fff;
             text-decoration: none;
+            cursor: pointer;
         }
   
         main {
@@ -110,21 +111,13 @@
             <div class="nav-center">
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="#user">User</a></li>
+                    <li><a href="#user">Booking</a></li>
                     <li><a href="#vehicle">Vehicle</a></li>
-                    <li><a href="../../Logout.php">Vehicle</a></li>
+                    <li><a href="#vehicle">Traffic Summon</a></li>
+                    <li><a href="../../Logout.php">Logout</a></li>
                 </ul>
-            </div>
-            <div class="nav-right">
-                <img src="avatar.png" class="profile" alt="Profile Picture">
             </div>
         </nav>
     </header>
     <main>
         <!-- Your main content here -->
-    </main>
-    <footer>
-        <!-- Your footer content here -->
-    </footer>
-</body>
-</html>

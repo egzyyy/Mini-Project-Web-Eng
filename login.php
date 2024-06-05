@@ -1,55 +1,62 @@
-<?php 
-session_start(); 
-$link = mysqli_connect("localhost", "root", "", "web_eng");
+<?php
+session_start();
+
+$link = mysqli_connect("localhost", "root", "");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-if (isset($_POST['uname']) && isset($_POST['password']) && isset($_POST['type'])) {
+$message = "";
 
-	$uname = $_POST['uname'];
-	$pass = $_POST['password'];
-	$type = $_POST['type'];
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $role = $_POST["role"];
 
-	if (empty($uname)) {
-		header("Location: index.php?error=Username is required");
-	    exit();
-	} else if (empty($pass)) {
-        header("Location: index.php?error=Password is required");
-	    exit();
-	} else if (empty($type)) {
-        header("Location: index.php?error=Type is required");
-	    exit();
-	} else {
-		$sql = "SELECT * FROM user WHERE U_Username='$uname' AND U_Password='$pass'";
+    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("sss", $username, $password, $role);
 
-		$result = mysqli_query($link, $sql);
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-		if (mysqli_num_rows($result) === 1) {
-			$row = mysqli_fetch_assoc($result);
-            if ($row['U_Username'] === $uname && $row['U_Password'] === $pass) {
-            	$_SESSION['U_Username'] = $row['U_Username'];
-            	$_SESSION['U_ID'] = $row['U_ID'];
-				if ($type == 'admin'){
-					header("Location: Module1/Admin/Dashbourd.php");
-				} else if ($type == 'staff'){
-					header("Location: Module1/Staff/Dashbourd.php");
-				} else if ($type == 'student'){
-					header("Location: Module1/Student/Dashbourd.php");
-				}
-		        exit();
-            } else {
-				header("Location: index.php?error=Incorrect Username or Password");
-		        exit();
-			}
-		} else {
-			header("Location: index.php?error=Incorrect Username or Password");
-	        exit();
-		}
-	}
-} else {
-	header("Location: index.php");
-	exit();
+    // Check if user exists
+    if ($result->num_rows == 1) {
+        // Authentication successful, redirect based on userType
+        $user = $result->fetch_assoc();
+
+        // Create new session ID
+        $newSessionId = session_create_id();
+        $sessionId = $newSessionId . "_" . $user['U_ID'];
+        session_id($sessionId);
+
+        $_SESSION["user_id"] = $user['U_ID'];
+        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
+        $_SESSION['last_regeneration'] = time();
+
+        switch ($user['U_Type']) {
+            case 'Student':
+                header("Location: Module1/Student/Dashboard.php?login=success");
+                exit();
+            case 'Administrator':
+                header("Location: Module1/Admin/Dashboard.php?login=success");
+                exit();
+            case 'Staff Unit Keselamatan':
+                header("Location: Module1/Staff/Dashboard.php?login=success");
+                exit();
+            default:
+                // Handle unexpected role
+                $message = "Invalid user type.";
+                header("Location: loginPage.php?message=" . urlencode($message));
+                exit();
+        }
+    } else {
+        $message = "Invalid username or password.";
+        header("Location: loginPage.php?message=" . urlencode($message));
+        exit();
+    }
 }
 ?>

@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            display: flex;
             flex-direction: column;
         }
         header {
@@ -73,15 +72,11 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 200px;
             background-color: #111;
-            padding-top: 20px;
             position: fixed;
-            overflow-x: hidden;
             color: #333;
     height: 100%;
     left: 0;
-    overflow-x: hidden;
     padding-top: 20px;
     position: absolute;
     width: 250px;
@@ -106,6 +101,7 @@
             font-size: 20px;
             padding: 20px;
             flex: 1;
+            padding-left: 80px;
         }
         .active {
             background-color: green;
@@ -147,7 +143,6 @@
     <div class="container">
         <div class="sidenav">
             <a href="#">Dashboard</a>
-            <a href="#">Profile</a>
             <button class="dropdown-btn">User 
                 <i class="fa fa-caret-down"></i>
             </button>
@@ -159,5 +154,21 @@
             <a href="#">Manage Parking Area</a>
             <a href="#">Administration Dashboard</a>
         </div>
+        <script>
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
         <div class="main">
 

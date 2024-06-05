@@ -50,12 +50,9 @@ if (mysqli_query($link, $sql2)) {
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_studentID INT AUTO_INCREMENT PRIMARY KEY,
     STU_name VARCHAR(100),
-    STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),
-    STU_yearStudy integer,
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
-    STU_password VARCHAR(50),
     U_ID INT,
     FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
@@ -133,6 +130,10 @@ if (mysqli_query($link, $sql7)) {
 $sql8 = "CREATE TABLE IF NOT EXISTS trafficSummon (
     TF_summonID INT AUTO_INCREMENT PRIMARY KEY,
     V_vehicleID INT,
+    student_id VARCHAR(50),
+    date DATE,
+    status ENUM('Paid', 'Unpaid'),
+    plate_number VARCHAR(50),
     FOREIGN KEY (V_vehicleID) REFERENCES vehicle(V_vehicleID)
 )";
 if (mysqli_query($link, $sql8)) {

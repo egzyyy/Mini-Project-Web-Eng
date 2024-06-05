@@ -1,25 +1,24 @@
+<?php
+include('../../Layout/admin_layout.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Daily Available Parking Area</title>
+    <title>Student Car Park Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
+        
+        .content-container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+
         }
-        h2 {
+        .content-container h2 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -45,10 +44,11 @@
             color: red;
             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="content-container">
         <h2>Daily Available Parking Area</h2>
         <table>
             <thead>
@@ -89,5 +89,6 @@
             </tbody>
         </table>
     </div>
+
 </body>
 </html>

@@ -41,7 +41,8 @@ $result = $conn->query($sql);
         /* Main content container */
         .content-container {
             max-width: 800px;
-            margin: 50px auto;
+            margin-left: 425px;
+            margin-bottom: 250px;
             padding: 40px;
             background-color: white;
             border-radius: 10px;

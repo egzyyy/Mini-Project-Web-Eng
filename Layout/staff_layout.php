@@ -81,23 +81,21 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 250px;
-            background-color: #800000; /* Maroon sidebar background */
+            width: 300px;
+            background-color: #D9DDDC;
             padding-top: 20px;
-            position: fixed;
             overflow-x: hidden;
-            color: white;
+            color: #000000;
+            border-bottom-right-radius: 25px;    
             left: 0;
             overflow-x: hidden;
-            padding-top: 20px;
             position: absolute;
-            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
         }
         .sidenav a, .dropdown-btn {
-            padding: 10px 16px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
+            padding: 6px 8px 30px 16px;
+            text-decoration:none ;
+            font-size: 20px;
+            color: #000000;
             display: block;
             background: none;
             width: 100%;
@@ -106,7 +104,7 @@
             outline: none;
         }
         .sidenav a:hover, .dropdown-btn:hover {
-            background-color: #571515; /* Darker maroon on hover */
+            color: #f1f1f1;/
         }
         .main {
             margin-left: 250px; /* Width of sidebar */

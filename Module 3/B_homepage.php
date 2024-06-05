@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php
+include('../header/home.php');
+?>
     <title>Student Car Park Booking</title>
     <style>
         body {
@@ -73,7 +73,6 @@
             background-color: #555;
         }
     </style>
-</head>
 <body>
     <header id="main-header">
         <div class="container">

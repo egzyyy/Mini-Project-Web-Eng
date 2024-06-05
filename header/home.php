@@ -62,43 +62,56 @@
             padding: 20px;
         }
 
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
 
         .logo {
             height: 80px; /* Adjust the height as needed */
             width: auto; /* Maintains the aspect ratio */
         }
 
-        .profile {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            cursor: pointer;
+        .dropdown {
+          float: left;
+          overflow: hidden;
         }
-
-        .profile-menu {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
+        
+        .dropdown .dropbtn {
+          font-size: 16px;  
+          border: none;
+          outline: none;
+          color: white;
+          padding: 14px 16px;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
         }
-
-        .profile-menu li {
-            margin-left: 15px;
+        
+        .navbar a:hover, .dropdown:hover .dropbtn {
+          background-color: red;
         }
-
-        .profile-menu li a {
-            color: #fff;
-            text-decoration: none;
+        
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+        
+        .dropdown-content a {
+          float: none;
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+        }
+        
+        .dropdown-content a:hover {
+          background-color: #ddd;
+        }
+        
+        .dropdown:hover .dropdown-content {
+          display: block;
         }
     </style>
 </head>
@@ -106,21 +119,28 @@
     <header>
         <nav>
             <div class="nav-left">
-                <img src="logo.png" class="logo" alt="FKPark Logo">
+                <img src="image/logo.png" class="logo" alt="FKPark Logo">
             </div>
-            <center>
             <div class="nav-center">
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#user">About</a></li>
-                    <li><a onclick="document.getElementById('loginModal').style.display='block'" style="width:auto;">Login</a></li>
+                    <li>
+                        <div class="dropdown">
+                                <button class="dropbtn">Login 
+                                <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                <a href="../../Module1/Admin/loginPage.php">Administrator</a>
+                                <a href="#">Staff Unit Keselamatan</a>
+                                <a href="../../Module1/Student/loginPage.php">Student</a>
+                                </div>
+                            </div> 
+                    </li>
                 </ul>
-            </div>
-            </center>
-            <div class="nav-right">
-                <img src="avatar.png" class="profile" alt="Profile Picture">
             </div>
         </nav>
     </header>
     <main>
         <!-- Your main content here -->
+

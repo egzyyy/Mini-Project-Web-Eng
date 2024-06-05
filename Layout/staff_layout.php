@@ -79,8 +79,7 @@
             position: fixed;
             overflow-x: hidden;
             color: #333;
-    border-bottom-right-radius: 25px;
-    height: 86%;
+    height: 100%;
     left: 0;
     overflow-x: hidden;
     padding-top: 20px;
@@ -128,6 +127,7 @@
     </style>
 </head>
 <body>
+<link rel="stylesheet" href="../../footer/footer.css">
     <header>
         <div class="header-left">
             <h1>ADMIN</h1>

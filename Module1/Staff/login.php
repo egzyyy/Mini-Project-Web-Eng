@@ -6,7 +6,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <!--Stylesheet-->
     <style media="screen">
         *,
         *:before,
@@ -139,33 +138,69 @@
 </head>
 <body>
 
+<?php
+session_start();
 
+$link = mysqli_connect("localhost", "root", "");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+$message = "";
+
+// Select the database
+mysqli_select_db($link, "web_eng");
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $role = "staff"; // Set role as administrator
+
+    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("sss", $username, $password, $role);
+
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if user exists
+    if ($result->num_rows == 1) {
+        // Authentication successful, redirect based on userType
+        $user = $result->fetch_assoc();
+
+        // Create new session ID
+        $newSessionId = session_create_id();
+        $sessionId = $newSessionId . "_" . $user['U_ID'];
+        session_id($sessionId);
+
+        $_SESSION["user_id"] = $user['U_ID'];
+        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
+        $_SESSION['last_regeneration'] = time();
+        header("Location: Dashbourd.php?login=success");
+        exit();
+    } else {
+        $message = "Invalid username or password.";
+        header("Location: loginPage.php?message=" . urlencode($message));
+        exit();
+    }
+}
+?>
 
 <div class="background">
     <div class="shape"></div>
     <div class="shape"></div>
 </div>
 <form method="post">
-    <h3>Login FKPark</h3>
+    <h3>Staff FKPark</h3>
 
-    <?php
-    if ($error != "") {
-        echo "<div class='error-message'>$error</div>";
-    }
-    ?>
+    <label for="username">Username</label>
+    <input type="text" placeholder="Username" id="username" name="username" required>
 
-    <label for="U_Username">Username</label>
-    <input type="text" placeholder="Username" id="U_Username" name="U_Username" required>
-
-    <label for="U_Password">Password</label>
-    <input type="password" placeholder="Password" id="U_Password" name="U_Password" required>
-
-    <label for="U_Type">Role</label>
-    <select id="U_Type" name="U_Type">
-        <option value="Administrator">Administrator</option>
-        <option value="Staff Unit Keselamatan">Staff Unit Keselamatan</option>
-        <option value="Student">Student</option>
-    </select>
+    <label for="password">Password</label>
+    <input type="password" placeholder="Password" id="password" name="password" required>
     
     <div class="forgot-password">
         <a href="#">Forgot Password?</a>

@@ -1,6 +1,6 @@
 <?php
 // Include header file
-require('../../header/headerAdmin.php');
+require('../../Layout/admin_layout.php');
 
 $link = mysqli_connect("localhost", "root", "");
 
@@ -54,19 +54,19 @@ $link->close();
                     <form method="POST">
                         <div class="form-group mb-3">
                             <label for="studentName">Full Name</label>
-                            <input type="text" required class="form-control" id="studentName" name="studentName">
+                            <input type="text" required class="form-control" id="studentName" name="studentName" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentID">Student ID</label>
-                            <input type="text" class="form-control" id="studentID" name="studentID">
+                            <input type="text" class="form-control" id="studentID" name="studentID" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentPhoneNum">Phone Number</label>
-                            <input type="tel" class="form-control" id="studentPhoneNum" name="studentPhoneNum">
+                            <input type="tel" class="form-control" id="studentPhoneNum" name="studentPhoneNum" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentAddress">Address</label>
-                            <input type="text" class="form-control" id="studentAddress" name="studentAddress">
+                            <input type="text" class="form-control" id="studentAddress" name="studentAddress" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentType">Level Of Study</label>
@@ -77,11 +77,11 @@ $link->close();
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentYear">Year Of Study</label>
-                            <input type="number" class="form-control" id="studentYear" name="studentYear">
+                            <input type="number" class="form-control" id="studentYear" name="studentYear" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="studentEmail">Email</label>
-                            <input type="email" class="form-control" id="studentEmail" name="studentEmail">
+                            <input type="email" class="form-control" id="studentEmail" name="studentEmail" required>
                         </div>
                         <button type="submit" name="add_user" class="btn btn-success">Add User</button>
                         <button type="reset" name="reset" class="btn btn-warning">Reset</button>

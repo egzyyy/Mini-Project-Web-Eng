@@ -130,7 +130,7 @@
 <body>
     <header>
         <div class="header-left">
-            <h1>ADMIN</h1>
+            <h1>STUDENT</h1>
         </div>
         <div class="header-right">
             <div class="dropdown">

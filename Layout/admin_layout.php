@@ -75,7 +75,7 @@
             background-color: #111;
             position: fixed;
             color: #333;
-    height: 100%;
+    height: 108%;
     left: 0;
     padding-top: 20px;
     position: absolute;
@@ -149,7 +149,7 @@
             <div class="dropdown-container">
                 <a href="#">Manage User</a>
                 <a href="#">Profile</a>
-                <a href="#">Registration</a>
+                <a href="../../Module1/Admin/addUser.php">Registration</a>
             </div>
             <a href="#">Manage Parking Area</a>
             <a href="#">Administration Dashboard</a>

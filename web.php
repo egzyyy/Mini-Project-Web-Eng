@@ -1,5 +1,5 @@
 <?php
-include('Home/house.php');
+include('headbar/house.php');
 ?>
 <link rel="stylesheet" href="footer/footer.css">
 <section id="home">
@@ -8,7 +8,3 @@ include('Home/house.php');
         <p>Manage your parking with ease.</p>
     </center>
 </section>
-
-<?php
-include('footer/footer.php');
-?>

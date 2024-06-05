@@ -1,0 +1,50 @@
+/* Styling for delete message alert */
+.alert {
+    margin-top: 10px;
+}
+
+/* Styling for table headers and cells */
+.table th,
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive table layout */
+.table-responsive table {
+    table-layout: auto;
+    width: 100%;
+}
+
+/* Word wrap for table headers and cells */
+.table-responsive th,
+.table-responsive td {
+    word-wrap: break-word;
+}
+
+/* Overflow and text ellipsis for long content in table headers and cells */
+.table th,
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Custom CSS to ensure proper table layout */
+.table-responsive table {
+    table-layout: auto;
+    width: 100%;
+}
+.table-responsive th,
+.table-responsive td {
+    word-wrap: break-word;
+}
+.table th,
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+

@@ -139,53 +139,54 @@
 </head>
 <body>
 
-<?php 
-session_start(); 
+<?php
+session_start();
+
 $link = mysqli_connect("localhost", "root", "");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
+$message = "";
+
 // Select the database
 mysqli_select_db($link, "web_eng");
 
-if (isset($_POST['uname']) && isset($_POST['password'])) {
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $role = "student"; // Set role as student
 
-	$uname = $_POST['uname'];
-	$pass = $_POST['password'];
+    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("sss", $username, $password, $role);
 
-	if (empty($uname)) {
-		header("Location: index.php?error=User Name is required");
-	    exit();
-	}else if(empty($pass)){
-        header("Location: index.php?error=Password is required");
-	    exit();
-	}else{
-		$sql = "SELECT * FROM user WHERE U_Username='$uname' AND U_Password='$pass'";
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-		$result = mysqli_query($link, $sql);
+    // Check if user exists
+    if ($result->num_rows == 1) {
+        // Authentication successful, redirect based on userType
+        $user = $result->fetch_assoc();
 
-		if (mysqli_num_rows($result) === 1) {
-			$row = mysqli_fetch_assoc($result);
-            if ($row['U_Username'] === $uname && $row['U_Password'] === $pass) {
-            	$_SESSION['U_Username'] = $row['U_Username'];
-            	$_SESSION['U_Id'] = $row['U_Id'];
-            	header("Location: Dashbourd.php");
-		        exit();
-            }else{
-				header("Location: index.php?error=Incorect User name or password");
-		        exit();
-			}
-		}else{
-			header("Location: index.php?error=Incorect User name or password");
-	        exit();
-		}
-	}
-	
-}else{
-	header("Location: Dashbourd.php");
-	exit();
+        // Create new session ID
+        $newSessionId = session_create_id();
+        $sessionId = $newSessionId . "_" . $user['U_ID'];
+        session_id($sessionId);
+
+        $_SESSION["user_id"] = $user['U_ID'];
+        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
+        $_SESSION['last_regeneration'] = time();
+        header("Location: Dashbourd.php?login=success");
+        exit();
+    } else {
+        $message = "Invalid username or password.";
+        header("Location: loginPage.php?message=" . urlencode($message));
+        exit();
+    }
 }
 ?>
 
@@ -194,26 +195,13 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
     <div class="shape"></div>
 </div>
 <form method="post">
-    <h3>Login FKPark</h3>
+    <h3>Student FKPark</h3>
 
-    <?php
-    if ($error != "") {
-        echo "<div class='error-message'>$error</div>";
-    }
-    ?>
+    <label for="username">Username</label>
+    <input type="text" placeholder="Username" id="username" name="username" required>
 
-    <label for="U_Username">Username</label>
-    <input type="text" placeholder="Username" id="U_Username" name="U_Username" required>
-
-    <label for="U_Password">Password</label>
-    <input type="password" placeholder="Password" id="U_Password" name="U_Password" required>
-
-    <label for="U_Type">Role</label>
-    <select id="U_Type" name="U_Type">
-        <option value="Administrator">Administrator</option>
-        <option value="Staff Unit Keselamatan">Staff Unit Keselamatan</option>
-        <option value="Student">Student</option>
-    </select>
+    <label for="password">Password</label>
+    <input type="password" placeholder="Password" id="password" name="password" required>
     
     <div class="forgot-password">
         <a href="#">Forgot Password?</a>

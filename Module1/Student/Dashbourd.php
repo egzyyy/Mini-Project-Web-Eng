@@ -1,11 +1,11 @@
 <?php
 session_start();
-    include('header.php');
+require('../../Layout/student_layout.php');
 ?>
 
 <link rel="stylesheet" href="Dashbourd.css">
 <center>
-<h2>Hello, <?php echo $_SESSION['U_Username']; ?></h2>
+<h2>Hello, <?php echo $_SESSION['user_username']; ?></h2>
 </center>
 <div class="dashboard-container">
     <div class="dashboard-content">
@@ -50,6 +50,3 @@ session_start();
 
 <script src="Dashbourd.js"></script>
 
-<?php
-    include('../../footer/footer.php');
-?>

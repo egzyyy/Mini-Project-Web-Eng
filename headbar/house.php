@@ -132,9 +132,9 @@
                                 <i class="fa fa-caret-down"></i>
                                 </button>
                                 <div class="dropdown-content">
-                                <a href="loginPage.php">Administrator</a>
-                                <a href="#">Staff Unit Keselamatan</a>
-                                <a href="../../Module1/Student/loginPage.php">Student</a>
+                                <a href="Module1/Admin/login.php">Administrator</a>
+                                <a href="Module1/Staff/login.php">Staff Unit Keselamatan</a>
+                                <a href="Module1/Student/login.php">Student</a>
                                 </div>
                             </div> 
                     </li>

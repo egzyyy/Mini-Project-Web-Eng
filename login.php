@@ -36,23 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["user_id"] = $user['U_ID'];
         $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
         $_SESSION['last_regeneration'] = time();
-
-        switch ($user['U_Type']) {
-            case 'Student':
+        if{
                 header("Location: Module1/Student/Dashboard.php?login=success");
                 exit();
-            case 'Administrator':
-                header("Location: Module1/Admin/Dashboard.php?login=success");
-                exit();
-            case 'Staff Unit Keselamatan':
-                header("Location: Module1/Staff/Dashboard.php?login=success");
-                exit();
-            default:
-                // Handle unexpected role
-                $message = "Invalid user type.";
-                header("Location: loginPage.php?message=" . urlencode($message));
-                exit();
-        }
     } else {
         $message = "Invalid username or password.";
         header("Location: loginPage.php?message=" . urlencode($message));

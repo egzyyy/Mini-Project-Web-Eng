@@ -1,14 +1,6 @@
 <?php
 session_start();
-    require('../../Layout/admin_layout.php');
-
-    $link = mysqli_connect("localhost", "root", "");
-
-if (!$link) {
-    die('Error connecting to the server: ' . mysqli_connect_error());
-}
-// Include database connection file
-mysqli_select_db($link, "web_eng");
+require('../../Layout/staff_layout.php');
 ?>
 
 <link rel="stylesheet" href="Dashbourd.css">
@@ -20,21 +12,21 @@ mysqli_select_db($link, "web_eng");
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
-                <button class="action-btn">Add User</button>
-                <button class="action-btn">View Report</button>
+                <button class="action-btn">Add Summon</button>
+                <button class="action-btn">View Booking History</button>
             </div>
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
-                <div class="card-title">Vehicles Registered</div>
+                <div class="card-title">Total Warning</div>
                 <div class="card-content">150</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">User Registered</div>
+                <div class="card-title">Total Summon</div>
                 <div class="card-content">25</div>
             </div>
             <div class="dashboard-card">
-                <div class="card-title">Traffic Summon Report</div>
+                <div class="card-title">Traffic Summon</div>
                 <div class="card-content">10</div>
             </div>
             <!-- Add more cards as needed -->
@@ -58,5 +50,3 @@ mysqli_select_db($link, "web_eng");
 
 <script src="Dashbourd.js"></script>
 
-</body>
-</html>

@@ -72,20 +72,22 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            background-color: #111;
-            position: fixed;
+            background-color: #d9dddc;
+            font-weight: bold;
+            padding-top: 20px;
+            overflow-x: hidden;
             color: #333;
-    height: 108%;
-    left: 0;
-    padding-top: 20px;
-    position: absolute;
-    width: 250px;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            position: absolute;
+            width: 300px;
         }
         .sidenav a, .dropdown-btn {
-            padding: 6px 8px 6px 16px;
+            padding: 6px 8px 30px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: #818181;
+            color: #000000;
             display: block;
             background: none;
             width: 100%;

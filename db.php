@@ -50,9 +50,12 @@ if (mysqli_query($link, $sql2)) {
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_studentID INT AUTO_INCREMENT PRIMARY KEY,
     STU_name VARCHAR(100),
+    STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),
+    STU_yearStudy integer,
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
+    STU_password VARCHAR(50),
     U_ID INT,
     FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
@@ -83,9 +86,7 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehicleID INT AUTO_INCREMENT PRIMARY KEY,
     V_plateNum VARCHAR(50),
     V_vehigrant VARCHAR(255),
-    V_vehicleType VARCHAR(50),
-    U_ID INT,
-    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
+    V_vehicleType VARCHAR(50)
 )";
 
 $sql1 = "INSERT INTO user (U_Username, U_Password, U_Type)
@@ -158,16 +159,28 @@ if (mysqli_query($link, $sql9)) {
     die('Error creating new record: ' . mysqli_error($link));
 }
 
-$tab = "INSERT INTO user (U_ID, U_Username, U_Password, U_Type) 
+$tab1 = "INSERT INTO user (U_ID, U_Username, U_Password, U_Type) 
         VALUES ('A100', 'fikri', 'fikri030', 'Student'), 
                ('B100', 'rusydan', 'rusydan040', 'Staff'), 
                ('BC100', 'iqmal', 'iqmal050', 'Administrator')";
 
-if ($link->query($tab) === TRUE) {
+if ($link->query($tab1) === TRUE) {
     echo "New records created successfully";
 } else {
-    echo "Error: " . $tab . "<br>" . $link->error;
+    echo "Error: " . $tab1 . "<br>" . $link->error;
 }
+
+$tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
+        VALUES ('www111', 'de', 'ford'), 
+               ('www222', 'de', 'ranger'), 
+               ('www333', 'de', 'rover')";
+
+if ($link->query($tab2) === TRUE) {
+    echo "New records created successfully";
+} else {
+    echo "Error: " . $tab2 . "<br>" . $link->error;
+}
+
 
 mysqli_close($link);
 ?>

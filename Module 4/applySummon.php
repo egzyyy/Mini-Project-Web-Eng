@@ -153,10 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="apply-summon">Apply Summon</button>
         </form>
     </div>
-    <?php
-// Include footer and scripts
-include('../footer/footer.php');
-?>
 </body>
 </html>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Staff Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
@@ -130,7 +130,7 @@
 <link rel="stylesheet" href="../../footer/footer.css">
     <header>
         <div class="header-left">
-            <h1>ADMIN</h1>
+            <h1>STAFF</h1>
         </div>
         <div class="header-right">
             <div class="dropdown">

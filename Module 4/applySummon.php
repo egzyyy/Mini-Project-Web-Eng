@@ -64,7 +64,7 @@ mysqli_close($link);
 
         .content-container {
             max-width: 800px;
-            margin: 50px auto;
+            margin-left: 425px;
             padding: 20px;
             background-color: white;
             border-radius: 10px;

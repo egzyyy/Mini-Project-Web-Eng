@@ -1,30 +1,24 @@
 <?php
-include('../Layout/staff_layout.php');
 
+$link = mysqli_connect("localhost", "root", "", "web_eng");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+// Check if form is submitted and the apply-summon button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $servername = "localhost";
-    $username = "root"; // Replace with your MySQL username
-    $password = ""; // Replace with your MySQL password
-    $dbname = "web_eng";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
+    // Get form data
     $student_id = $_POST['student_id'];
     $plate_number = $_POST['plate_number'];
-    $violation_type = $_POST['violation_type'];
     $date = $_POST['date'];
     $status = $_POST['status'];
 
     // Get the vehicle ID based on the plate number
     $sql = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum='$plate_number'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
+    $result = $link->query($sql);
+
+    if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $vehicle_id = $row['V_vehicleID'];
 
@@ -32,17 +26,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO trafficSummon (V_vehicleID, student_id, date, status, plate_number)
                 VALUES ('$vehicle_id', '$student_id', '$date', '$status', '$plate_number')";
 
-        if ($conn->query($sql) === TRUE) {
-            echo "New summon added successfully";
+        if ($link->query($sql) === TRUE) {
+            echo "<div class='alert alert-success' role='alert'>New summon added successfully!</div>";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
         }
     } else {
-        echo "No vehicle found with that plate number.";
+        echo "<div class='alert alert-danger' role='alert'>No vehicle found with that plate number.</div>";
     }
-
-    $conn->close();
 }
+
+// Close the database connection
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .content-container {
             max-width: 800px;
             margin: 50px auto;
-            padding: 40px;
+            padding: 20px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
@@ -97,12 +92,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
         }
 
-        form input[type="text"],
-        form input[type="date"],
-        form select {
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            flex: 1;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group select {
+            flex: 2;
             width: calc(100% - 22px);
             padding: 10px;
-            margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
@@ -114,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 12px 24px;
             font-size: 16px;
             color: #fff;
-            background-color: #333;
+            background-color: #800000;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -128,9 +136,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
+    <?php include('../Layout/staff_layout.php'); ?>
     <div class="content-container">
         <h2>Add Summon</h2>
-        <form action="add_summon.php" method="post">
+        <form action="applySummon.php" method="post">
             <div class="form-group">
                 <label for="student_id">Student ID:</label>
                 <input type="text" id="student_id" name="student_id" required>
@@ -150,9 +159,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Unpaid">Unpaid</option>
                 </select>
             </div>
-            <button type="submit" class="apply-summon">Apply Summon</button>
+            <button type="submit" name="apply-summon">Apply Summon</button>
         </form>
     </div>
 </body>
 </html>
-

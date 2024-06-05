@@ -185,13 +185,13 @@ $result = $conn->query($sql);
     <script>
         function cancelSummon(id) {
             if (confirm("Are you sure you want to cancel this summon?")) {
-                window.location.href = 'cancel_summon.php?id=' + id;
+                window.location.href = 'cancel.php?id=' + id;
             }
         }
 
         function deleteSummon(id) {
             if (confirm("Are you sure you want to delete this summon?")) {
-                window.location.href = 'delete_summon.php?id=' + id;
+                window.location.href = 'delete.php?id=' + id;
             }
         }
     </script>

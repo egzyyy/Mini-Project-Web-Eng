@@ -1,11 +1,14 @@
+<?php
+include('../../Layout/admin_layout.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Parking Area</title>
+    <title>Student Car Park Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .container {
+        .content-container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
@@ -14,7 +17,7 @@
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .container h2 {
+        .content-container h2 {
             margin-bottom: 20px;
         }
         .parking-image {
@@ -106,78 +109,78 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Manage Parking Area</h2>
-        <div class="parking-image">
-            <img src="parking_area.jpg" alt="Parking Area">
-            <div class="parking-label label-A1">A1</div>
-            <div class="parking-label label-A2">A2</div>
-            <div class="parking-label label-A3">A3</div>
-            <div class="parking-label label-A4">A4</div>
-            <div class="parking-label label-B1">B1</div>
-            <div class="parking-label label-B2">B2</div>
-            <div class="parking-label label-B3">B3</div>
-        </div>
-        <form onsubmit="closeParkingArea(event)">
-            <input type="text" id="parkingArea" placeholder="Enter parking area (e.g., A1)">
-            <input type="submit" value="Close Area">
-        </form>
-        <table id="parkingTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Example rows for demonstration purposes -->
-                <tr>
-                    <td>1</td>
-                    <td>A1</td>
-                    <td>Available</td>
-                    <td>Staff</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>A2</td>
-                    <td>Occupied</td>
-                    <td>Staff</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>A3</td>
-                    <td>Available</td>
-                    <td>Student</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>A4</td>
-                    <td>Available</td>
-                    <td>Student</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>B1</td>
-                    <td>Available</td>
-                    <td>Student</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>B2</td>
-                    <td>Occupied</td>
-                    <td>Student</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>B3</td>
-                    <td>Available</td>
-                    <td>Staff</td>
-                </tr>
-                <!-- Additional rows can be added here -->
-            </tbody>
-        </table>
+<div class="content-container">
+    <h2>Manage Parking Area</h2>
+    <div class="parking-image">
+        <img src="parking_area.jpg" alt="Parking Area">
+        <div class="parking-label label-A1">A1</div>
+        <div class="parking-label label-A2">A2</div>
+        <div class="parking-label label-A3">A3</div>
+        <div class="parking-label label-A4">A4</div>
+        <div class="parking-label label-B1">B1</div>
+        <div class="parking-label label-B2">B2</div>
+        <div class="parking-label label-B3">B3</div>
     </div>
+    <form onsubmit="closeParkingArea(event)">
+        <input type="text" id="parkingArea" placeholder="Enter parking area (e.g., A1)" required>
+        <input type="submit" value="Close Area">
+    </form>
+    <table id="parkingTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example rows for demonstration purposes -->
+            <tr>
+                <td>1</td>
+                <td>A1</td>
+                <td>Available</td>
+                <td>Staff</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>A2</td>
+                <td>Occupied</td>
+                <td>Staff</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>A3</td>
+                <td>Available</td>
+                <td>Student</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>A4</td>
+                <td>Available</td>
+                <td>Student</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>B1</td>
+                <td>Available</td>
+                <td>Student</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>B2</td>
+                <td>Occupied</td>
+                <td>Student</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>B3</td>
+                <td>Available</td>
+                <td>Staff</td>
+            </tr>
+            <!-- Additional rows can be added here -->
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

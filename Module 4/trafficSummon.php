@@ -1,4 +1,6 @@
 <?php
+include('../Layout/staff_layout.php');
+
 $servername = "localhost";
 $username = "root"; // Replace with your MySQL username
 $password = ""; // Replace with your MySQL password
@@ -21,19 +23,128 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Violations</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Main content container */
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .content-container h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Form styling */
+        form {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form input[type="date"],
+        form select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Button styling */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #575757;
+        }
+
+        .btn.cancel {
+            background-color: #ff9800;
+        }
+
+        .btn.cancel:hover {
+            background-color: #e68900;
+        }
+
+        .btn.delete {
+            background-color: #f44336;
+        }
+
+        .btn.delete:hover {
+            background-color: #d32f2f;
+        }
+
+    </style>
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <a href="#">ACADEMIC</a>
-            <a href="#">ABOUT</a>
-            <a href="#">UNIT KESELAMATAN</a>
-        </div>
-    </header>
+
     <main>
-        <section class="content">
-            <h2>Parking</h2>
+        <div class="content-container">
+            <h2>Parking Violations</h2>
             <table>
                 <thead>
                     <tr>
@@ -69,18 +180,8 @@ $result = $conn->query($sql);
                     ?>
                 </tbody>
             </table>
-        </section>
-    </main>
-    <footer>
-        <div class="footer-nav">
-            <a href="#">Profile</a>
-            <a href="#">Parking</a>
-            <a href="#">Home</a>
-            <a href="#">Summon</a>
-            <a href="#">Dashboard</a>
-            <a href="#">Vehicle</a>
         </div>
-    </footer>
+    </main>
     <script>
         function cancelSummon(id) {
             if (confirm("Are you sure you want to cancel this summon?")) {

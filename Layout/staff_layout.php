@@ -13,14 +13,16 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            background-color: #f4f4f4; /* Light grey background */
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333;
+            background-color: #800000; /* Maroon header background */
             color: white;
             padding: 30px 50px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
         .header-left h1 {
             margin: 0;
@@ -33,17 +35,23 @@
             display: inline-block;
         }
         .dropbtn {
-            background-color: #333;
+            background-color: #800000;
             color: white;
             border: none;
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 5px; /* Changed to rectangle shape */
+            transition: background-color 0.3s;
         }
         .dropbtn img {
             width: 30px;
             height: 30px;
             border-radius: 50%;
+            margin-right: 10px;
         }
         .dropdown-content {
             display: none;
@@ -73,24 +81,23 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 200px;
-            background-color: #111;
+            width: 250px;
+            background-color: #800000; /* Maroon sidebar background */
             padding-top: 20px;
             position: fixed;
             overflow-x: hidden;
-            color: #333;
-    height: 100%;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    position: absolute;
-    width: 250px;
+            color: white;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            position: absolute;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
         }
         .sidenav a, .dropdown-btn {
-            padding: 6px 8px 6px 16px;
+            padding: 10px 16px;
             text-decoration: none;
-            font-size: 20px;
-            color: #818181;
+            font-size: 18px;
+            color: white;
             display: block;
             background: none;
             width: 100%;
@@ -99,13 +106,15 @@
             outline: none;
         }
         .sidenav a:hover, .dropdown-btn:hover {
-            color: #f1f1f1;
+            background-color: #571515; /* Darker maroon on hover */
         }
         .main {
-            margin-left: 200px;
+            margin-left: 250px; /* Width of sidebar */
             font-size: 20px;
             padding: 20px;
             flex: 1;
+            background-color: #fff; /* White main content background */
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
         }
         .active {
             background-color: green;
@@ -122,12 +131,11 @@
         }
         @media screen and (max-height: 450px) {
             .sidenav {padding-top: 15px;}
-            .sidenav a {font-size: 18px;}
+            .sidenav a {font-size: 16px;}
         }
     </style>
 </head>
 <body>
-<link rel="stylesheet" href="../../footer/footer.css">
     <header>
         <div class="header-left">
             <h1>STAFF</h1>
@@ -135,7 +143,8 @@
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
-                    <img src="../../image/loginIcon.png" alt="login">
+                    <img src="../../image/profileIcon.png" alt="Profile">
+                    Profile
                 </button>
                 <div class="dropdown-content">
                     <a href="../Module1/Admin/Profile.php">View Profile</a>
@@ -147,17 +156,9 @@
     <div class="container">
         <div class="sidenav">
             <a href="#">Dashboard</a>
-            <a href="#">Profile</a>
-            <button class="dropdown-btn">User 
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-container">
-                <a href="#">Manage User</a>
-                <a href="#">Profile</a>
-                <a href="#">Registration</a>
-            </div>
-            <a href="#">Manage Parking Area</a>
-            <a href="#">Administration Dashboard</a>
+            <a href="#">Apply Summon</a>
+            <a href="#">Manage Booking</a>
         </div>
-        <div class="main">
-
+    </div>
+</body>
+</html>

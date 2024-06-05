@@ -17,8 +17,6 @@
             });
         }
     </script>
-</body>
-</html>
 
     <footer>
         <p>&copy; 2024 FKPark. All rights reserved.</p>

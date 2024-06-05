@@ -18,7 +18,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #007B85;
+            background-color: #333;
             color: white;
             padding: 30px 50px;
         }
@@ -73,22 +73,25 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 300px;
-            background-color: #D9DDDC;
+            width: 200px;
+            background-color: #111;
             padding-top: 20px;
+            position: fixed;
             overflow-x: hidden;
-            color: #000000;
-            border-bottom-right-radius: 25px;    
-            left: 0;
-            overflow-x: hidden;
-            position: absolute;
+            color: #333;
+    border-bottom-right-radius: 25px;
+    height: 86%;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    position: absolute;
+    width: 250px;
         }
-
         .sidenav a, .dropdown-btn {
-            padding: 6px 8px 30px 16px;
-            text-decoration:none ;
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
             font-size: 20px;
-            color: #000000;
+            color: #818181;
             display: block;
             background: none;
             width: 100%;
@@ -127,7 +130,7 @@
 <body>
     <header>
         <div class="header-left">
-            <h1>STUDENT</h1>
+            <h1>ADMIN</h1>
         </div>
         <div class="header-right">
             <div class="dropdown">
@@ -145,8 +148,16 @@
         <div class="sidenav">
             <a href="#">Dashboard</a>
             <a href="#">Profile</a>
-            <a href="#">Booking</a>
-            <a href="#">Summon</a>
+            <button class="dropdown-btn">User 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="#">Manage User</a>
+                <a href="#">Profile</a>
+                <a href="#">Registration</a>
+            </div>
+            <a href="#">Manage Parking Area</a>
+            <a href="#">Administration Dashboard</a>
         </div>
         <div class="main">
 

@@ -1,21 +1,10 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    flex-direction: column;
-    min-height: 100vh;
-    box-sizing: border-box;
-    justify-content: center;
-} 
-
-        
+      
         /* Card styling */
         .card {
             border-radius: 0.25rem;
             width: 100%;
             max-width: 600px;
-            padding-left: 60px;
+            padding-left: 30%;
                 }
         
         .card-header {

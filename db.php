@@ -48,7 +48,7 @@ if (mysqli_query($link, $sql2)) {
 
 // Create the student table
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
-    STU_studentID INT AUTO_INCREMENT PRIMARY KEY,
+    STU_studentID INT PRIMARY KEY,
     STU_name VARCHAR(100),
     STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),

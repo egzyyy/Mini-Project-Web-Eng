@@ -81,6 +81,14 @@ include('../../Layout/admin_layout.php');
         input[type="submit"]:hover {
             background-color: #555;
         }
+
+        .parking-image{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+            margin-top: 20px;
+        }
     </style>
     <script>
         function closeParkingArea(event) {
@@ -112,14 +120,14 @@ include('../../Layout/admin_layout.php');
 <div class="content-container">
     <h2>Manage Parking Area</h2>
     <div class="parking-image">
-        <img src="parking_area.jpg" alt="Parking Area">
-        <div class="parking-label label-A1">A1</div>
+        <img src="../../image/park.jpg" alt="Parking Area">
+        <!-- <div class="parking-label label-A1">A1</div>
         <div class="parking-label label-A2">A2</div>
         <div class="parking-label label-A3">A3</div>
         <div class="parking-label label-A4">A4</div>
         <div class="parking-label label-B1">B1</div>
         <div class="parking-label label-B2">B2</div>
-        <div class="parking-label label-B3">B3</div>
+        <div class="parking-label label-B3">B3</div> -->
     </div>
     <form onsubmit="closeParkingArea(event)">
         <input type="text" id="parkingArea" placeholder="Enter parking area (e.g., A1)" required>

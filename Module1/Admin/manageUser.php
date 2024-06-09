@@ -90,7 +90,7 @@ if (isset($_GET['del'])) {
                                             <td><?php echo $row->STU_type; ?></td>
                                             <td><?php echo $row->STU_yearStudy; ?></td>
                                             <td>
-                                                <a href="admin-edit-user.php?u_id=<?php echo $row->STU_studentID; ?>" class="badge bg-success text-white"><i class="fas fa-user-edit"></i> Update</a>
+                                                <a href="editUser.php?u_id=<?php echo $row->STU_studentID; ?>" class="badge bg-success text-white"><i class="fas fa-user-edit"></i> Update</a>
                                                 <a href="manageUser.php?del=<?php echo $row->STU_studentID; ?>" class="badge bg-danger text-white" onclick="return confirm('Are you sure you want to delete this user?');"><i class="fas fa-trash-alt"></i> Delete</a>
                                             </td>
                                             </center>

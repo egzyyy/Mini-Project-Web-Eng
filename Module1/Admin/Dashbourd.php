@@ -20,7 +20,9 @@ mysqli_select_db($link, "web_eng");
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
-                <button class="action-btn">Add User</button>
+            <form action="addUser.php" method="get" style="display:inline;">
+                 <button type="submit" class="action-btn">Add User</button>
+                </form>
                 <button class="action-btn">View Report</button>
             </div>
         </div>

@@ -12,7 +12,7 @@ require('../../Layout/staff_layout.php');
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
-                <button class="action-btn">Add User</button>
+                <button class="action-btn">Add summon</button>
                 <button class="action-btn">Approve</button>
             </div>
         </div>

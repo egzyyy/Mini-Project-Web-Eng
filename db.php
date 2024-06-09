@@ -52,7 +52,7 @@ $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_name VARCHAR(100),
     STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),
-    STU_yearStudy integer,
+    STU_yearStudy INTEGER,
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
     STU_password VARCHAR(50),
@@ -88,12 +88,6 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehigrant VARCHAR(255),
     V_vehicleType VARCHAR(50)
 )";
-
-$sql1 = "INSERT INTO user (U_Username, U_Password, U_Type)
-VALUES ('Rusydan', 'rusydan040', 'staff')";
-
-if (mysqli_query($link, $sql)) {
-    echo "new record created successfully\n";}
 if (mysqli_query($link, $sql5)) {
     echo "Table vehicle created successfully\n";
 } else {
@@ -159,28 +153,36 @@ if (mysqli_query($link, $sql9)) {
     die('Error creating new record: ' . mysqli_error($link));
 }
 
-$tab1 = "INSERT INTO user (U_ID, U_Username, U_Password, U_Type) 
-        VALUES ('A100', 'fikri', 'fikri030', 'Student'), 
-               ('B100', 'rusydan', 'rusydan040', 'Staff'), 
-               ('BC100', 'iqmal', 'iqmal050', 'Administrator')";
+// Check if the flag file exists
+$flagFile = 'data_inserted.flag';
 
-if ($link->query($tab1) === TRUE) {
-    echo "New records created successfully";
-} else {
-    echo "Error: " . $tab1 . "<br>" . $link->error;
+if (!file_exists($flagFile)) {
+    // Insert sample data
+    $tab1 = "INSERT INTO user (U_Username, U_Password, U_Type) 
+            VALUES ('fikri', 'fikri030', 'Student'), 
+                   ('rusydan', 'rusydan040', 'Staff'), 
+                   ('iqmal', 'iqmal050', 'Administrator')";
+
+    if ($link->query($tab1) === TRUE) {
+        echo "New records created successfully\n";
+    } else {
+        echo "Error: " . $tab1 . "<br>" . $link->error;
+    }
+
+    $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
+            VALUES ('www111', 'de', 'ford'), 
+                   ('www222', 'de', 'ranger'), 
+                   ('www333', 'de', 'rover')";
+
+    if ($link->query($tab2) === TRUE) {
+        echo "New records created successfully\n";
+    } else {
+        echo "Error: " . $tab2 . "<br>" . $link->error;
+    }
+
+    // Create the flag file to indicate data has been inserted
+    file_put_contents($flagFile, 'Data inserted');
 }
 
-$tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
-        VALUES ('www111', 'de', 'ford'), 
-               ('www222', 'de', 'ranger'), 
-               ('www333', 'de', 'rover')";
-
-if ($link->query($tab2) === TRUE) {
-    echo "New records created successfully";
-} else {
-    echo "Error: " . $tab2 . "<br>" . $link->error;
-}
-
-
-mysqli_close($link);
+// Do not close the database connection here
 ?>

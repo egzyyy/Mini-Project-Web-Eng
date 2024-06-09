@@ -86,7 +86,7 @@ include('../../Layout/admin_layout.php');
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 40%;
+            width: 4%;
             margin-top: 20px;
         }
     </style>

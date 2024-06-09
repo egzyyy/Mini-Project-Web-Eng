@@ -1,37 +1,40 @@
 <?php
 include('../Layout/student_layout.php');
-// Include the database connection file
-include ('../db.php');
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+// Check if form is submitted and the apply-summon button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize form inputs
-    $car = mysqli_real_escape_string($conn, $_POST['car']);
-    $date = mysqli_real_escape_string($conn, $_POST['date']);
-    $time = mysqli_real_escape_string($conn, $_POST['time']);
+    // Get form data
+    $B_bookingID = $_POST['B_bookingID'];
+    $B_startTime = $_POST['B_startTime'];
+    $B_endTime= $_POST['B_endTime'];
+    $P_parkingspaceID = $_POST['P_parkingspaceID'];
 
-    // Check for clashing bookings
-    $check_sql = "SELECT * FROM booking WHERE B_startTime <= '$date $time' AND B_endTime >= '$date $time' AND P_parkingSpaceID = '$car'";
-    $result = $conn->query($check_sql);
+    // Get the vehicle ID based on the plate number
+    $sql = "SELECT P_parkingspaceID FROM parking";
+    $result = $link->query($sql);
 
-    if ($result->num_rows > 0) {
-        echo "<p>Booking clash detected. Please choose another time or parking space.</p>";
-    } else {
-        // Insert booking into the database
-        $insert_sql = "INSERT INTO booking (B_startTime, B_endTime, P_parkingSpaceID) VALUES ('$date $time', DATE_ADD('$date $time', INTERVAL 1 HOUR), '$car')";
-        if ($conn->query($insert_sql) === TRUE) {
-            // Generate QR code logic here (placeholder)
-            $qr_code = "generated_qr_code_for_booking";
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $P_parkingspaceID = $row['P_parkingspaceID'];
 
-            echo "<h2>Booking Confirmation</h2>";
-            echo "<p>Car: $car</p>";
-            echo "<p>Date: $date</p>";
-            echo "<p>Time: $time</p>";
-            echo "<p>QR Code: $qr_code</p>";
+        // Insert the summon
+        $sql = "INSERT INTO booking (B_bookingID, B_startTime,B_endTime, P_parkingSpaceID)
+                VALUES ('$B_bookingID', '$B_startTime', '$B_endTime', '$P_parkingspaceID')";
+
+        if ($link->query($sql) === TRUE) {
+            echo "<div class='alert alert-success' role='alert'>Booking added successfully!</div>";
         } else {
-            echo "Error: " . $insert_sql . "<br>" . $conn->error;
+            echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
         }
+    } else {
+        echo "<div class='alert alert-danger' role='alert'Booking failed.</div>";
     }
-} else {
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,5 +134,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 </html>
 <?php
-}
+
 ?>

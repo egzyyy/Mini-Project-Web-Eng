@@ -156,6 +156,7 @@
                 <a href="../../Module1/Admin/addUser.php">Registration</a>
             </div>
             <a href="#">Manage Parking Area</a>
+            <a href="#">Manage Parking Space</a>
             <a href="#">Administration Dashboard</a>
         </div>
         <script>

@@ -146,6 +146,7 @@
             <a href="#">Dashboard</a>
             <a href="#">Apply Summon</a>
             <a href="#">Manage Booking</a>
+            <a href="#">Vehicle</a>
         </div>
         <div class="main">
 

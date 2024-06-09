@@ -11,13 +11,14 @@
             margin: 0;
             padding: 0;
             height: 100vh;
+            display: flex;
             flex-direction: column;
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333;
+            background-color: #40E0D0;
             color: white;
             padding: 30px 50px;
         }
@@ -48,7 +49,7 @@
             display: none;
             position: absolute;
             right: 0;
-            background-color: #f9f9f9;
+            background-color: #808080;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             font-weight: bold;
@@ -72,22 +73,23 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            background-color: #d9dddc;
-            font-weight: bold;
-            padding-top: 20px;
-            overflow-x: hidden;
-            color: #333;
-            left: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-            position: absolute;
             width: 300px;
+            background-color: #D9DDDC;
+            padding-top: 20px;
+            overflow-x: hidden;
+            color: #000000;
+            border-bottom-right-radius: 25px;    
+            left: 0;
+            height: 120%
+            overflow-x: hidden;
+            position: absolute;
         }
+
         .sidenav a, .dropdown-btn {
             padding: 6px 8px 30px 16px;
-            text-decoration: none;
+            text-decoration:none ;
             font-size: 20px;
-            color: #000000;
+            color: #808080;
             display: block;
             background: none;
             width: 100%;
@@ -103,10 +105,10 @@
             font-size: 20px;
             padding: 20px;
             flex: 1;
-            padding-left: 80px;
+            padding-left: 10%;
         }
         .active {
-            background-color: green;
+            background-color: #808080;
             color: white;
         }
         .dropdown-container {
@@ -120,7 +122,7 @@
         }
         @media screen and (max-height: 450px) {
             .sidenav {padding-top: 15px;}
-            .sidenav a {font-size: 18px;}
+            .sidenav a {font-size: 16px;}
         }
     </style>
 </head>
@@ -136,7 +138,7 @@
                     <img src="../../image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Admin/Profile.php">View Profile</a>
+                    <a href="../../Module1/Admin/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -144,13 +146,13 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="#">Dashboard</a>
+            <a href="../../Module1/Admin/Dashbourd.php">Dashboard</a>
             <button class="dropdown-btn">User 
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="#">Manage User</a>
-                <a href="#">Profile</a>
+                <a href="../../Module1/Admin/manageUser.php">Manage User</a>
+                <a href="../../Module1/Admin/Profile.php">Profile</a>
                 <a href="../../Module1/Admin/addUser.php">Registration</a>
             </div>
             <a href="#">Manage Parking Area</a>

@@ -93,7 +93,7 @@ include('../Layout/student_layout.php');
         <h1>Welcome to the Student Car Park Booking System</h1>
         <div class="card">
             <h2><i class="fas fa-car"></i> View Cars</h2>
-            <a class="nav-link" href="view_cars.php"><i class="fas fa-eye"></i> View Cars</a>
+            <a class="nav-link" href="edit_booking.php"><i class="fas fa-eye"></i> View Cars</a>
         </div>
         <div class="card">
             <h2><i class="fas fa-calendar-plus"></i> Make Booking</h2>

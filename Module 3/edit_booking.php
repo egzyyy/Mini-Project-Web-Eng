@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="content-container">
         <h2>Edit Booking</h2>
-        <form method="post" action="view_car.php">
+        <form method="post" action="edit_booking.php">
             <div class="form-group">
                 <label for="booking_id">Booking ID:</label>
                 <select name="booking_id" id="booking_id" required>

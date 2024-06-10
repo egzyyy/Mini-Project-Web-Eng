@@ -36,13 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['st
     $parkingSpaceID = generateParkingSpaceID($prefix, $link);
 
     $sql = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) VALUES ('$parkingSpaceID', '$location', '$status', '$type')";
+    header('Content-Type: application/json');
     if (mysqli_query($link, $sql)) {
         echo json_encode(["status" => "success", "message" => "New parking space added successfully"]);
     } else {
         echo json_encode(["status" => "error", "message" => mysqli_error($link)]);
     }
     exit;
-}
+    }
 
 // Handle delete request
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteParkingSpaceID'])) {
@@ -79,9 +80,48 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             margin-bottom: 20px;
             text-align: center;
         }
-        .form-container, .add-button {
-            display: none;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        table th {
+            background-color: #333;
+            color: white;
+        }
+        .add-button-container {
+            text-align: right;
             margin-top: 20px;
+        }
+        .add-button-container button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .add-button-container button:hover {
+            background-color: #555;
+        }
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            z-index: 1000;
+            width: 400px;
+            max-width: 90%;
         }
         .form-container h2 {
             margin-bottom: 20px;
@@ -112,34 +152,14 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         .form-container button:hover {
             background-color: #555;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        table th {
-            background-color: #333;
-            color: white;
-        }
-        .add-button-container {
-            text-align: right;
-            margin-top: 20px;
-        }
-        .add-button-container button {
-            padding: 10px 20px;
-            background-color: #333;
-            color: white;
+        .form-container .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
             border: none;
-            border-radius: 5px;
+            font-size: 20px;
             cursor: pointer;
-        }
-        .add-button-container button:hover {
-            background-color: #555;
         }
     </style>
     <script>
@@ -147,26 +167,38 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             document.querySelector('.form-container').style.display = 'block';
         }
 
-        function addParkingSpace(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert(data.message);
-                    location.reload(); // Reload the page
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        function hideAddForm() {
+            document.querySelector('.form-container').style.display = 'none';
         }
+
+        function addParkingSpace(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data received:', data);
+        if (data.status === 'success') {
+            alert(data.message);
+            location.reload(); // Reload the page
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    //     alert('An error occurred while adding the parking space.');
+    // });
+}
+
 
         function deleteParkingSpace(parkingSpaceID) {
             if (confirm('Are you sure you want to delete this parking space?')) {
@@ -270,6 +302,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         <button onclick="showAddForm()">Add New Parking Space</button>
     </div>
     <div class="form-container">
+        <button class="close-btn" onclick="hideAddForm()">&times;</button>
         <h2>Add New Parking Space</h2>
         <form method="post" onsubmit="addParkingSpace(event)">
             <label for="parkingSpaceID">Parking Space ID</label>

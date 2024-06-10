@@ -96,7 +96,7 @@ if (mysqli_query($link, $sql5)) {
 
 // Create the parkingSpace table
 $sql6 = "CREATE TABLE IF NOT EXISTS parkingSpace (
-    P_parkingSpaceID INT AUTO_INCREMENT PRIMARY KEY,
+    P_parkingSpaceID VARCHAR(6) PRIMARY KEY,
     P_location VARCHAR(15),
     P_status VARCHAR(30),
     P_parkingType VARCHAR(15),
@@ -113,7 +113,7 @@ $sql7 = "CREATE TABLE IF NOT EXISTS booking (
     B_bookingID INT AUTO_INCREMENT PRIMARY KEY,
     B_startTime DATE,
     B_endTime DATE,
-    P_parkingSpaceID INT,
+    P_parkingSpaceID VARCHAR(6),
     FOREIGN KEY (P_parkingSpaceID) REFERENCES parkingSpace(P_parkingSpaceID)
 )";
 if (mysqli_query($link, $sql7)) {

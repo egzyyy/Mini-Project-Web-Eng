@@ -147,7 +147,7 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-$message = "";
+$message = "Invalid Login";
 
 // Select the database
 mysqli_select_db($link, "web_eng");

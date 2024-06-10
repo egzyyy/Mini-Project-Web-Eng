@@ -152,7 +152,7 @@
             </button>
             <div class="dropdown-container">
                 <a href="../../Module1/Admin/manageUser.php">Manage User</a>
-                <a href="../../Module1/Admin/Profile.php">Profile</a>
+                <a href="../../Module1/Admin/profileUser.php">Profile</a>
                 <a href="../../Module1/Admin/addUser.php">Registration</a>
             </div>
             <a href="../../Module2/Admin/manage_parking_area.php">Manage Parking Area</a>

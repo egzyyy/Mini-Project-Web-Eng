@@ -1,6 +1,12 @@
 <?php
 include('../../Layout/admin_layout.php');
-include('../../db.php'); // Make sure this path is correct
+$link = mysqli_connect("localhost", "root", "", "web_eng");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+mysqli_select_db($link, "web_eng");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['P_parkingSpaceID'])) {
     $parkingSpaceID = mysqli_real_escape_string($link, $_GET['P_parkingSpaceID']);

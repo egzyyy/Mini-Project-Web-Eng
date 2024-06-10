@@ -241,6 +241,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
                 <th>Location</th>
                 <th>Status</th>
                 <th>Type</th>
+                <th>Reason</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -254,6 +255,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
                             <td>{$row['P_location']}</td>
                             <td>{$row['P_status']}</td>
                             <td>{$row['P_parkingType']}</td>
+                            <td>{$row['P_reason']}</td>
                             <td>
                                 <button onclick='editParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Update</button>
                                 <button onclick='deleteParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Delete</button>
@@ -271,8 +273,15 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         <h2>Add New Parking Space</h2>
         <form method="post" onsubmit="addParkingSpace(event)">
             <label for="parkingSpaceID">Parking Space ID</label>
-            <input type="text" id="parkingSpaceID" name="parkingSpaceID" onkeyup="filterLocationType()" required>
-            
+            <select id="parkingSpaceID" name="parkingSpaceID" onchange="filterLocationType()" required>
+                <option value="" disabled selected>Select Parking Type</option>
+                <option value="PS">PS for Parking Staff</option>
+                <option value="SS">SS for Parking Student</option>
+            </select>
+
+            <label for="type">Parking Type</label>
+            <input type="text" id="type" name="type" readonly required>
+
             <label for="location">Location</label>
             <select id="location" name="location" required>
                 <option value="" disable selected>Please Enter Parking Space ID First</option>
@@ -284,9 +293,6 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
                 <option value="Available">Available</option>
                 <option value="Occupied">Occupied</option>
             </select>
-            
-            <label for="type">Parking Type</label>
-            <input type="text" id="type" name="type" readonly required>
 
             <button type="submit">Add Parking Space</button>
         </form>

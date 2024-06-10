@@ -99,7 +99,8 @@ $sql6 = "CREATE TABLE IF NOT EXISTS parkingSpace (
     P_parkingSpaceID INT AUTO_INCREMENT PRIMARY KEY,
     P_location VARCHAR(15),
     P_status VARCHAR(30),
-    P_parkingType VARCHAR(15)
+    P_parkingType VARCHAR(15),
+    P_reason VARCHAR(100) NULL
 )";
 if (mysqli_query($link, $sql6)) {
     echo "Table parkingSpace created successfully\n";

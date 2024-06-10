@@ -10,13 +10,16 @@ if (!$link) {
 $fixed_locations = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3'];
 $parking_statuses = [];
 
-$parking_sql = "SELECT P_location, P_status FROM parkingSpace WHERE P_location IN ('" . implode("','", $fixed_locations) . "')";
+// Updated query to also fetch the reason
+$parking_sql = "SELECT P_location, P_status, P_reason FROM parkingSpace WHERE P_location IN ('" . implode("','", $fixed_locations) . "')";
 $parking_result = $link->query($parking_sql);
 
 while ($parking_row = $parking_result->fetch_assoc()) {
-    $parking_statuses[$parking_row['P_location']] = $parking_row['P_status'];
+    $parking_statuses[$parking_row['P_location']] = [
+        'status' => $parking_row['P_status'],
+        'reason' => $parking_row['P_reason']
+    ];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,16 +93,19 @@ while ($parking_row = $parking_result->fetch_assoc()) {
             <tr>
                 <th>Location</th>
                 <th>Status</th>
+                <th>Reason</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php
             foreach ($fixed_locations as $location) {
-                $status = isset($parking_statuses[$location]) ? $parking_statuses[$location] : 'Unknown';
+                $status = isset($parking_statuses[$location]['status']) ? $parking_statuses[$location]['status'] : 'Unknown';
+                $reason = isset($parking_statuses[$location]['reason']) ? $parking_statuses[$location]['reason'] : '';
                 echo "<tr>";
                 echo "<td>{$location}</td>";
                 echo "<td id='status-{$location}'>{$status}</td>";
+                echo "<td>{$reason}</td>";
                 echo "<td>
                         <button onclick=\"updateParkingStatus('{$location}', 'Available')\">Open</button>
                         <button onclick=\"updateParkingStatus('{$location}', 'Occupied')\">Close</button>

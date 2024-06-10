@@ -135,7 +135,7 @@
                     <img src="../image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Student/Profile.php">View Profile</a>
+                    <a href="../../Module1/Student/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -143,9 +143,9 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="#../Module1/Student/Dashbourd.php">Dashboard</a>
-            <a href="#../Module3/B_homepage.php">Booking</a>
-            <a href="#../">Summon</a>
+            <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <a href="../../Module 3/B_homepage.php">Booking</a>
+            <a href="../">Summon</a>
         </div>
         <div class="main">
 

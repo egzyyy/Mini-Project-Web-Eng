@@ -1,8 +1,6 @@
 <?php
 include('../Layout/student_layout.php');
 
-
-
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
@@ -11,31 +9,20 @@ if (!$link) {
 
 // Check if form is submitted and the apply-summon button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $B_bookingID = $_POST['B_bookingID'];
-    $B_endTime = $_POST['B_endTime'];
-    $P_parkingspaceID = $_POST['P_parkingspaceID'];
-    $B_startTime = $_POST['B_startTime'];
+    // Get form data and sanitize inputs
+    $B_bookingID = mysqli_real_escape_string($link, $_POST['B_bookingID']);
+    $B_endTime = mysqli_real_escape_string($link, $_POST['B_endTime']);
+    $P_parkingspaceID = mysqli_real_escape_string($link, $_POST['P_parkingspaceID']);
+    $B_startTime = mysqli_real_escape_string($link, $_POST['B_startTime']);
 
-    // Get the vehicle ID based on the plate number
-    $sql = "SELECT B_bookingID FROM booking";
-    $result = $link->query($sql);
+    // Insert the summon
+    $sql = "INSERT INTO booking (B_startTime, B_endTime, P_parkingspaceID, B_bookingID)
+            VALUES ('$B_startTime', '$B_endTime', '$P_parkingspaceID', '$B_bookingID')";
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $vehicle_id = $row['V_vehicleID'];
-
-        // Insert the summon
-        $sql = "INSERT INTO booking (B_startTime, B_endTime, P_parkingspaceID, B_bookingID)
-                VALUES ('$B_startTime', '$B_endTime', '$P_parkingspaceID', '$B_bookingID')";
-
-        if ($link->query($sql) === TRUE) {
-            echo "<div class='alert alert-success' role='alert'>New summon added successfully!</div>";
-        } else {
-            echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
-        }
+    if ($link->query($sql) === TRUE) {
+        echo "<div class='alert alert-success' role='alert'>New summon added successfully!</div>";
     } else {
-        echo "<div class='alert alert-danger' role='alert'>No vehicle found with that plate number.</div>";
+        echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
     }
 }
 
@@ -115,7 +102,7 @@ mysqli_close($link);
                 echo "<p><strong>Booking ID:</strong> " . $row['B_bookingID'] . "</p>";
                 echo "<p><strong>Start Time:</strong> " . $row['B_startTime'] . "</p>";
                 echo "<p><strong>End Time:</strong> " . $row['B_endTime'] . "</p>";
-                echo "<p><strong>Parking Space ID:</strong> " . $row['P_parkingSpaceID'] . "</p>";
+                echo "<p><strong>Parking Space ID:</strong> " . $row['P_parkingspaceID'] . "</p>";
                 echo "</div>";
             }
         } else {

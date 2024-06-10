@@ -1,6 +1,6 @@
 <?php
 // Include header file
-require('../../Layout/admin_layout.php');
+require('../../Layout/student_layout.php');
 
 $link = mysqli_connect("localhost", "root", "");
 

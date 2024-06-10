@@ -6,24 +6,27 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-// Check if form is submitted and the apply-summon button is clicked
+mysqli_select_db($link, "web_eng");
+
+// Check if form is submitted and the confirm booking button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $B_bookingID = $_POST['B_bookingID'];
     $B_startTime = $_POST['B_startTime'];
-    $B_endTime= $_POST['B_endTime'];
+    $B_endTime = $_POST['B_endTime'];
     $P_parkingspaceID = $_POST['P_parkingspaceID'];
 
-    // Get the vehicle ID based on the plate number
-    $sql = "SELECT P_parkingspaceID FROM parking";
+    // Get the vehicle ID based on the selected car
+    $selectedCarID = $_POST['car'];
+    $sql = "SELECT V_plateNum FROM vehicle WHERE V_vehicleID = '$selectedCarID'";
     $result = $link->query($sql);
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $P_parkingspaceID = $row['P_parkingspaceID'];
+        $P_parkingspaceID = $row['V_plateNum'];
 
-        // Insert the summon
-        $sql = "INSERT INTO booking (B_bookingID, B_startTime,B_endTime, P_parkingSpaceID)
+        // Insert the booking
+        $sql = "INSERT INTO booking (B_bookingID, B_startTime, B_endTime, P_parkingSpaceID)
                 VALUES ('$B_bookingID', '$B_startTime', '$B_endTime', '$P_parkingspaceID')";
 
         if ($link->query($sql) === TRUE) {
@@ -32,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
         }
     } else {
-        echo "<div class='alert alert-danger' role='alert'Booking failed.</div>";
+        echo "<div class='alert alert-danger' role='alert'>Booking failed.</div>";
     }
 }
 ?>
@@ -111,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Options should be dynamically generated from the database -->
                     <?php
                     $car_sql = "SELECT * FROM vehicle";
-                    $car_result = $conn->query($car_sql);
+                    $car_result = $link->query($car_sql);
                     while ($car_row = $car_result->fetch_assoc()) {
                         echo "<option value='" . $car_row['V_vehicleID'] . "'>" . $car_row['V_plateNum'] . "</option>";
                     }
@@ -119,12 +122,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
+                <label for="B_startTime">Start Time:</label>
+                <input type="datetime-local" id="B_startTime" name="B_startTime" required>
             </div>
             <div class="form-group">
-                <label for="time">Time:</label>
-                <input type="time" id="time" name="time" required>
+                <label for="B_endTime">End Time:</label>
+                <input type="datetime-local" id="B_endTime" name="B_endTime" required>
             </div>
             <div class="form-group">
                 <button type="submit">Confirm Booking</button>
@@ -134,5 +137,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 </html>
 <?php
-
+// Closing PHP tag at the end of the script
 ?>

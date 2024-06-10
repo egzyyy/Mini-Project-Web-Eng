@@ -1,6 +1,13 @@
 <?php
 include('../../Layout/admin_layout.php');
-include('../../db.php'); // Make sure this path is correct
+
+$link = mysqli_connect("localhost", "root", "", "web_eng");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+mysqli_select_db($link, "web_eng");
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['status'], $_POST['type'])) {

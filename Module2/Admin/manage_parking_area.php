@@ -68,6 +68,14 @@ while ($parking_row = $parking_result->fetch_assoc()) {
     </style>
     <script>
         function updateParkingStatus(location, status) {
+            let reason = 'None';
+            if (status === 'Temporary Closed') {
+                reason = prompt("Please enter the reason to close the area:");
+                if (!reason) {
+                    alert("Reason is required to close the area.");
+                    return;
+                }
+            }
             const xhr = new XMLHttpRequest();
             xhr.open("POST", "update_parking_status.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -76,12 +84,13 @@ while ($parking_row = $parking_result->fetch_assoc()) {
                     const response = JSON.parse(xhr.responseText);
                     if (response.success) {
                         document.getElementById('status-' + location).innerHTML = status === 'Occupied' ? 'Temporary Closed' : status;
+                        document.getElementById('reason-' + location).innerHTML = reason;
                     } else {
                         alert("Failed to update status: " + response.message);
                     }
                 }
             };
-            xhr.send("location=" + location + "&status=" + status);
+            xhr.send("location=" + location + "&status=" + status + "&reason=" + encodeURIComponent(reason));
         }
     </script>
 </head>
@@ -105,10 +114,10 @@ while ($parking_row = $parking_result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>{$location}</td>";
                 echo "<td id='status-{$location}'>{$status}</td>";
-                echo "<td>{$reason}</td>";
+                echo "<td id='reason-{$location}'>{$reason}</td>";
                 echo "<td>
                         <button onclick=\"updateParkingStatus('{$location}', 'Available')\">Open</button>
-                        <button onclick=\"updateParkingStatus('{$location}', 'Occupied')\">Close</button>
+                        <button onclick=\"updateParkingStatus('{$location}', 'Temporary Closed')\">Close</button>
                       </td>";
                 echo "</tr>";
             }

@@ -291,7 +291,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             <select id="status" name="status" required>
                 <option value="" disable selected>Please Choose</option>
                 <option value="Available">Available</option>
-                <option value="Occupied">Occupied</option>
+                <option value="Temporary Closed">Temporary Closed</option>
             </select>
 
             <button type="submit">Add Parking Space</button>

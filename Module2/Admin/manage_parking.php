@@ -10,19 +10,32 @@ if (!$link) {
 
 mysqli_select_db($link, "web_eng");
 
-$link = mysqli_connect("localhost", "root", "");
-
-if (!$link) {
-    die('Error connecting to the server: ' . mysqli_connect_error());
+// Function to generate the next parking space ID
+function generateParkingSpaceID($prefix, $link) {
+    $query = "SELECT P_parkingSpaceID FROM parkingSpace WHERE P_parkingSpaceID LIKE '$prefix%' ORDER BY P_parkingSpaceID DESC LIMIT 1";
+    $result = mysqli_query($link, $query);
+    $lastID = mysqli_fetch_assoc($result)['P_parkingSpaceID'];
+    
+    if ($lastID) {
+        $number = (int)substr($lastID, strlen($prefix)) + 1;
+    } else {
+        $number = 1;
+    }
+    
+    return $prefix . str_pad($number, 3, '0', STR_PAD_LEFT);
 }
-mysqli_select_db($link, "web_eng");
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['status'], $_POST['type'])) {
     $location = mysqli_real_escape_string($link, $_POST['location']);
     $status = mysqli_real_escape_string($link, $_POST['status']);
     $type = mysqli_real_escape_string($link, $_POST['type']);
+    
+    // Determine the prefix based on the parking type
+    $prefix = $type == 'Student' ? 'SS' : 'PS';
+    $parkingSpaceID = generateParkingSpaceID($prefix, $link);
 
-    $sql = "INSERT INTO parkingSpace (P_location, P_status, P_parkingType) VALUES ('$location', '$status', '$type')";
+    $sql = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) VALUES ('$parkingSpaceID', '$location', '$status', '$type')";
     if (mysqli_query($link, $sql)) {
         echo json_encode(["status" => "success", "message" => "New parking space added successfully"]);
     } else {
@@ -31,11 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['st
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['parkingSpaceID'])) {
-    $parkingSpaceID = mysqli_real_escape_string($link, $_POST['parkingSpaceID']);
-    
-    // Redirect to EditParkingSpace.php with the parkingSpaceID
-    header("Location: EditParkingSpace.php?P_parkingSpaceID=$parkingSpaceID");
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteParkingSpaceID'])) {
+    $parkingSpaceID = mysqli_real_escape_string($link, $_POST['deleteParkingSpaceID']);
+
+    $sql = "DELETE FROM parkingSpace WHERE P_parkingSpaceID = '$parkingSpaceID'";
+    if (mysqli_query($link, $sql)) {
+        echo json_encode(["status" => "success", "message" => "Parking space deleted successfully"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => mysqli_error($link)]);
+    }
     exit;
 }
 
@@ -152,12 +170,12 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
 
         function deleteParkingSpace(parkingSpaceID) {
             if (confirm('Are you sure you want to delete this parking space?')) {
-                fetch('delete_parking_space.php', {
+                fetch('', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams({parkingSpaceID: parkingSpaceID})
+                    body: new URLSearchParams({deleteParkingSpaceID: parkingSpaceID})
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -173,15 +191,44 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         }
 
         function editParkingSpace(parkingSpaceID) {
-    if (confirm('Are you sure you want to edit this parking space?')) {
-        
-        // Construct the URL with the parkingSpaceID as a query parameter
-        const url = `EditParkingSpace.php?P_parkingSpaceID=${parkingSpaceID}`;
+            if (confirm('Are you sure you want to edit this parking space?')) {
+                // Construct the URL with the parkingSpaceID as a query parameter
+                const url = `EditParkingSpace.php?P_parkingSpaceID=${parkingSpaceID}`;
 
-        // Navigate to EditParkingSpace.php
-        window.location.href = url;
-    }
-}
+                // Navigate to EditParkingSpace.php
+                window.location.href = url;
+            }
+        }
+
+        function filterLocationType() {
+            const idInput = document.getElementById('parkingSpaceID');
+            const locationSelect = document.getElementById('location');
+            const typeInput = document.getElementById('type');
+            
+            locationSelect.innerHTML = ''; // Clear previous options
+
+            if (idInput.value.startsWith('SS')) {
+                locationSelect.innerHTML = `
+                    <option value="" disable selected>Please Choose Location</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="B3">B3</option>
+                `;
+                typeInput.value = 'Student';
+            } else if (idInput.value.startsWith('PS')) {
+                locationSelect.innerHTML = `
+                    <option value="" disable selected>Please Choose Location</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="A4">A4</option>
+                `;
+                typeInput.value = 'Staff';
+            } else {
+                locationSelect.innerHTML = '<option value="" disable selected>Please Enter a Valid ID</option>';
+                typeInput.value = '';
+            }
+        }
     </script>
 </head>
 <body>
@@ -190,7 +237,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Location</th>
                 <th>Status</th>
                 <th>Type</th>
@@ -201,19 +248,17 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             <?php
             // Display parking spaces from database
             if ($result) {
-                $index = 1;
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>
-                            <td>{$index}</td>
+                            <td>{$row['P_parkingSpaceID']}</td>
                             <td>{$row['P_location']}</td>
                             <td>{$row['P_status']}</td>
                             <td>{$row['P_parkingType']}</td>
                             <td>
-                                <button onclick='editParkingSpace({$row['P_parkingSpaceID']})'>Update</button>
-                                <button onclick='deleteParkingSpace({$row['P_parkingSpaceID']})'>Delete</button>
+                                <button onclick='editParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Update</button>
+                                <button onclick='deleteParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Delete</button>
                             </td>
                           </tr>";
-                    $index++;
                 }
             }
             ?>
@@ -225,21 +270,24 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
     <div class="form-container">
         <h2>Add New Parking Space</h2>
         <form method="post" onsubmit="addParkingSpace(event)">
+            <label for="parkingSpaceID">Parking Space ID</label>
+            <input type="text" id="parkingSpaceID" name="parkingSpaceID" onkeyup="filterLocationType()" required>
+            
             <label for="location">Location</label>
-            <input type="text" id="location" name="location" required>
+            <select id="location" name="location" required>
+                <option value="" disable selected>Please Enter Parking Space ID First</option>
+            </select>
             
             <label for="status">Status</label>
             <select id="status" name="status" required>
-                <option value="available">Available</option>
-                <option value="occupied">Occupied</option>
+                <option value="" disable selected>Please Choose</option>
+                <option value="Available">Available</option>
+                <option value="Occupied">Occupied</option>
             </select>
             
             <label for="type">Parking Type</label>
-            <select id="type" name="type" required>
-                <option value="staff">Staff</option>
-                <option value="student">Student</option>
-            </select>
-            
+            <input type="text" id="type" name="type" readonly required>
+
             <button type="submit">Add Parking Space</button>
         </form>
     </div>

@@ -6,9 +6,17 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-// Fetch parking spaces
-$parking_sql = "SELECT * FROM parkingSpace";
+// Fetch parking spaces status
+$fixed_locations = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3'];
+$parking_statuses = [];
+
+$parking_sql = "SELECT P_location, P_status FROM parkingSpace WHERE P_location IN ('" . implode("','", $fixed_locations) . "')";
 $parking_result = $link->query($parking_sql);
+
+while ($parking_row = $parking_result->fetch_assoc()) {
+    $parking_statuses[$parking_row['P_location']] = $parking_row['P_status'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +72,7 @@ $parking_result = $link->query($parking_sql);
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     const response = JSON.parse(xhr.responseText);
                     if (response.success) {
-                        document.getElementById('status-' + location).innerHTML = status;
+                        document.getElementById('status-' + location).innerHTML = status === 'Occupied' ? 'Temporary Closed' : status;
                     } else {
                         alert("Failed to update status: " + response.message);
                     }
@@ -87,13 +95,14 @@ $parking_result = $link->query($parking_sql);
         </thead>
         <tbody>
             <?php
-            while ($parking_row = $parking_result->fetch_assoc()) {
+            foreach ($fixed_locations as $location) {
+                $status = isset($parking_statuses[$location]) ? $parking_statuses[$location] : 'Unknown';
                 echo "<tr>";
-                echo "<td>{$parking_row['P_location']}</td>";
-                echo "<td id='status-{$parking_row['P_location']}'>{$parking_row['P_status']}</td>";
+                echo "<td>{$location}</td>";
+                echo "<td id='status-{$location}'>{$status}</td>";
                 echo "<td>
-                        <button onclick=\"updateParkingStatus('{$parking_row['P_location']}', 'Open')\">Open</button>
-                        <button onclick=\"updateParkingStatus('{$parking_row['P_location']}', 'Close')\">Close</button>
+                        <button onclick=\"updateParkingStatus('{$location}', 'Available')\">Open</button>
+                        <button onclick=\"updateParkingStatus('{$location}', 'Occupied')\">Close</button>
                       </td>";
                 echo "</tr>";
             }

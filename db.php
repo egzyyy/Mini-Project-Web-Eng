@@ -71,7 +71,7 @@ $sql4 = "CREATE TABLE IF NOT EXISTS administrator (
     A_name VARCHAR(100),
     A_phoneNum VARCHAR(20),
     A_address VARCHAR(250),
-    A_email VARCHAR (100),
+    A_email VARCHAR(100),
     U_ID INT,
     FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
@@ -126,10 +126,10 @@ if (mysqli_query($link, $sql7)) {
 $sql8 = "CREATE TABLE IF NOT EXISTS trafficSummon (
     TF_summonID INT AUTO_INCREMENT PRIMARY KEY,
     V_vehicleID INT,
-    student_id VARCHAR(50),
-    date DATE,
-    status ENUM('Paid', 'Unpaid'),
-    plate_number VARCHAR(50),
+    TF_date DATE,
+    TF_status ENUM('Paid', 'Unpaid'),
+    TF_violationType VARCHAR(200),
+    TF_demeritPoint INT,
     FOREIGN KEY (V_vehicleID) REFERENCES vehicle(V_vehicleID)
 )";
 if (mysqli_query($link, $sql8)) {
@@ -138,52 +138,40 @@ if (mysqli_query($link, $sql8)) {
     die('Error creating table: ' . mysqli_error($link));
 }
 
-// Create the demeritPoint table
-$sql9 = "CREATE TABLE IF NOT EXISTS demeritPoint (
-    DP_ID INT AUTO_INCREMENT PRIMARY KEY,
-    V_type VARCHAR(50),
-    V_date DATE,
-    V_demeritPoint INT,
-    V_description VARCHAR(250),
-    TF_summonID INT,
-    FOREIGN KEY (TF_summonID) REFERENCES trafficSummon(TF_summonID)
-)";
-if (mysqli_query($link, $sql9)) {
-    echo "Table demeritPoint created successfully\n";
-} else {
-    die('Error creating new record: ' . mysqli_error($link));
-}
-
-// Check if the flag file exists
+// Insert sample data if flag file doesn't exist
 $flagFile = 'data_inserted.flag';
 
 if (!file_exists($flagFile)) {
-    // Insert sample data
+    // Insert sample data into the user table
     $tab1 = "INSERT INTO user (U_Username, U_Password, U_Type) 
             VALUES ('fikri', 'fikri030', 'Student'), 
                    ('rusydan', 'rusydan040', 'Staff'), 
                    ('iqmal', 'iqmal050', 'Administrator')";
 
-    if ($link->query($tab1) === TRUE) {
-        echo "New records created successfully\n";
+    if (mysqli_query($link, $tab1)) {
+        echo "New records created successfully in user table\n";
     } else {
-        echo "Error: " . $tab1 . "<br>" . $link->error;
+        die('Error: ' . $tab1 . "<br>" . mysqli_error($link));
     }
 
+    // Insert sample data into the vehicle table
     $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
-            VALUES ('www111', 'de', 'ford'), 
-                   ('www222', 'de', 'ranger'), 
-                   ('www333', 'de', 'rover')";
+            VALUES ('abc111', 'de', 'ford'), 
+                   ('abc222', 'de', 'ranger'), 
+                   ('abc333', 'de', 'rover')";
 
-    if ($link->query($tab2) === TRUE) {
-        echo "New records created successfully\n";
+    if (mysqli_query($link, $tab2)) {
+        echo "New records created successfully in vehicle table\n";
     } else {
-        echo "Error: " . $tab2 . "<br>" . $link->error;
+        die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
     }
 
     // Create the flag file to indicate data has been inserted
     file_put_contents($flagFile, 'Data inserted');
+} else {
+    echo "Data already inserted. Skipping insertion.\n";
 }
 
-// Do not close the database connection here
+// Close the database connection
+mysqli_close($link);
 ?>

@@ -1,29 +1,28 @@
 <?php
+$servername = "localhost";
+$username = "root"; // Replace with your MySQL username
+$password = ""; // Replace with your MySQL password
+$dbname = "web_eng";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 if (isset($_GET['id'])) {
-    $servername = "localhost";
-    $username = "root"; // Replace with your MySQL username
-    $password = ""; // Replace with your MySQL password
-    $dbname = "web_eng";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $id = $_GET['id'];
-
-    $sql = "DELETE FROM trafficSummon WHERE TF_summonID = '$id' AND status = 'Paid'";
+    $summonID = $_GET['id'];
+    $sql = "DELETE FROM trafficSummon WHERE TF_summonID='$summonID'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Summon deleted successfully";
+        echo "Record deleted successfully";
+        header("Location: ../Module 4/trafficSummon.php"); // Redirect to the main page
     } else {
-        echo "Error deleting summon: " . $conn->error;
+        echo "Error deleting record: " . $conn->error;
     }
-
-    $conn->close();
-    header("Location: trafficSummon.php");
 }
+
+$conn->close();
 ?>

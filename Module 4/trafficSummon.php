@@ -14,15 +14,68 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Handle update action
+if (isset($_GET['action']) && $_GET['action'] == 'update' && isset($_GET['id'])) {
+    $summon_id = $_GET['id'];
+
+    // Update status to 'Paid' with prepared statements
+    $stmt = $conn->prepare("UPDATE trafficSummon SET TF_status = 'Paid' WHERE TF_summonID = ?");
+    $stmt->bind_param("i", $summon_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Summon updated successfully');</script>";
+    } else {
+        echo "<script>alert('Error updating record: " . $conn->error . "');</script>";
+    }
+
+    $stmt->close();
+}
+
+// Handle cancel action
+if (isset($_GET['action']) && $_GET['action'] == 'cancel' && isset($_GET['id'])) {
+    $summon_id = $_GET['id'];
+
+    // Update status to 'Cancelled' with prepared statements
+    $stmt = $conn->prepare("UPDATE trafficSummon SET TF_status = 'Cancelled' WHERE TF_summonID = ?");
+    $stmt->bind_param("i", $summon_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Summon cancelled successfully');</script>";
+    } else {
+        echo "<script>alert('Error cancelling summon: " . $conn->error . "');</script>";
+    }
+
+    $stmt->close();
+}
+
+// Handle delete action
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+    $summon_id = $_GET['id'];
+
+    // Delete summon from database with prepared statements
+    $stmt = $conn->prepare("DELETE FROM trafficSummon WHERE TF_summonID = ?");
+    $stmt->bind_param("i", $summon_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Summon deleted successfully');</script>";
+    } else {
+        echo "<script>alert('Error deleting summon: " . $conn->error . "');</script>";
+    }
+
+    $stmt->close();
+}
+
+// Fetch summons from database
 $sql = "SELECT * FROM trafficSummon";
 $result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parking Violations</title>
+    <title>Traffic Summons</title>
     <style>
         /* General reset */
         * {
@@ -38,12 +91,12 @@ $result = $conn->query($sql);
             color: #333;
             line-height: 1.6;
         }
+
         /* Main content container */
         .content-container {
             max-width: 800px;
-            margin-left: 425px;
-            margin-bottom: 250px;
-            padding: 40px;
+            margin: 20px auto;
+            padding: 20px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
@@ -109,92 +162,88 @@ $result = $conn->query($sql);
         /* Button styling */
         .btn {
             display: inline-block;
-            padding: 12px 24px;
-            font-size: 16px;
+            padding: 8px 16px;
+            font-size: 14px;
             color: #fff;
-            background-color: #333;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        .btn:hover {
-            background-color: #575757;
+        .btn-update {
+            background-color: #28a745;
         }
 
-        .btn.cancel {
-            background-color: #ff9800;
+        .btn-update:hover {
+            background-color: #218838;
         }
 
-        .btn.cancel:hover {
-            background-color: #e68900;
+        .btn-cancel {
+            background-color: #ffc107;
         }
 
-        .btn.delete {
-            background-color: #f44336;
+        .btn-cancel:hover {
+            background-color: #e0a800;
         }
 
-        .btn.delete:hover {
-            background-color: #d32f2f;
+        .btn-delete {
+            background-color: #dc3545;
         }
 
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
-
-    <main>
-        <div class="content-container">
-            <h2>Parking Violations</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student ID</th>
-                        <th>Plate Number</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $row["student_id"] . "</td>";
-                            echo "<td>" . $row["plate_number"] . "</td>";
-                            echo "<td>" . $row["date"] . "</td>";
-                            echo "<td>" . $row["status"] . "</td>";
-                            echo '<td>';
-                            if ($row["status"] == "Unpaid") {
-                                echo '<button class="btn cancel" onclick="cancelSummon(' . $row["TF_summonID"] . ')">Cancel</button>';
-                            } else {
-                                echo '<button class="btn delete" onclick="deleteSummon(' . $row["TF_summonID"] . ')">Delete</button>';
-                            }
-                            echo '</td>';
-                            echo "</tr>";
+    <div class="content-container">
+        <h2>Traffic Summons</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Summon ID</th>
+                    <th>Vehicle ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Plate Number</th>
+                    <th>Violation Type</th>
+                    <th>Demerit Points</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row["TF_summonID"] . "</td>";
+                        echo "<td>" . $row["V_vehicleID"] . "</td>";
+                        echo "<td>" . $row["TF_date"] . "</td>";
+                        echo "<td>" . $row["TF_status"] . "</td>";
+                        echo "<td>" . $row["plate_number"] . "</td>";
+                        echo "<td>" . $row["TF_violationType"] . "</td>";
+                        echo "<td>" . $row["TF_demeritPoint"] . "</td>";
+                        echo '<td>';
+                        if ($row["TF_status"] == "Unpaid") {
+                            echo '<a href="trafficSummon.php?action=update&id=' . $row["TF_summonID"] . '" class="btn btn-update">Update</a>';
+                            echo '<a href="trafficSummon.php?action=cancel&id=' . $row["TF_summonID"] . '" class="btn btn-cancel">Cancel</a>';
+                        } else {
+                            echo '<a href="trafficSummon.php?action=delete&id=' . $row["TF_summonID"] . '" class="btn btn-delete">Delete</a>';
                         }
-                    } else {
-                        echo "<tr><td colspan='5'>No summons found</td></tr>";
+                        echo '</td>';
+                        echo "</tr>";
                     }
-                    $conn->close();
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </main>
-    <script>
-        function cancelSummon(id) {
-            if (confirm("Are you sure you want to cancel this summon?")) {
-                window.location.href = 'cancel.php?id=' + id;
-            }
-        }
-
-        function deleteSummon(id) {
-            if (confirm("Are you sure you want to delete this summon?")) {
-                window.location.href = 'delete.php?id=' + id;
-            }
-        }
-    </script>
+                } else {
+                    echo "<tr><td colspan='8'>No summons found</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>

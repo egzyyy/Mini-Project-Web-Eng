@@ -1,36 +1,136 @@
 <?php
 // Include header file
 require('../../Layout/student_layout.php');
+?>
 
-$link = mysqli_connect("localhost", "root", "");
+<style>
+/* Card styling */
+.card {
+    border-radius: 0.25rem;
+    width: 100%;
+    max-width: 600px;
+    padding-left: 30%;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    text-align: center;
+}
+
+/* Card body styling */
+.card-body {
+    padding: 2rem;
+    width: auto;
+    height: auto;
+    padding-bottom: auto;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Button styling */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-warning:hover {
+    background-color: #ec971f;
+    border-color: #ec971f;
+}
+
+.btn-warning:active {
+    background-color: #d58512;
+}
+
+/* Styling for success message */
+.alert-success {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+    border-radius: 0.25rem;
+}
+
+/* Styling for error message */
+.alert-danger {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    border-radius: 0.25rem;
+}
+</style>
+
+<?php
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
-// Include database connection file
-mysqli_select_db($link, "web_eng");
 
 // Check if form is submitted and the add_user button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
     // Get form data
-    $studentName = $_POST['studentName'];
-    $studentType = $_POST['studentType'];
-    $studentPhoneNum = $_POST['studentPhoneNum'];
-    $studentYear = $_POST['studentYear'];
-    $studentAddress = $_POST['studentAddress'];
-    $studentEmail = $_POST['studentEmail'];
-
-    // Default password value
-    $defaultPassword = "FK123"; // You can change this default value
+    $plateNum = $_POST['plate'];
+    $vehicleType = $_POST['type'];
+    $vehicleGrant = $_POST['grant'];
 
     // Prepare and execute the insert query
-    $query = "INSERT INTO student (STU_name, STU_type, STU_phoneNum, STU_yearStudy, STU_address, STU_email, STU_password, U_ID)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO vehicle (V_plateNum, V_vehicleType, V_vehigrant) VALUES (?, ?, ?)";
     $stmt = $link->prepare($query);
-    $stmt->bind_param("sssisssi", $studentName, $studentType, $studentPhoneNum, $studentYear, $studentAddress, $studentEmail, $defaultPassword, $U_ID);
+    $stmt->bind_param("sss", $plateNum, $vehicleType, $vehicleGrant);
+
+    
 
     if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>New user added successfully!</div>";
+        echo "<div class='alert alert-success' role='alert'>Vehicle registered successfully!</div>";
     } else {
         echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
     }
@@ -43,52 +143,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
 $link->close();
 ?>
 
-<link rel="stylesheet" href="addUser.css">
-
-            <div class="card">
-                <div class="card-header">
-                    User Registration
-                </div>
-                <div class="card-body">
-                    <!-- Add User Form -->
-                    <form method="POST">
-                        <div class="form-group mb-3">
-                            <label for="studentName">Full Name</label>
-                            <input type="text" required class="form-control" id="studentName" name="studentName" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentID">Student ID</label>
-                            <input type="text" class="form-control" id="studentID" name="studentID" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentPhoneNum">Phone Number</label>
-                            <input type="tel" class="form-control" id="studentPhoneNum" name="studentPhoneNum" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentAddress">Address</label>
-                            <input type="text" class="form-control" id="studentAddress" name="studentAddress" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentType">Level Of Study</label>
-                            <select class="form-control" id="studentType" name="studentType" required>
-                                <option value="Undergraduate">Undergraduate</option>
-                                <option value="Postgraduate">Postgraduate</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentYear">Year Of Study</label>
-                            <input type="number" class="form-control" id="studentYear" name="studentYear" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="studentEmail">Email</label>
-                            <input type="email" class="form-control" id="studentEmail" name="studentEmail" required>
-                        </div>
-                        <button type="submit" name="add_user" class="btn btn-success">Add User</button>
-                        <button type="reset" name="reset" class="btn btn-warning">Reset</button>
-                    </form>
-                    <!-- End Form -->
-                </div>
+<div class="card">
+    <div class="card-header">
+        Vehicle Registration
+    </div>
+    <div class="card-body">
+        <!-- Add User Form -->
+        <form method="POST">
+            <div class="form-group mb-3">
+                <label for="plate">Plate Number</label>
+                <input type="text" required class="form-control" id="plate" name="plate" required>
             </div>
+            <div class="form-group mb-3">
+                <label for="type">Type:</label>
+                <select name="type" id="type" class="form-control" required>
+                    <option value="car">Car</option>
+                    <option value="motorcycle">Motorcycle</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="grant">Grant</label>
+                <input type="file" class="form-control" id="grant" name="grant" required>
+            </div>
+            <button type="submit" name="add_user" class="btn btn-success">Register Vehicle</button>
+            <button type="reset" name="reset" class="btn btn-warning">Reset</button>
+        </form>
+        <!-- End Form -->
+    </div>
+</div>
 
 <hr>
 

@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <!--Stylesheet-->
     <style media="screen">
         *,
         *:before,
@@ -141,26 +142,27 @@
 <?php
 session_start();
 
-$link = mysqli_connect("localhost", "root", "");
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-$message = "Invalid Login";
-
-// Select the database
 mysqli_select_db($link, "web_eng");
 
+$message = "";
+
 // Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $role = "administrator"; // Set role as administrator
 
-    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
+    // Hash the password - assuming you've already hashed passwords in the database
+    // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "SELECT * FROM administrator WHERE A_username = ? AND A_password = ?";
     $stmt = $link->prepare($sql);
-    $stmt->bind_param("sss", $username, $password, $role);
+    $stmt->bind_param("ss", $username, $password);
 
     // Execute the query
     $stmt->execute();
@@ -168,27 +170,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if user exists
     if ($result->num_rows == 1) {
-        // Authentication successful, redirect based on userType
+        // Authentication successful, fetch user data
         $user = $result->fetch_assoc();
 
         // Create new session ID
         $newSessionId = session_create_id();
-        $sessionId = $newSessionId . "_" . $user['U_ID'];
+        $sessionId = $newSessionId . "_" . $user['A_username']; // Using STU_studentID for session ID
         session_id($sessionId);
-
-        $_SESSION["user_id"] = $user['U_ID'];
-        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
+        
+        $_SESSION["user_username"] = htmlspecialchars($user['A_username']);
+        $_SESSION["STU_name"] = htmlspecialchars($user['A_name']); // Added STU_name to session
+        $_SESSION["student_password"] = htmlspecialchars($user[' A_password']); // Adjusted to STU_password
         $_SESSION['last_regeneration'] = time();
         header("Location: Dashbourd.php?login=success");
         exit();
     } else {
         $message = "Invalid username or password.";
-        header("Location: loginPage.php?message=" . urlencode($message));
+        header("Location: login.php?message=" . urlencode($message));
         exit();
     }
 }
 ?>
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FK Park Login</title>
+    <!-- Add your CSS links and styles here -->
+</head>
+<body>
 <div class="background">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -209,3 +220,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 </body>
 </html>
+

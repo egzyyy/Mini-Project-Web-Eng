@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
@@ -111,7 +111,7 @@
         }
         .dropdown-container {
             display: none;
-            background-color: #262626;
+            background-color: #808080;
             padding-left: 8px;
         }
         .fa-caret-down {
@@ -144,8 +144,31 @@
     <div class="container">
         <div class="sidenav">
             <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <button class="dropdown-btn">Vehicle 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../../Module1/student/addVehicle.php">Registartion</a>
+                <a href="../../Module1/student/profileUser.php">Information</a>
+            </div>
             <a href="../../Module 3/B_homepage.php">Booking</a>
             <a href="../">Summon</a>
         </div>
+        <script>
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
         <div class="main">
 

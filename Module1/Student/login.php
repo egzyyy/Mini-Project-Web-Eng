@@ -140,56 +140,51 @@
 <body>
 
 <?php
-session_start();
 
 $link = mysqli_connect("localhost", "root", "");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
-
-$message = "";
-
-// Select the database
+// Include database connection file
 mysqli_select_db($link, "web_eng");
 
-// Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    $role = "student"; // Set role as student
+// Check if form is submitted and the add_user button is clicked
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
+    // Get form data
+    $plate = $_POST['plate'];
+    $type = $_POST['type'];
+    $grant = $_POST['grant'];
+    $username = $_SESSION['user_username'];
 
-    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
-    $stmt = $link->prepare($sql);
-    $stmt->bind_param("sss", $username, $password, $role);
+    // Prepare and execute the insert query
+    $query = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType, STU_username)
+              VALUES (?, ?, ?, ?)";
+    $stmt = $link->prepare($query);
+    $stmt->bind_param("ssss", $plate, $grant, $type, $username);
 
-    // Execute the query
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Check if user exists
-    if ($result->num_rows == 1) {
-        // Authentication successful, redirect based on userType
-        $user = $result->fetch_assoc();
-
-        // Create new session ID
-        $newSessionId = session_create_id();
-        $sessionId = $newSessionId . "_" . $user['U_ID'];
-        session_id($sessionId);
-
-        $_SESSION["user_id"] = $user['U_ID'];
-        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
-        $_SESSION['last_regeneration'] = time();
-        header("Location: Dashbourd.php?login=success");
-        exit();
+    if ($stmt->execute()) {
+        echo "<div class='alert alert-success' role='alert'>New vehicle added successfully!</div>";
     } else {
-        $message = "Invalid username or password.";
-        header("Location: loginPage.php?message=" . urlencode($message));
-        exit();
+        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
     }
+
+    // Close the statement
+    $stmt->close();
 }
+
+// Close the database connection
+$link->close();
 ?>
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FK Park Login</title>
+    <!-- Add your CSS links and styles here -->
+</head>
+<body>
 <div class="background">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -210,3 +205,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 </body>
 </html>
+

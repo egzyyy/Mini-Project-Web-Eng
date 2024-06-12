@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
@@ -59,7 +60,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
             $stmt_update->bind_param("sssii", $date, $status, $violation_type, $new_demerit_points, $vehicle_id);
 
             if ($stmt_update->execute()) {
+                // Save the summon details in the session
+                $_SESSION['summon'] = [
+                    'plate_number' => $plate_number,
+                    'date' => $date,
+                    'status' => $status,
+                    'violation_type' => $violation_type,
+                    'demerit_points' => $new_demerit_points
+                ];
                 echo "<div class='alert alert-success' role='alert'>Traffic summon updated successfully!</div>";
+                echo "<a href='qrCode.php' class='btn btn-primary'>Generate QR Code</a>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error updating traffic summon: " . $link->error . "</div>";
             }
@@ -72,7 +82,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
             $stmt_insert->bind_param("isssi", $vehicle_id, $date, $status, $violation_type, $demerit_points);
 
             if ($stmt_insert->execute()) {
+                // Save the summon details in the session
+                $_SESSION['summon'] = [
+                    'plate_number' => $plate_number,
+                    'date' => $date,
+                    'status' => $status,
+                    'violation_type' => $violation_type,
+                    'demerit_points' => $demerit_points
+                ];
                 echo "<div class='alert alert-success' role='alert'>New traffic summon added successfully!</div>";
+                echo "<a href='qrCode.php' class='btn btn-primary'>Generate QR Code</a>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error adding traffic summon: " . $link->error . "</div>";
             }
@@ -89,7 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
 // Close the database connection
 mysqli_close($link);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

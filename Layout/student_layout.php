@@ -152,8 +152,13 @@
                 <a href="../../Module1/student/profileUser.php">Information</a>
             </div>
             <a href="../../Module 3/B_homepage.php">Booking</a>
-            <a href="../">Summon</a>
-        </div>
+            <button class="dropdown-btn">Summon 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../Module 4/scanSummon.php">View Summon Details</a>
+                <a href="../../Module1/student/profileUser.php">Information</a>
+            </div>        </div>
         <script>
         var dropdown = document.getElementsByClassName("dropdown-btn");
         var i;

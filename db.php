@@ -33,12 +33,12 @@ if (mysqli_query($link, $sql1)) {
 // Create the staff table
 $sql2 = "CREATE TABLE IF NOT EXISTS staff (
     S_staffID INT AUTO_INCREMENT PRIMARY KEY,
-    S_username VARCHAR(100),
     S_name VARCHAR(100),
     S_phoneNum VARCHAR(20),
     S_address VARCHAR(250),
     S_email VARCHAR(100),
-    S_password VARCHAR(255)
+    U_ID INT,
+    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
 if (mysqli_query($link, $sql2)) {
     echo "Table staff created successfully\n";
@@ -48,15 +48,16 @@ if (mysqli_query($link, $sql2)) {
 
 // Create the student table
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
-    STU_studentID INT AUTO_INCREMENT PRIMARY KEY,
-    STU_username VARCHAR(100),
+    STU_studentID INT PRIMARY KEY,
     STU_name VARCHAR(100),
     STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),
     STU_yearStudy INTEGER,
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
-    STU_password VARCHAR(50)
+    STU_password VARCHAR(50),
+    U_ID INT,
+    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
 if (mysqli_query($link, $sql3)) {
     echo "Table student created successfully\n";
@@ -67,12 +68,12 @@ if (mysqli_query($link, $sql3)) {
 // Create the administrator table
 $sql4 = "CREATE TABLE IF NOT EXISTS administrator (
     A_adminID INT AUTO_INCREMENT PRIMARY KEY,
-    A_username VARCHAR(100),
     A_name VARCHAR(100),
     A_phoneNum VARCHAR(20),
     A_address VARCHAR(250),
-    A_email VARCHAR (100),
-    A_password VARCHAR(255)
+    A_email VARCHAR(100),
+    U_ID INT,
+    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
 if (mysqli_query($link, $sql4)) {
     echo "Table administrator created successfully\n";
@@ -85,9 +86,7 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehicleID INT AUTO_INCREMENT PRIMARY KEY,
     V_plateNum VARCHAR(50),
     V_vehigrant VARCHAR(255),
-    V_vehicleType VARCHAR(50),
-    STU_studentID INT,
-    FOREIGN KEY (STU_studentID) REFERENCES student(STU_studentID)
+    V_vehicleType VARCHAR(50)
 )";
 if (mysqli_query($link, $sql5)) {
     echo "Table vehicle created successfully\n";
@@ -153,18 +152,6 @@ if (!file_exists($flagFile)) {
         echo "New records created successfully in user table\n";
     } else {
         die('Error: ' . $tab1 . "<br>" . mysqli_error($link));
-    }
-
-    // Insert sample data into the vehicle table
-    $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
-            VALUES ('abc111', 'de', 'ford'), 
-                   ('abc222', 'de', 'ranger'), 
-                   ('abc333', 'de', 'rover')";
-
-    if (mysqli_query($link, $tab2)) {
-        echo "New records created successfully in vehicle table\n";
-    } else {
-        die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
     }
 
     // Create the flag file to indicate data has been inserted

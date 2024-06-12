@@ -65,8 +65,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     $stmt->close();
 }
 
-// Fetch summons from database
-$sql = "SELECT * FROM trafficSummon";
+// Fetch summons from database with JOIN to include plate number
+$sql = "SELECT t.TF_summonID, t.V_vehicleID, t.TF_date, t.TF_status, v.V_plateNum AS plate_number, t.TF_violationType, t.TF_demeritPoint 
+        FROM trafficSummon t
+        JOIN vehicle v ON t.V_vehicleID = v.V_vehicleID";
+
 $result = $conn->query($sql);
 ?>
 
@@ -96,6 +99,7 @@ $result = $conn->query($sql);
         .content-container {
             max-width: 800px;
             margin: 20px auto;
+            margin-left: 315px;
             padding: 20px;
             background-color: white;
             border-radius: 10px;

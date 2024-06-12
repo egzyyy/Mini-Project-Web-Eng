@@ -86,8 +86,8 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_plateNum VARCHAR(50),
     V_vehigrant VARCHAR(255),
     V_vehicleType VARCHAR(50),
-    STU_username VARCHAR(10),
-    FOREIGN KEY (STU_username) REFERENCES student(STU_username)
+    STU_studentID INT,
+    FOREIGN KEY (STU_studentID) REFERENCES student(STU_studentID)
 )";
 if (mysqli_query($link, $sql5)) {
     echo "Table vehicle created successfully\n";

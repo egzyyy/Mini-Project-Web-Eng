@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,6 +32,7 @@
         .dropdown {
             position: relative;
             display: inline-block;
+            margin-right: 20px;
         }
         .dropbtn {
             background-color: #333;
@@ -39,20 +41,24 @@
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
         }
         .dropbtn img {
             width: 30px;
             height: 30px;
             border-radius: 50%;
+            margin-right: 10px;
         }
         .dropdown-content {
             display: none;
             position: absolute;
-            right: 0;
             background-color: #f9f9f9;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             font-weight: bold;
+            right: 0;
         }
         .dropdown-content a {
             color: black;
@@ -100,7 +106,6 @@
             color: #f1f1f1;
         }
         .main {
-            margin-left: 200px;
             font-size: 20px;
             padding: 20px;
             flex: 1;
@@ -133,6 +138,8 @@
             <div class="dropdown">
                 <button class="dropbtn">
                     <img src="../image/loginIcon.png" alt="login">
+                    Profile
+                    <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
                     <a href="../Module1/Student/Profile.php">View Profile</a>
@@ -144,9 +151,20 @@
     <div class="container">
         <div class="sidenav">
             <a href="#">Dashboard</a>
-            <a href="#">Apply Summon</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-btn">Summon <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="../Module 4/applySummon.php">Apply Summon</a>
+                <div class="dropdown-content">
+                    <a href="../Module 4/trafficSummon.php">Traffic Summon</a>
+                </div>
+            </div>
             <a href="#">Manage Booking</a>
             <a href="#">Vehicle</a>
         </div>
         <div class="main">
-
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

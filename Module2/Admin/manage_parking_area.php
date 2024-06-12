@@ -1,11 +1,31 @@
 <?php
 include('../../Layout/admin_layout.php');
+$link = mysqli_connect("localhost", "root", "", "web_eng");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+// Fetch parking spaces status
+$fixed_locations = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3'];
+$parking_statuses = [];
+
+// Updated query to also fetch the reason
+$parking_sql = "SELECT P_location, P_status, P_reason FROM parkingSpace WHERE P_location IN ('" . implode("','", $fixed_locations) . "')";
+$parking_result = $link->query($parking_sql);
+
+while ($parking_row = $parking_result->fetch_assoc()) {
+    $parking_statuses[$parking_row['P_location']] = [
+        'status' => $parking_row['P_status'],
+        'reason' => $parking_row['P_reason']
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Car Park Booking</title>
+    <title>Manage Parking Area</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .content-container {
@@ -20,32 +40,6 @@ include('../../Layout/admin_layout.php');
         .content-container h2 {
             margin-bottom: 20px;
         }
-        .parking-image {
-            position: relative;
-            display: inline-block;
-        }
-        .parking-image img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-        .parking-label {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 12px;
-            text-align: center;
-        }
-        .label-A1 { top: 10%; left: 10%; }
-        .label-A2 { top: 10%; left: 30%; }
-        .label-A3 { top: 10%; left: 50%; }
-        .label-A4 { top: 10%; left: 70%; }
-        .label-B1 { top: 50%; left: 10%; }
-        .label-B2 { top: 50%; left: 30%; }
-        .label-B3 { top: 50%; left: 50%; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -60,17 +54,7 @@ include('../../Layout/admin_layout.php');
             background-color: #333;
             color: white;
         }
-        form {
-            margin: 20px 0;
-        }
-        input[type="text"] {
-            padding: 10px;
-            width: 150px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        input[type="submit"] {
+        button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -78,115 +62,66 @@ include('../../Layout/admin_layout.php');
             color: white;
             cursor: pointer;
         }
-        input[type="submit"]:hover {
+        button:hover {
             background-color: #555;
-        }
-
-        .parking-image{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 4%;
-            margin-top: 20px;
         }
     </style>
     <script>
-        function closeParkingArea(event) {
-            event.preventDefault();
-            const area = document.getElementById('parkingArea').value;
-            const table = document.getElementById('parkingTable');
-            let found = false;
-
-            for (let i = 1; i < table.rows.length; i++) {
-                const row = table.rows[i];
-                const locationCell = row.cells[1];
-
-                if (locationCell.innerHTML === area) {
-                    row.cells[2].innerHTML = 'Temporarily Closed';
-                    found = true;
-                    break;
+        function updateParkingStatus(location, status) {
+            let reason = 'None';
+            if (status === 'Temporary Closed') {
+                reason = prompt("Please enter the reason to close the area:");
+                if (!reason) {
+                    alert("Reason is required to close the area.");
+                    return;
                 }
             }
-
-            if (!found) {
-                alert('Parking area not found!');
-            }
-
-            document.getElementById('parkingArea').value = '';
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "update_parking_status.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        document.getElementById('status-' + location).innerHTML = status === 'Occupied' ? 'Temporary Closed' : status;
+                        document.getElementById('reason-' + location).innerHTML = reason;
+                    } else {
+                        alert("Failed to update status: " + response.message);
+                    }
+                }
+            };
+            xhr.send("location=" + location + "&status=" + status + "&reason=" + encodeURIComponent(reason));
         }
     </script>
 </head>
 <body>
 <div class="content-container">
     <h2>Manage Parking Area</h2>
-    <div class="parking-image">
-        <img src="../../image/park.jpg" alt="Parking Area">
-        <!-- <div class="parking-label label-A1">A1</div>
-        <div class="parking-label label-A2">A2</div>
-        <div class="parking-label label-A3">A3</div>
-        <div class="parking-label label-A4">A4</div>
-        <div class="parking-label label-B1">B1</div>
-        <div class="parking-label label-B2">B2</div>
-        <div class="parking-label label-B3">B3</div> -->
-    </div>
-    <form onsubmit="closeParkingArea(event)">
-        <input type="text" id="parkingArea" placeholder="Enter parking area (e.g., A1)" required>
-        <input type="submit" value="Close Area">
-    </form>
-    <table id="parkingTable">
+    <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th>Type</th>
+                <th>Reason</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Example rows for demonstration purposes -->
-            <tr>
-                <td>1</td>
-                <td>A1</td>
-                <td>Available</td>
-                <td>Staff</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>A2</td>
-                <td>Occupied</td>
-                <td>Staff</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>A3</td>
-                <td>Available</td>
-                <td>Student</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>A4</td>
-                <td>Available</td>
-                <td>Student</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>B1</td>
-                <td>Available</td>
-                <td>Student</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>B2</td>
-                <td>Occupied</td>
-                <td>Student</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>B3</td>
-                <td>Available</td>
-                <td>Staff</td>
-            </tr>
-            <!-- Additional rows can be added here -->
+            <?php
+            foreach ($fixed_locations as $location) {
+                $status = isset($parking_statuses[$location]['status']) ? $parking_statuses[$location]['status'] : 'Unknown';
+                $reason = isset($parking_statuses[$location]['reason']) ? $parking_statuses[$location]['reason'] : '';
+                echo "<tr>";
+                echo "<td>{$location}</td>";
+                echo "<td id='status-{$location}'>{$status}</td>";
+                echo "<td id='reason-{$location}'>{$reason}</td>";
+                echo "<td>
+                        <button onclick=\"updateParkingStatus('{$location}', 'Available')\">Open</button>
+                        <button onclick=\"updateParkingStatus('{$location}', 'Temporary Closed')\">Close</button>
+                      </td>";
+                echo "</tr>";
+            }
+            ?>
         </tbody>
     </table>
 </div>

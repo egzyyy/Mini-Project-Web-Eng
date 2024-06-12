@@ -7,33 +7,83 @@ if (!$link) {
 }
 
 // Check if form is submitted and the apply-summon button is clicked
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
     // Get form data
-    $student_id = $_POST['student_id'];
     $plate_number = $_POST['plate_number'];
     $date = $_POST['date'];
     $status = $_POST['status'];
+    $violation_type = $_POST['violation_type'];
+    $demerit_points = 0;
 
-    // Get the vehicle ID based on the plate number
-    $sql = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum='$plate_number'";
-    $result = $link->query($sql);
+    // Set demerit points based on violation type
+    switch ($violation_type) {
+        case 'Parking Violation':
+            $demerit_points = 10;
+            break;
+        case 'Not Complying with Campus Traffic Regulations':
+            $demerit_points = 15;
+            break;
+        case 'Accident Caused':
+            $demerit_points = 20;
+            break;
+    }
 
-    if ($result && $result->num_rows > 0) {
+    // Check if vehicle with plate number already exists
+    $sql = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE V_plateNum = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("s", $plate_number);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Vehicle with the plate number exists, fetch the vehicle ID
         $row = $result->fetch_assoc();
         $vehicle_id = $row['V_vehicleID'];
 
-        // Insert the summon
-        $sql = "INSERT INTO trafficSummon (V_vehicleID, student_id, date, status, plate_number)
-                VALUES ('$vehicle_id', '$student_id', '$date', '$status', '$plate_number')";
+        // Check if there's an existing summon for this vehicle
+        $sql = "SELECT * FROM trafficSummon WHERE V_vehicleID = ?";
+        $stmt = $link->prepare($sql);
+        $stmt->bind_param("i", $vehicle_id);
+        $stmt->execute();
+        $result_summon = $stmt->get_result();
 
-        if ($link->query($sql) === TRUE) {
-            echo "<div class='alert alert-success' role='alert'>New summon added successfully!</div>";
+        if ($result_summon->num_rows > 0) {
+            // There is an existing summon for this vehicle, update the demerit points
+            $row_summon = $result_summon->fetch_assoc();
+            $current_demerit_points = (int)$row_summon['TF_demeritPoint'];
+            $new_demerit_points = $current_demerit_points + $demerit_points;
+
+            // Update the existing summon with the new demerit points
+            $sql_update = "UPDATE trafficSummon SET TF_date = ?, TF_status = ?, TF_violationType = ?, TF_demeritPoint = ? WHERE V_vehicleID = ?";
+            $stmt_update = $link->prepare($sql_update);
+            $stmt_update->bind_param("sssii", $date, $status, $violation_type, $new_demerit_points, $vehicle_id);
+
+            if ($stmt_update->execute()) {
+                echo "<div class='alert alert-success' role='alert'>Traffic summon updated successfully!</div>";
+            } else {
+                echo "<div class='alert alert-danger' role='alert'>Error updating traffic summon: " . $link->error . "</div>";
+            }
+
+            $stmt_update->close();
         } else {
-            echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
+            // No existing summon, insert a new summon
+            $sql_insert = "INSERT INTO trafficSummon (V_vehicleID, TF_date, TF_status, plate_number, TF_violationType, TF_demeritPoint) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt_insert = $link->prepare($sql_insert);
+            $stmt_insert->bind_param("issssi", $vehicle_id, $date, $status, $plate_number, $violation_type, $demerit_points);
+
+            if ($stmt_insert->execute()) {
+                echo "<div class='alert alert-success' role='alert'>New traffic summon added successfully!</div>";
+            } else {
+                echo "<div class='alert alert-danger' role='alert'>Error adding traffic summon: " . $link->error . "</div>";
+            }
+
+            $stmt_insert->close();
         }
     } else {
         echo "<div class='alert alert-danger' role='alert'>No vehicle found with that plate number.</div>";
     }
+
+    $stmt->close();
 }
 
 // Close the database connection
@@ -64,7 +114,7 @@ mysqli_close($link);
 
         .content-container {
             max-width: 800px;
-            margin-left: 425px;
+            margin: 20px auto;
             padding: 20px;
             background-color: white;
             border-radius: 10px;
@@ -132,7 +182,6 @@ mysqli_close($link);
         button:hover {
             background-color: #575757;
         }
-
     </style>
 </head>
 <body>
@@ -140,10 +189,6 @@ mysqli_close($link);
     <div class="content-container">
         <h2>Add Summon</h2>
         <form action="applySummon.php" method="post">
-            <div class="form-group">
-                <label for="student_id">Student ID:</label>
-                <input type="text" id="student_id" name="student_id" required>
-            </div>
             <div class="form-group">
                 <label for="plate_number">Plate Number:</label>
                 <input type="text" id="plate_number" name="plate_number" required>
@@ -157,6 +202,14 @@ mysqli_close($link);
                 <select id="status" name="status">
                     <option value="Paid">Paid</option>
                     <option value="Unpaid">Unpaid</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="violation_type">Violation Type:</label>
+                <select id="violation_type" name="violation_type">
+                    <option value="Parking Violation">Parking Violation</option>
+                    <option value="Not Complying with Campus Traffic Regulations">Not Complying with Campus Traffic Regulations</option>
+                    <option value="Accident Caused">Accident Caused</option>
                 </select>
             </div>
             <button type="submit" name="apply-summon">Apply Summon</button>

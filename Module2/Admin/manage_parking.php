@@ -10,32 +10,51 @@ if (!$link) {
 
 mysqli_select_db($link, "web_eng");
 
-$link = mysqli_connect("localhost", "root", "");
-
-if (!$link) {
-    die('Error connecting to the server: ' . mysqli_connect_error());
+// Function to generate the next parking space ID
+function generateParkingSpaceID($prefix, $link) {
+    $query = "SELECT P_parkingSpaceID FROM parkingSpace WHERE P_parkingSpaceID LIKE '$prefix%' ORDER BY P_parkingSpaceID DESC LIMIT 1";
+    $result = mysqli_query($link, $query);
+    $lastID = mysqli_fetch_assoc($result)['P_parkingSpaceID'];
+    
+    if ($lastID) {
+        $number = (int)substr($lastID, strlen($prefix)) + 1;
+    } else {
+        $number = 1;
+    }
+    
+    return $prefix . str_pad($number, 3, '0', STR_PAD_LEFT);
 }
-mysqli_select_db($link, "web_eng");
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['status'], $_POST['type'])) {
     $location = mysqli_real_escape_string($link, $_POST['location']);
     $status = mysqli_real_escape_string($link, $_POST['status']);
     $type = mysqli_real_escape_string($link, $_POST['type']);
+    
+    // Determine the prefix based on the parking type
+    $prefix = $type == 'Student' ? 'SS' : 'PS';
+    $parkingSpaceID = generateParkingSpaceID($prefix, $link);
 
-    $sql = "INSERT INTO parkingSpace (P_location, P_status, P_parkingType) VALUES ('$location', '$status', '$type')";
+    $sql = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) VALUES ('$parkingSpaceID', '$location', '$status', '$type')";
+    header('Content-Type: application/json');
     if (mysqli_query($link, $sql)) {
         echo json_encode(["status" => "success", "message" => "New parking space added successfully"]);
     } else {
         echo json_encode(["status" => "error", "message" => mysqli_error($link)]);
     }
     exit;
-}
+    }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['parkingSpaceID'])) {
-    $parkingSpaceID = mysqli_real_escape_string($link, $_POST['parkingSpaceID']);
-    
-    // Redirect to EditParkingSpace.php with the parkingSpaceID
-    header("Location: EditParkingSpace.php?P_parkingSpaceID=$parkingSpaceID");
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteParkingSpaceID'])) {
+    $parkingSpaceID = mysqli_real_escape_string($link, $_POST['deleteParkingSpaceID']);
+
+    $sql = "DELETE FROM parkingSpace WHERE P_parkingSpaceID = '$parkingSpaceID'";
+    if (mysqli_query($link, $sql)) {
+        echo json_encode(["status" => "success", "message" => "Parking space deleted successfully"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => mysqli_error($link)]);
+    }
     exit;
 }
 
@@ -60,39 +79,6 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         .content-container h2 {
             margin-bottom: 20px;
             text-align: center;
-        }
-        .form-container, .add-button {
-            display: none;
-            margin-top: 20px;
-        }
-        .form-container h2 {
-            margin-bottom: 20px;
-        }
-        .form-container label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .form-container input, .form-container select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .form-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .form-container button:hover {
-            background-color: #555;
         }
         table {
             width: 100%;
@@ -123,41 +109,105 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         .add-button-container button:hover {
             background-color: #555;
         }
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            z-index: 1000;
+            width: 400px;
+            max-width: 90%;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #555;
+        }
+        .form-container .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
     <script>
         function showAddForm() {
             document.querySelector('.form-container').style.display = 'block';
         }
 
-        function addParkingSpace(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert(data.message);
-                    location.reload(); // Reload the page
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        function hideAddForm() {
+            document.querySelector('.form-container').style.display = 'none';
         }
+
+        function addParkingSpace(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data received:', data);
+        if (data.status === 'success') {
+            alert(data.message);
+            location.reload(); // Reload the page
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    //     alert('An error occurred while adding the parking space.');
+    // });
+}
+
 
         function deleteParkingSpace(parkingSpaceID) {
             if (confirm('Are you sure you want to delete this parking space?')) {
-                fetch('delete_parking_space.php', {
+                fetch('', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams({parkingSpaceID: parkingSpaceID})
+                    body: new URLSearchParams({deleteParkingSpaceID: parkingSpaceID})
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -173,15 +223,44 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         }
 
         function editParkingSpace(parkingSpaceID) {
-    if (confirm('Are you sure you want to edit this parking space?')) {
-        
-        // Construct the URL with the parkingSpaceID as a query parameter
-        const url = `EditParkingSpace.php?P_parkingSpaceID=${parkingSpaceID}`;
+            if (confirm('Are you sure you want to edit this parking space?')) {
+                // Construct the URL with the parkingSpaceID as a query parameter
+                const url = `EditParkingSpace.php?P_parkingSpaceID=${parkingSpaceID}`;
 
-        // Navigate to EditParkingSpace.php
-        window.location.href = url;
-    }
-}
+                // Navigate to EditParkingSpace.php
+                window.location.href = url;
+            }
+        }
+
+        function filterLocationType() {
+            const idInput = document.getElementById('parkingSpaceID');
+            const locationSelect = document.getElementById('location');
+            const typeInput = document.getElementById('type');
+            
+            locationSelect.innerHTML = ''; // Clear previous options
+
+            if (idInput.value.startsWith('SS')) {
+                locationSelect.innerHTML = `
+                    <option value="" disable selected>Please Choose Location</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="B3">B3</option>
+                `;
+                typeInput.value = 'Student';
+            } else if (idInput.value.startsWith('PS')) {
+                locationSelect.innerHTML = `
+                    <option value="" disable selected>Please Choose Location</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="A4">A4</option>
+                `;
+                typeInput.value = 'Staff';
+            } else {
+                locationSelect.innerHTML = '<option value="" disable selected>Please Enter a Valid ID</option>';
+                typeInput.value = '';
+            }
+        }
     </script>
 </head>
 <body>
@@ -190,10 +269,11 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Location</th>
                 <th>Status</th>
                 <th>Type</th>
+                <th>Reason</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -201,19 +281,18 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             <?php
             // Display parking spaces from database
             if ($result) {
-                $index = 1;
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>
-                            <td>{$index}</td>
+                            <td>{$row['P_parkingSpaceID']}</td>
                             <td>{$row['P_location']}</td>
                             <td>{$row['P_status']}</td>
                             <td>{$row['P_parkingType']}</td>
+                            <td>{$row['P_reason']}</td>
                             <td>
-                                <button onclick='editParkingSpace({$row['P_parkingSpaceID']})'>Update</button>
-                                <button onclick='deleteParkingSpace({$row['P_parkingSpaceID']})'>Delete</button>
+                                <button onclick='editParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Update</button>
+                                <button onclick='deleteParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Delete</button>
                             </td>
                           </tr>";
-                    $index++;
                 }
             }
             ?>
@@ -223,23 +302,31 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         <button onclick="showAddForm()">Add New Parking Space</button>
     </div>
     <div class="form-container">
+        <button class="close-btn" onclick="hideAddForm()">&times;</button>
         <h2>Add New Parking Space</h2>
         <form method="post" onsubmit="addParkingSpace(event)">
+            <label for="parkingSpaceID">Parking Space ID</label>
+            <select id="parkingSpaceID" name="parkingSpaceID" onchange="filterLocationType()" required>
+                <option value="" disabled selected>Select Parking Type</option>
+                <option value="PS">PS for Parking Staff</option>
+                <option value="SS">SS for Parking Student</option>
+            </select>
+
+            <label for="type">Parking Type</label>
+            <input type="text" id="type" name="type" readonly required>
+
             <label for="location">Location</label>
-            <input type="text" id="location" name="location" required>
+            <select id="location" name="location" required>
+                <option value="" disable selected>Please Enter Parking Space ID First</option>
+            </select>
             
             <label for="status">Status</label>
             <select id="status" name="status" required>
-                <option value="available">Available</option>
-                <option value="occupied">Occupied</option>
+                <option value="" disable selected>Please Choose</option>
+                <option value="Available">Available</option>
+                <option value="Temporary Closed">Temporary Closed</option>
             </select>
-            
-            <label for="type">Parking Type</label>
-            <select id="type" name="type" required>
-                <option value="staff">Staff</option>
-                <option value="student">Student</option>
-            </select>
-            
+
             <button type="submit">Add Parking Space</button>
         </form>
     </div>

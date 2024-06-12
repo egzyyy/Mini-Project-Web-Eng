@@ -133,7 +133,7 @@
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
-                    <img src="../image/loginIcon.png" alt="login">
+                    <img src="../../image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
                     <a href="../../Module1/Student/Profile.php">View Profile</a>

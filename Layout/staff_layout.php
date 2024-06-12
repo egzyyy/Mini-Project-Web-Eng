@@ -135,7 +135,7 @@
                     <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Student/Profile.php">View Profile</a>
+                    <a href="../../Module1/Staff/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>

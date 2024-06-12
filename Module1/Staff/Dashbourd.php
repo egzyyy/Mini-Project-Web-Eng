@@ -4,7 +4,7 @@ require('../../Layout/staff_layout.php');
 ?>
 <link rel="stylesheet" href="Dashbourd.css">
 <center>
-<h2>Hello, <?php echo $_SESSION['user_username']; ?></h2>
+<h2>Hello, <?php echo $_SESSION['S_name']; ?></h2>
 </center>
 <div class="dashboard-container">
     <div class="dashboard-content">

@@ -178,8 +178,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         session_id($sessionId);
         
         $_SESSION["user_username"] = htmlspecialchars($user['S_username']);
-        $_SESSION["STU_studentID"] = htmlspecialchars($user['S_staffID']);
-        $_SESSION["STU_name"] = htmlspecialchars($user['S_name']); // Added STU_name to session
+        $_SESSION["S_staffID"] = htmlspecialchars($user['S_staffID']);
+        $_SESSION["S_name"] = htmlspecialchars($user['S_name']); // Added STU_name to session
         $_SESSION["student_password"] = htmlspecialchars($user['S_password']); // Adjusted to STU_password
         $_SESSION['last_regeneration'] = time();
         header("Location: Dashbourd.php?login=success");

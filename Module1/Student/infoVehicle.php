@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../../Layout/staff_layout.php');
+require('../../Layout/student_layout.php');
 
 // Initialize database connection
 $link = mysqli_connect("localhost", "root", "", "web_eng");
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['approve'])) {
 }
 
 // Select pending vehicle registrations
-$query_pending = "SELECT * FROM vehicle WHERE V_status = 'pending'";
+$query_pending = "SELECT * FROM vehicle ";
 $stmt_pending = $link->prepare($query_pending);
 
 if (!$stmt_pending) {
@@ -76,7 +76,7 @@ if (!$stmt_pending) {
             <th style="border: 1px solid black; padding: 8px;">Plate Number</th>
             <th style="border: 1px solid black; padding: 8px;">Vehicle Type</th>
             <th style="border: 1px solid black; padding: 8px;">Status</th>
-            <th style="border: 1px solid black; padding: 8px;">Action</th>
+            <th style="border: 1px solid black; padding: 8px;">QR</th>
         </tr>
     </thead>
     <tbody>
@@ -88,14 +88,7 @@ if (!$stmt_pending) {
             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_vehicleType; ?></td>
             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_status; ?></td>
             <td style="border: 1px solid black; padding: 20px 50px;">
-                <form method="POST">
-                    <input type="hidden" name="vehicle_id" value="<?php echo $row ? $row->V_vehicleID : ''; ?>">
-                    <select name="approval_status">
-                        <option value="approved">Approve</option>
-                        <option value="rejected">Reject</option>
-                    </select>
-                    <button type="submit" name="approve" class="btn btn-success">Submit</button>
-                </form>
+
             </td>
         </tr>
         </table>
@@ -106,7 +99,7 @@ if (!$stmt_pending) {
     }
     }
     else {
-        echo '<div class="alert alert-info" role="alert">Nothing to Approve</div>';
+        echo '<div class="alert" role="alert">No Vehicle Proposal</div>';
     }
     // Close the statement
     $stmt_pending->close();

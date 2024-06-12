@@ -73,7 +73,7 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 200px;
+            width: 250px;
             background-color: #D9DDDC;
             padding-top: 20px;
             overflow-x: hidden;
@@ -150,7 +150,7 @@
             </button>
             <div class="dropdown-container">
                 <a href="../../Module1/student/addVehicle.php">Registartion</a>
-                <a href="../../Module1/student/profileUser.php">Information</a>
+                <a href="../../Module1/student/infoVehicle.php">Information</a>
             </div>
             <a href="../../Module 3/B_homepage.php">Booking</a>
             <a href="../">Summon</a>

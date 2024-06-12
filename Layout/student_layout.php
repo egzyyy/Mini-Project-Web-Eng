@@ -73,7 +73,7 @@
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 300px;
+            width: 200px;
             background-color: #D9DDDC;
             padding-top: 20px;
             overflow-x: hidden;
@@ -125,6 +125,7 @@
     </style>
 </head>
 <body>
+
     <header>
         <div class="header-left">
             <h1>STUDENT</h1>

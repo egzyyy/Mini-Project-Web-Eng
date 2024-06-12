@@ -141,26 +141,27 @@
 <?php
 session_start();
 
-$link = mysqli_connect("localhost", "root", "");
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-$message = "";
-
-// Select the database
 mysqli_select_db($link, "web_eng");
 
+$message = "";
+
 // Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $role = "staff"; // Set role as administrator
 
-    $sql = "SELECT * FROM user WHERE U_Username = ? AND U_Password = ? AND U_Type = ?";
+    // Hash the password - assuming you've already hashed passwords in the database
+    // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "SELECT * FROM staff WHERE S_username = ? AND S_password = ?";
     $stmt = $link->prepare($sql);
-    $stmt->bind_param("sss", $username, $password, $role);
+    $stmt->bind_param("ss", $username, $password);
 
     // Execute the query
     $stmt->execute();
@@ -168,22 +169,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if user exists
     if ($result->num_rows == 1) {
-        // Authentication successful, redirect based on userType
+        // Authentication successful, fetch user data
         $user = $result->fetch_assoc();
 
         // Create new session ID
         $newSessionId = session_create_id();
-        $sessionId = $newSessionId . "_" . $user['U_ID'];
+        $sessionId = $newSessionId . "_" . $user['S_username']; // Using STU_studentID for session ID
         session_id($sessionId);
-
-        $_SESSION["user_id"] = $user['U_ID'];
-        $_SESSION["user_username"] = htmlspecialchars($user['U_Username']);
+        
+        $_SESSION["user_username"] = htmlspecialchars($user['S_username']);
+        $_SESSION["STU_studentID"] = htmlspecialchars($user['S_staffID']);
+        $_SESSION["STU_name"] = htmlspecialchars($user['S_name']); // Added STU_name to session
+        $_SESSION["student_password"] = htmlspecialchars($user['S_password']); // Adjusted to STU_password
         $_SESSION['last_regeneration'] = time();
         header("Location: Dashbourd.php?login=success");
         exit();
     } else {
         $message = "Invalid username or password.";
-        header("Location: loginPage.php?message=" . urlencode($message));
+        header("Location: login.php?message=" . urlencode($message));
         exit();
     }
 }

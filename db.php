@@ -86,6 +86,7 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_plateNum VARCHAR(50),
     V_vehigrant VARCHAR(255),
     V_vehicleType VARCHAR(50),
+    V_status VARCHAR(50),
     STU_studentID INT,
     FOREIGN KEY (STU_studentID) REFERENCES student(STU_studentID)
 )";
@@ -143,17 +144,6 @@ if (mysqli_query($link, $sql8)) {
 $flagFile = 'data_inserted.flag';
 
 if (!file_exists($flagFile)) {
-    // Insert sample data into the user table
-    $tab1 = "INSERT INTO user (U_Username, U_Password, U_Type) 
-            VALUES ('fikri', 'fikri030', 'Student'), 
-                   ('rusydan', 'rusydan040', 'Staff'), 
-                   ('iqmal', 'iqmal050', 'Administrator')";
-
-    if (mysqli_query($link, $tab1)) {
-        echo "New records created successfully in user table\n";
-    } else {
-        die('Error: ' . $tab1 . "<br>" . mysqli_error($link));
-    }
 
     // Insert sample data into the vehicle table
     $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
@@ -166,6 +156,15 @@ if (!file_exists($flagFile)) {
     } else {
         die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
     }
+    $tab3 = "INSERT INTO administrator (A_username, A_name, A_phoneNum, A_address, A_email, A_password) 
+         VALUES 
+         ('admin01', 'Gege', '01234567890', '123 Admin Street', 'admin1@example.com', 'admin123')";
+
+if (mysqli_query($link, $tab2)) {
+echo "New records created successfully in vehicle table\n";
+} else {
+die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
+}
 
     // Create the flag file to indicate data has been inserted
     file_put_contents($flagFile, 'Data inserted');

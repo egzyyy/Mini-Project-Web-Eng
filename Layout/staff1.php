@@ -93,6 +93,10 @@
 </head>
 
 <body>
+
+<?php
+session_start();
+?>
     <div id="wrapper">
         <x-staffNavbar />
         <main id="main" class="main">

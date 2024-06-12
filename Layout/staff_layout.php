@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        body {
+                body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -68,13 +66,13 @@
             display: block;
         }
         .container {
-            display: flex;
+            margin-left: 200px;
             flex: 1;
             flex-direction: row;
         }
         .sidenav {
             height: calc(100vh - 40px); /* Subtract header height */
-            width: 300px;
+            width: 200px;
             background-color: #D9DDDC;
             padding-top: 20px;
             overflow-x: hidden;

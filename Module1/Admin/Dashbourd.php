@@ -13,7 +13,7 @@ mysqli_select_db($link, "web_eng");
 
 <link rel="stylesheet" href="Dashbourd.css">
 <center>
-<h2>Hello, <?php echo $_SESSION['user_username']; ?></h2>
+<h2>Hello, <?php echo $_SESSION['A_name']; ?></h2>
 </center>
 <div class="dashboard-container">
     <div class="dashboard-content">

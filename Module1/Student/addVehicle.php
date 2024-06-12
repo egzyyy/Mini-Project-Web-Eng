@@ -1,6 +1,8 @@
 <?php
 // Include header file
+session_start();
 require('../../Layout/student_layout.php');
+
 ?>
 
 <style>
@@ -109,6 +111,7 @@ require('../../Layout/student_layout.php');
 </style>
 
 <?php
+
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
@@ -122,21 +125,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
     $vehicleType = $_POST['type'];
     $vehicleGrant = $_POST['grant'];
 
-    // Prepare and execute the insert query
-    $query = "INSERT INTO vehicle (V_plateNum, V_vehicleType, V_vehigrant) VALUES (?, ?, ?)";
-    $stmt = $link->prepare($query);
-    $stmt->bind_param("sss", $plateNum, $vehicleType, $vehicleGrant);
+    // Get the STU_studentID from the session
+    if (isset($_SESSION['STU_studentID'])) {
+        $studentID = $_SESSION['STU_studentID'];
 
-    
+        // Prepare and execute the insert query
+        $query = "INSERT INTO vehicle (V_plateNum, V_vehicleType, V_vehigrant, V_status, STU_studentID) VALUES (?, ?, ?, 'pending', ?)";
+        $stmt = $link->prepare($query);
+        $stmt->bind_param("ssss", $plateNum, $vehicleType, $vehicleGrant, $studentID);
 
-    if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>Vehicle registered successfully!</div>";
+        if ($stmt->execute()) {
+            echo "<div class='alert alert-success' role='alert'>Vehicle registered successfully!</div>";
+        } else {
+            echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+        }
+
+        // Close the statement
+        $stmt->close();
     } else {
-        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+        echo "<div class='alert alert-danger' role='alert'>Error: User is not logged in.</div>";
     }
-
-    // Close the statement
-    $stmt->close();
 }
 
 // Close the database connection

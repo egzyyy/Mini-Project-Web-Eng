@@ -140,41 +140,57 @@
 <body>
 
 <?php
+session_start();
 
-$link = mysqli_connect("localhost", "root", "");
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
-// Include database connection file
+
 mysqli_select_db($link, "web_eng");
 
-// Check if form is submitted and the add_user button is clicked
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
-    // Get form data
-    $plate = $_POST['plate'];
-    $type = $_POST['type'];
-    $grant = $_POST['grant'];
-    $username = $_SESSION['user_username'];
+$message = "";
 
-    // Prepare and execute the insert query
-    $query = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType, STU_username)
-              VALUES (?, ?, ?, ?)";
-    $stmt = $link->prepare($query);
-    $stmt->bind_param("ssss", $plate, $grant, $type, $username);
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 
-    if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>New vehicle added successfully!</div>";
+    // Hash the password - assuming you've already hashed passwords in the database
+    // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "SELECT * FROM student WHERE STU_username = ? AND STU_password = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("ss", $username, $password);
+
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if user exists
+    if ($result->num_rows == 1) {
+        // Authentication successful, fetch user data
+        $user = $result->fetch_assoc();
+
+        // Create new session ID
+        $newSessionId = session_create_id();
+        $sessionId = $newSessionId . "_" . $user['STU_username']; // Using STU_studentID for session ID
+        session_id($sessionId);
+        
+        $_SESSION["user_username"] = htmlspecialchars($user['STU_username']);
+        $_SESSION["STU_studentID"] = htmlspecialchars($user['STU_studentID']);
+        $_SESSION["STU_name"] = htmlspecialchars($user['STU_name']); // Added STU_name to session
+        $_SESSION["student_password"] = htmlspecialchars($user['STU_password']); // Adjusted to STU_password
+        $_SESSION['last_regeneration'] = time();
+        header("Location: Dashbourd.php?login=success");
+        exit();
     } else {
-        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+        $message = "Invalid username or password.";
+        header("Location: login.php?message=" . urlencode($message));
+        exit();
     }
-
-    // Close the statement
-    $stmt->close();
 }
-
-// Close the database connection
-$link->close();
 ?>
 
 

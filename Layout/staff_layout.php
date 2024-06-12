@@ -105,7 +105,7 @@
             flex: 1;
         }
         .active {
-            background-color: green;
+            background-color: #FF7F7F;
             color: white;
         }
         .dropdown-container {
@@ -125,18 +125,16 @@
 </head>
 <body>
     <header>
-        <div class="header-left">
+    <div class="header-left">
             <h1>STAFF</h1>
         </div>
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
                     <img src="../image/loginIcon.png" alt="login">
-                    Profile
-                    <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="../Module1/Student/Profile.php">View Profile</a>
+                    <a href="../../Module1/Student/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -144,21 +142,38 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="#">Dashboard</a>
-            <div class="dropdown">
-                <a href="#" class="dropdown-btn">Summon <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="../Module 4/applySummon.php">Apply Summon</a>
-                <div class="dropdown-content">
-                    <a href="../Module 4/trafficSummon.php">Traffic Summon</a>
-                </div>
+            <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <button class="dropdown-btn">Vehicle 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../../Module1/student/addVehicle.php">Registartion</a>
+                <a href="../../Module1/student/profileUser.php">Information</a>
             </div>
-            <a href="#">Manage Booking</a>
-            <a href="#">Vehicle</a>
+            <a href="../../Module 3/B_homepage.php">Booking</a>
+            <button class="dropdown-btn">Summon 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../Module 4/applySummon.php">Apply Summon</a>
+                <a href="../Module 4/trafficSummon.php">Manage Summon</a>
+            </div>
         </div>
-        <div class="main">
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script>
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
 </body>
 </html>

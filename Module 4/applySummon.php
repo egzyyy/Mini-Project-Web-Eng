@@ -67,9 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
             $stmt_update->close();
         } else {
             // No existing summon, insert a new summon
-            $sql_insert = "INSERT INTO trafficSummon (V_vehicleID, TF_date, TF_status, plate_number, TF_violationType, TF_demeritPoint) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql_insert = "INSERT INTO trafficSummon (V_vehicleID, TF_date, TF_status, TF_violationType, TF_demeritPoint) VALUES (?, ?, ?, ?, ?)";
             $stmt_insert = $link->prepare($sql_insert);
-            $stmt_insert->bind_param("issssi", $vehicle_id, $date, $status, $plate_number, $violation_type, $demerit_points);
+            $stmt_insert->bind_param("isssi", $vehicle_id, $date, $status, $violation_type, $demerit_points);
 
             if ($stmt_insert->execute()) {
                 echo "<div class='alert alert-success' role='alert'>New traffic summon added successfully!</div>";
@@ -115,6 +115,7 @@ mysqli_close($link);
         .content-container {
             max-width: 800px;
             margin: 20px auto;
+            margin-left: 425px;
             padding: 20px;
             background-color: white;
             border-radius: 10px;

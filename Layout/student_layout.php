@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="http://localhost/projectWeb/Mini-Project-Web-Eng/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
@@ -132,6 +133,7 @@
             .sidenav a {font-size: 16px;}
         }
     </style>
+    
 </head>
 <body>
 
@@ -153,28 +155,26 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <a href="Module1/Student/Dashbourd.php">Dashboard</a>
             <button class="dropdown-btn">Vehicle 
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module1/student/addVehicle.php">Registartion</a>
-                <a href="../../Module1/student/infoVehicle.php">Information</a>
+                <a href="Module1/student/addVehicle.php">Registartion</a>
+                <a href="Module1/student/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module3/B_homepage.php">View Parking Spaces</a>
-                <a href="../../Module3/view_booking.php">View Booking List</a>
+                <a href="Module3/B_homepage.php">View Parking Spaces</a>
+                <a href="Module3/view_booking.php">View Booking List</a>
             </div>
             <button class="dropdown-btn">Summon 
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module4/scanSummon.php">View Summon Details</a>
-                <a href="../../Module4/profileUser.php">My Summon</a>
-            </div>        </div>
+                <a href="Module4/scanSummon.php">View Summon Details</a>
             </div>        
         </div>
         <script>

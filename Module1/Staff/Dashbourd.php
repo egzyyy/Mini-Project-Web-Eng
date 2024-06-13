@@ -126,7 +126,6 @@ require('../../Layout/staff_layout.php');
 <center>
 <h2>Hello, <?php echo $_SESSION['STU_name']; ?></h2>
 </center>
-<div class="content-container">
 <div class="dashboard-container">
     <div class="dashboard-content">
         <div class="dashboard-header">

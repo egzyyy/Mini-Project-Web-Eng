@@ -126,15 +126,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
     $plateNum = $_POST['plate'];
     $vehicleType = $_POST['type'];
     $vehicleGrant = $_POST['grant'];
+    $colour= $_POST['V_colour'];
+    $brand = $_POST['V_brand'];
+
 
     // Get the STU_studentID from the session
     if (isset($_SESSION['STU_studentID'])) {
         $studentID = $_SESSION['STU_studentID'];
 
         // Prepare and execute the insert query
-        $query = "INSERT INTO vehicle (V_plateNum, V_vehicleType, V_vehigrant, V_status, STU_studentID) VALUES (?, ?, ?, 'pending', ?)";
+        $query = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType, V_brand, V_colour, V_status, STU_studentID)
+        VALUES (?, ?, ?, ?, ?, 'pending', ?)";
         $stmt = $link->prepare($query);
-        $stmt->bind_param("ssss", $plateNum, $vehicleType, $vehicleGrant, $studentID);
+        $stmt->bind_param("sssssi", $plateNum, $vehigrant, $vehicleType, $brand, $colour, $studentID);
 
         if ($stmt->execute()) {
             echo "<div class='alert alert-success' role='alert'>Vehicle registered successfully!</div>";
@@ -174,6 +178,29 @@ $link->close();
             <div class="form-group mb-3">
                 <label for="grant">Grant</label>
                 <input type="file" class="form-control" id="grant" name="grant" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="V_brand">Brand</label>
+                <select class="form-control" required id="V_brand" name="V_brand">
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Ford">Perodua</option>
+                    <option value="Chevrolet">Proton</option>
+                    <option value="Volkswagen">Volkswagen</option>
+                    <option value="BMW">BMW</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="V_colour">Color</label>
+                <select class="form-control" required id="V_colour" name="V_colour">
+                    <option value="Black">Black</option>
+                    <option value="White">White</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Gray">Gray</option>
+                    <option value="Red">Red</option>
+                    <!-- Add more options as needed -->
+                </select>
             </div>
             <button type="submit" name="add_user" class="btn btn-success">Register Vehicle</button>
             <button type="reset" name="reset" class="btn btn-warning">Reset</button>

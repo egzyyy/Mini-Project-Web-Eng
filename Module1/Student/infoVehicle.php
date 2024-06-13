@@ -10,7 +10,7 @@ if (!$link) {
 }
 
 // Perform inner join query to get student and vehicle details
-$query = "SELECT student.STU_name, student.STU_email, vehicle.V_plateNum, vehicle.V_vehicleType, vehicle.V_status
+$query = "SELECT student.STU_name, student.STU_email, vehicle.V_plateNum, vehicle.V_vehicleType, vehicle.V_status, vehicle.V_brand, vehicle.V_colour
           FROM vehicle
           INNER JOIN student ON vehicle.STU_studentID = student.STU_studentID";
 $result = mysqli_query($link, $query);
@@ -24,8 +24,8 @@ if (!$result) {
             <thead>
                 <tr>
                     <th style="border: 1px solid black; padding: 8px;">No</th>
-                    <th style="border: 1px solid black; padding: 8px;">Name</th>
-                    <th style="border: 1px solid black; padding: 8px;">Email</th>
+                    <th style="border: 1px solid black; padding: 8px;">Brand</th>
+                    <th style="border: 1px solid black; padding: 8px;">Colour</th>
                     <th style="border: 1px solid black; padding: 8px;">Plate Number</th>
                     <th style="border: 1px solid black; padding: 8px;">Vehicle Type</th>
                     <th style="border: 1px solid black; padding: 8px;">Status</th>
@@ -41,13 +41,15 @@ if (!$result) {
                     $V_plateNum = htmlspecialchars($row['V_plateNum']);
                     $V_vehicleType = htmlspecialchars($row['V_vehicleType']);
                     $V_status = htmlspecialchars($row['V_status']);
-                    $qrData = "Name: $STU_name | Email: $STU_email | No plate: $V_plateNum | Type: $V_vehicleType";
+                    $V_brand = htmlspecialchars($row['V_brand']);
+                    $V_colour = htmlspecialchars($row['V_colour']);
+                    $qrData = "Name: $STU_name | Email: $STU_email | No plate: $V_plateNum | Type: $V_vehicleType | Brand: $V_brand | Colour: $V_colour";
                     $qrDataEncoded = urlencode($qrData);
                     ?>
                     <tr>
                         <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $cnt; ?></td>
-                        <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $STU_name; ?></td>
-                        <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $STU_email; ?></td>
+                        <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_brand; ?></td>
+                        <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_colour; ?></td>
                         <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_plateNum; ?></td>
                         <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_vehicleType; ?></td>
                         <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_status; ?></td>

@@ -54,7 +54,7 @@ if (!$result) {
                         <td style="border: 1px solid black; padding: 20px 50px;">
 
                             <?php if ($V_status == 'approved'): ?>
-                                <img style="width:150%" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo $qrDataEncoded; ?>" alt="QR Code">
+                                <img style="width:100%" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo $qrDataEncoded; ?>" alt="QR Code">
                             <?php endif; ?>
 
                         </td>

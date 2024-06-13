@@ -175,6 +175,7 @@
             </button>
             <div class="dropdown-container">
                 <a href="Module4/scanSummon.php">View Summon Details</a>
+                <a href="Module4/MySummon.php">My Summon</a>
             </div>        
         </div>
         <script>

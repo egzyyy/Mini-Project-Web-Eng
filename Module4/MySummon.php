@@ -95,21 +95,7 @@ function getEnforcementType($demerit_points) {
         th {
             background-color: #f2f2f2;
         }
-        .button-container {
-            margin-top: 20px;
-        }
-        .button-container a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .button-container a:hover {
-            background-color: #0056b3;
-        }
+
     </style>
 </head>
 <body>
@@ -133,9 +119,6 @@ function getEnforcementType($demerit_points) {
             echo "<p>No summon details found.</p>";
         }
         ?>
-        <div class="button-container">
-            <a href="index.php">Back to Home</a>
-        </div>
     </div>
 </body>
 </html>

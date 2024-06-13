@@ -77,7 +77,7 @@
             display: block;
         }
         .container {
-            display: flex;
+            margin-left: 200px;
             flex: 1;
             flex-direction: row;
         }

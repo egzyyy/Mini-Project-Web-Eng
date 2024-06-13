@@ -69,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
                     'demerit_points' => $new_demerit_points
                 ];
                 echo "<div class='alert alert-success' role='alert'>Traffic summon updated successfully!</div>";
-                echo "<a href='qrCode.php' class='btn btn-primary'>Generate QR Code</a>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error updating traffic summon: " . $link->error . "</div>";
             }
@@ -91,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
                     'demerit_points' => $demerit_points
                 ];
                 echo "<div class='alert alert-success' role='alert'>New traffic summon added successfully!</div>";
-                echo "<a href='qrCode.php' class='btn btn-primary'>Generate QR Code</a>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error adding traffic summon: " . $link->error . "</div>";
             }
@@ -204,7 +202,7 @@ mysqli_close($link);
     </style>
 </head>
 <body>
-    <?php include('../Layout/staff_layout.php'); ?>
+    <?php include('../../Layout/staff_layout.php'); ?>
     <div class="content-container">
         <h2>Add Summon</h2>
         <form action="applySummon.php" method="post">

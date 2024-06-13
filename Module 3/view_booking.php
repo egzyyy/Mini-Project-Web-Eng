@@ -7,108 +7,86 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-// Check if form is submitted and the apply-summon button is clicked
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data and sanitize inputs
-    $B_bookingID = mysqli_real_escape_string($link, $_POST['B_bookingID']);
-    $B_endTime = mysqli_real_escape_string($link, $_POST['B_endTime']);
-    $P_parkingspaceID = mysqli_real_escape_string($link, $_POST['P_parkingspaceID']);
-    $B_startTime = mysqli_real_escape_string($link, $_POST['B_startTime']);
+// Fetch bookings
+$query = "SELECT b.B_bookingID, b.B_startTime, b.B_endTime, b.P_parkingSpaceID, v.V_vehicleID 
+          FROM booking b 
+          JOIN vehicle v ON b.V_vehicleID = v.V_vehicleID 
+          ORDER BY b.B_startTime";
+$result = mysqli_query($link, $query);
 
-    // Insert the summon
-    $sql = "INSERT INTO booking (B_startTime, B_endTime, P_parkingspaceID, B_bookingID)
-            VALUES ('$B_startTime', '$B_endTime', '$P_parkingspaceID', '$B_bookingID')";
-
-    if ($link->query($sql) === TRUE) {
-        echo "<div class='alert alert-success' role='alert'>New summon added successfully!</div>";
-    } else {
-        echo "<div class='alert alert-danger' role='alert'>Error: " . $sql . "<br>" . $link->error . "</div>";
-    }
+if (!$result) {
+    die('Error executing query: ' . mysqli_error($link));
 }
 
-// Fetch existing bookings
-$booking_sql = "SELECT * FROM booking";
-$booking_result = $link->query($booking_sql);
+$bookings = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $bookings[] = $row;
+}
 
-// Close the database connection
 mysqli_close($link);
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Bookings</title>
+    <title>View Bookings</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
+        table, th, td {
+            border: 1px solid black;
         }
-        h2 {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
+        th, td {
+            padding: 10px;
+            text-align: left;
         }
-        .booking {
-            background: #fff;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .action-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
         }
-        .booking p {
-            line-height: 1.6;
+        .edit-button {
+            background-color: #4CAF50;
+            color: white;
         }
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-        hr {
-            border: 0;
-            height: 1px;
-            background: #ccc;
-            margin: 20px 0;
+        .cancel-button {
+            background-color: #f44336;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="content-container">
-        <h2>Your Bookings</h2>
-        <?php
-        if ($booking_result->num_rows > 0) {
-            while ($row = $booking_result->fetch_assoc()) {
-                echo "<div class='booking'>";
-                echo "<p><strong>Booking ID:</strong> " . $row['B_bookingID'] . "</p>";
-                echo "<p><strong>Start Time:</strong> " . $row['B_startTime'] . "</p>";
-                echo "<p><strong>End Time:</strong> " . $row['B_endTime'] . "</p>";
-                echo "<p><strong>Parking Space ID:</strong> " . $row['P_parkingspaceID'] . "</p>";
-                echo "</div>";
-            }
-        } else {
-            echo "<p>No bookings found.</p>";
-        }
-        ?>
-    </div>
+    <h1>Booking List</h1>
+    <table>
+        <tr>
+            <th>Booking ID</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Parking Space ID</th>
+            <th>Vehicle ID</th>
+            <th>Actions</th>
+        </tr>
+        <?php if (empty($bookings)): ?>
+            <tr>
+                <td colspan="6">No bookings found.</td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($bookings as $booking): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($booking['B_bookingID']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['B_startTime']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['B_endTime']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['V_vehicleID']); ?></td>
+                    <td>
+                        <button class="action-button edit-button" onclick="window.location.href='make_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=edit'">Edit</button>
+                        <button class="action-button cancel-button" onclick="window.location.href='make_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=cancel'">Cancel</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </table>
 </body>
 </html>

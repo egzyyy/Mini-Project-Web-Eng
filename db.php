@@ -117,7 +117,9 @@ $sql7 = "CREATE TABLE IF NOT EXISTS booking (
     B_startTime DATE,
     B_endTime DATE,
     P_parkingSpaceID VARCHAR(6),
-    FOREIGN KEY (P_parkingSpaceID) REFERENCES parkingSpace(P_parkingSpaceID)
+    V_vehicleID INT,
+    FOREIGN KEY (P_parkingSpaceID) REFERENCES parkingSpace(P_parkingSpaceID),
+    FOREIGN KEY (V_vehicleID) REFERENCES vehicle(V_vehicleID)
 )";
 if (mysqli_query($link, $sql7)) {
     echo "Table booking created successfully\n";

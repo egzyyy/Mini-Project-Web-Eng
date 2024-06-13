@@ -14,18 +14,47 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vehicleID = $_POST['vehicleID'];
     $startTime = $_POST['startTime'];
-    $endTime = $_POST['endTime'];
 
     if ($action == 'edit') {
-        $query = "UPDATE booking SET B_startTime = ?, B_endTime = ?, V_vehicleID = ? WHERE B_bookingID = ?";
+        // Fetch the current booking details
+        $query = "SELECT P_parkingSpaceID FROM booking WHERE B_bookingID = ?";
         $stmt = mysqli_prepare($link, $query);
-        mysqli_stmt_bind_param($stmt, 'sssi', $startTime, $endTime, $vehicleID, $bookingID);
+        mysqli_stmt_bind_param($stmt, 'i', $bookingID);
         mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $booking = mysqli_fetch_assoc($result);
         mysqli_stmt_close($stmt);
-    }
 
-    header("Location: view_bookings.php");
-    exit();
+        if ($booking) {
+            $parkingSpaceID = $booking['P_parkingSpaceID'];
+
+            // Check for booking clashes
+            $query = "SELECT COUNT(*) AS clash_count FROM booking 
+                      WHERE P_parkingSpaceID = ? 
+                      AND B_startTime = ? 
+                      AND B_bookingID != ?";
+            $stmt = mysqli_prepare($link, $query);
+            mysqli_stmt_bind_param($stmt, 'ssi', $parkingSpaceID, $startTime, $bookingID);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $clash = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
+
+            if ($clash['clash_count'] > 0) {
+                echo "Error: The selected time slot is already booked for this parking space.";
+            } else {
+                // Update the booking
+                $query = "UPDATE booking SET B_startTime = ?, V_vehicleID = ? WHERE B_bookingID = ?";
+                $stmt = mysqli_prepare($link, $query);
+                mysqli_stmt_bind_param($stmt, 'ssi', $startTime, $vehicleID, $bookingID);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+
+                header("Location: view_bookings.php");
+                exit();
+            }
+        }
+    }
 } elseif ($action == 'cancel') {
     $query = "DELETE FROM booking WHERE B_bookingID = ?";
     $stmt = mysqli_prepare($link, $query);
@@ -40,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $parkingSpaceID = '';
 $vehicleID = '';
 $startTime = '';
-$endTime = '';
 
 if ($action == 'edit' && $bookingID) {
     $query = "SELECT * FROM booking WHERE B_bookingID = ?";
@@ -55,7 +83,6 @@ if ($action == 'edit' && $bookingID) {
         $parkingSpaceID = $booking['P_parkingSpaceID'];
         $vehicleID = $booking['V_vehicleID'];
         $startTime = $booking['B_startTime'];
-        $endTime = $booking['B_endTime'];
     }
 }
 
@@ -79,19 +106,16 @@ mysqli_close($link);
 </head>
 <body>
     <div class='content-container'>
-    <h1>Edit Booking</h1>
-    <form method="POST">
-        <label for="vehicleID">Vehicle Number Plate:</label>
-        <input type="text" id="vehicleID" name="vehicleID" value="<?php echo htmlspecialchars($vehicleID); ?>" required>
-        <br>
-        <label for="startTime">Start Time:</label>
-        <input type="date" id="startTime" name="startTime" value="<?php echo htmlspecialchars($startTime); ?>" required>
-        <br>
-        <label for="endTime">End Time:</label>
-        <input type="date" id="endTime" name="endTime" value="<?php echo htmlspecialchars($endTime); ?>" required>
-        <br>
-        <button type="submit">Update Booking</button>
-    </form>
-</div>
+        <h1>Edit Booking</h1>
+        <form method="POST">
+            <label for="vehicleID">Vehicle Number Plate:</label>
+            <input type="text" id="vehicleID" name="vehicleID" value="<?php echo htmlspecialchars($vehicleID); ?>" required>
+            <br>
+            <label for="startTime">Start Time:</label>
+            <input type="datetime-local" id="startTime" name="startTime" value="<?php echo htmlspecialchars($startTime); ?>" required>
+            <br>
+            <button type="submit">Update Booking</button>
+        </form>
+    </div>
 </body>
 </html>

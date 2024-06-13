@@ -175,6 +175,8 @@
                 <a href="../../Module4/scanSummon.php">View Summon Details</a>
                 <a href="../../Module4/profileUser.php">My Summon</a>
             </div>        </div>
+            </div>        
+        </div>
         <script>
         var dropdown = document.getElementsByClassName("dropdown-btn");
         var i;
@@ -191,5 +193,5 @@
             });
         }
     </script>
-        <div class="main">
-
+</body>
+</html>

@@ -91,6 +91,8 @@ require('../../Layout/student_layout.php');
 
 /* Styling for success message */
 .alert-success {
+    margin-left: 580px;
+    width: fit-content;
     margin-bottom: 10px;
     padding: 10px;
     background-color: #d4edda;

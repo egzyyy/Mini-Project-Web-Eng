@@ -83,7 +83,7 @@ if (mysqli_query($link, $sql4)) {
 // Create the vehicle table
 $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehicleID INT AUTO_INCREMENT PRIMARY KEY,
-    V_plateNum VARCHAR(50),
+    V_plateNum VARCHAR(50) UNIQUE,
     V_vehigrant VARCHAR(255),
     V_vehicleType VARCHAR(50),
     V_status VARCHAR(50),

@@ -274,6 +274,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
                 <th>Status</th>
                 <th>Type</th>
                 <th>Reason</th>
+                <th>QR Link</th>
                 <th>Actions</th>
             </tr>
         </thead>

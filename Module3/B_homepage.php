@@ -56,7 +56,7 @@ mysqli_close($link);
                 <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
                 <div class="grid-container">
                     <?php foreach ($spaces as $space): ?>
-                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
+                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
                             <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>
                             <p>Status: <?php echo htmlspecialchars($space['P_status']); ?></p>
                         </div>

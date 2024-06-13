@@ -46,68 +46,58 @@ if (!$stmt_pending) {
     $stmt_pending->execute();
     $result_pending = $stmt_pending->get_result();
     $cnt = 1;
+    ?>
 
-    if ($result_pending->num_rows > 0) {
-
-    // Display pending vehicle registrations
-    while ($row = $result_pending->fetch_object()) {
-        // Initialize variables with empty values if $row is null
-        $STU_name = '';
-        $V_plateNum = '';
-        $V_vehicleType = '';
-        $V_status = '';
-
-        // Check if $row is not null before accessing its properties
-        if ($row) {
-            $STU_studentID = $row->STU_studentID;
-            $V_plateNum = $row->V_plateNum;
-            $V_vehicleType = $row->V_vehicleType;
-            $V_status = $row->V_status;
-        }
-
-        // Display table row with data or empty values
-        ?>
-        <div class="table-responsive">
-    <table id="dataTable" style="margin-top: 50px; padding-right:0; padding-bottom: 20px; margin-left: 300px; border-collapse: collapse;">
-        <thead>
-            <tr>
-            <th style="border: 1px solid black; padding: 8px;">No</th>
-            <th style="border: 1px solid black; padding: 8px;">Name</th>
-            <th style="border: 1px solid black; padding: 8px;">Plate Number</th>
-            <th style="border: 1px solid black; padding: 8px;">Vehicle Type</th>
-            <th style="border: 1px solid black; padding: 8px;">Status</th>
-            <th style="border: 1px solid black; padding: 8px;">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Table rows will be filled dynamically above -->
-        <tr>
-            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $cnt; ?></td>
-            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $STU_studentID; ?></td>
-            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_plateNum; ?></td>
-            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_vehicleType; ?></td>
-            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_status; ?></td>
-            <td style="border: 1px solid black; padding: 20px 50px;">
-                <form method="POST">
-                    <input type="hidden" name="vehicle_id" value="<?php echo $row ? $row->V_vehicleID : ''; ?>">
-                    <select name="approval_status">
-                        <option value="approved">Approve</option>
-                        <option value="rejected">Reject</option>
-                    </select>
-                    <button type="submit" name="approve" class="btn btn-success">Submit</button>
-                </form>
-            </td>
-        </tr>
+    <div class="table-responsive">
+        <table id="dataTable" style="margin-top: 50px; padding-right:0; padding-bottom: 20px; margin-left: 300px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px;">No</th>
+                    <th style="border: 1px solid black; padding: 8px;">Name</th>
+                    <th style="border: 1px solid black; padding: 8px;">Plate Number</th>
+                    <th style="border: 1px solid black; padding: 8px;">Vehicle Type</th>
+                    <th style="border: 1px solid black; padding: 8px;">Status</th>
+                    <th style="border: 1px solid black; padding: 8px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result_pending->num_rows > 0) {
+                    while ($row = $result_pending->fetch_object()) {
+                        $STU_studentID = htmlspecialchars($row->STU_studentID);
+                        $V_plateNum = htmlspecialchars($row->V_plateNum);
+                        $V_vehicleType = htmlspecialchars($row->V_vehicleType);
+                        $V_status = htmlspecialchars($row->V_status);
+                        $V_vehicleID = htmlspecialchars($row->V_vehicleID);
+                        ?>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $cnt; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $STU_studentID; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_plateNum; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_vehicleType; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_status; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;">
+                                <form method="POST">
+                                    <input type="hidden" name="vehicle_id" value="<?php echo $V_vehicleID; ?>">
+                                    <select name="approval_status">
+                                        <option value="approved">Approve</option>
+                                        <option value="rejected">Reject</option>
+                                    </select>
+                                    <button type="submit" name="approve" class="btn btn-success">Submit</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <?php
+                        $cnt++;
+                    }
+                } else {
+                    echo '<tr><td colspan="6" style="border: 1px solid black; padding: 20px 50px;"><div class="alert alert-info" role="alert">Nothing to Approve</div></td></tr>';
+                }
+                ?>
+            </tbody>
         </table>
-        </div>
-        <?php
-        $cnt++;    
-        
-    }
-    }
-    else {
-        echo '<div class="alert alert-info" role="alert">Nothing to Approve</div>';
-    }
+    </div>
+    <?php
     // Close the statement
     $stmt_pending->close();
 }
@@ -116,14 +106,10 @@ if (!$stmt_pending) {
 $link->close();
 ?>
 
-
-
-
 <style>
 
 .alert{
-    margin-top: 200px;
-    margin-left: 500px;
+    margin-top: 0px;
     width: 500px;
     text-align: center;
     background-color: cyan;

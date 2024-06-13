@@ -52,6 +52,30 @@ $link->close();
 <head>
     <title>Edit Profile</title>
     <link rel="stylesheet" href="profile.css">
+    <style>
+        
+.btn-save {
+    background-color: #3224f7;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.40rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.btn-save:hover {
+    background-color: #3983f2;
+    border-color: #2d9af3;
+}
+
+.btn-save:active {
+    background-color: #1689e7;
+}
+/* End */
+    </style>
 </head>
 <body>
 <div class="main">

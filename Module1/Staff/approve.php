@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../Layout/staff_layout.php');
+require('../../Layout/staff_layout.php');
 
 // Initialize database connection
 $link = mysqli_connect("localhost", "root", "", "web_eng");

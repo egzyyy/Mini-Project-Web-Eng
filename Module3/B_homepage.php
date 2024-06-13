@@ -63,9 +63,7 @@ mysqli_close($link);
 </head>
 <body>
     <div class="content-container">
-        <div class="button-container">
-            <button onclick="window.location.href='view_booking.php'">View Booking List</button>
-        </div>
+
         <h1>Parking Spaces</h1>
         <?php foreach ($parkingSpaces as $location => $spaces): ?>
             <div class="location">

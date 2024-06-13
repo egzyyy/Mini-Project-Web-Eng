@@ -68,7 +68,7 @@ session_start();
             $enforcement_type = getEnforcementType($demerit_points);
 
             echo "<table>";
-            echo "<tr><th>Plate Number</th><th>Date</th><th>Status</th><th>Violation Type</th><th>Demerit Points</th><th>Enforcement Type</th><th>QR Code</th></tr>";
+            echo "<tr><th>Plate Number</th><th>Date</th><th>Status</th><th>Violation Type</th><th>Demerit Points</th><th>Enforcement Type</th></tr>";
             echo "<tr>";
             echo "<td>" . htmlspecialchars($summon['plate_number']) . "</td>";
             echo "<td>" . htmlspecialchars($summon['date']) . "</td>";

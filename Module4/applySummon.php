@@ -68,7 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
                     'violation_type' => $violation_type,
                     'demerit_points' => $new_demerit_points
                 ];
-                echo "<div class='alert alert-success' role='alert'>Traffic summon updated successfully!</div>";
+                // Redirect to qrCode.php
+                header("Location: qrCode.php");
+                exit();
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error updating traffic summon: " . $link->error . "</div>";
             }
@@ -89,7 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['apply-summon'])) {
                     'violation_type' => $violation_type,
                     'demerit_points' => $demerit_points
                 ];
-                echo "<div class='alert alert-success' role='alert'>New traffic summon added successfully!</div>";
+                // Redirect to qrCode.php
+                header("Location: qrCode.php");
+                exit();
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Error adding traffic summon: " . $link->error . "</div>";
             }

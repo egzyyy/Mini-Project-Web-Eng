@@ -262,7 +262,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="Module1/staff/approve.php">Registartion</a>
+                <a href="Module1/Staff/approve.php">Registartion</a>
                 <a href="Module1/staff/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking

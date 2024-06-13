@@ -154,7 +154,7 @@ $link->close();
 ?>
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header" style="margin-top:50px;">
         Vehicle Registration
     </div>
     <div class="card-body">
@@ -182,7 +182,6 @@ $link->close();
     </div>
 </div>
 
-<hr>
 
 <?php
 // Include footer and scripts

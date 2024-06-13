@@ -56,7 +56,7 @@ $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_yearStudy INTEGER,
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
-    STU_password VARCHAR(50),
+    STU_password VARCHAR(50)
 )";
 if (mysqli_query($link, $sql3)) {
     echo "Table student created successfully\n";
@@ -72,7 +72,7 @@ $sql4 = "CREATE TABLE IF NOT EXISTS administrator (
     A_phoneNum VARCHAR(20),
     A_address VARCHAR(250),
     A_email VARCHAR(100),
-    A_password VARCHAR(50),
+    A_password VARCHAR(50)
 )";
 if (mysqli_query($link, $sql4)) {
     echo "Table administrator created successfully\n";

@@ -2,8 +2,6 @@
 session_start();
 include('../Layout/student_layout.php');
 
-
-
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
@@ -25,13 +23,12 @@ mysqli_close($link);
 <head>
     <title>View Parking Spaces</title>
     <style>
-        
         .location {
             margin-bottom: 30px;
         }
         .grid-container {
             display: grid;
-            grid-template-columns: auto auto auto auto;;
+            grid-template-columns: auto auto auto auto;
             gap: 15px;
         }
         .card {
@@ -49,31 +46,17 @@ mysqli_close($link);
             background-color: red;
             color: white;
         }
-        .button-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .button-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-        }
     </style>
 </head>
 <body>
     <div class="content-container">
-
         <h1>Parking Spaces</h1>
         <?php foreach ($parkingSpaces as $location => $spaces): ?>
             <div class="location">
                 <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
                 <div class="grid-container">
                     <?php foreach ($spaces as $space): ?>
-                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
+                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
                             <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>
                             <p>Status: <?php echo htmlspecialchars($space['P_status']); ?></p>
                         </div>

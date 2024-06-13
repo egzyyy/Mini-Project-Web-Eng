@@ -147,8 +147,8 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module1/student/addVehicle.php">Registartion</a>
-                <a href="../../Module1/student/infoVehicle.php">Information</a>
+                <a href="../../Module1/Staff/approve.php.php">Approve</a>
+                <a href="Module1/student/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking
                 <i class="fa fa-caret-down"></i>

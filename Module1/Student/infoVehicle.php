@@ -20,7 +20,7 @@ if (!$result) {
 } else {
     ?>
     <div class="table-responsive">
-        <table id="dataTable" style="margin-top: 50px; padding-right:0; padding-bottom: 20px; margin-left: 50px; border-collapse: collapse;">
+        <table id="dataTable" style="margin-top: 50px; padding-right:0; padding-bottom: 20px; margin-left: 100px; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th style="border: 1px solid black; padding: 8px;">No</th>
@@ -54,7 +54,7 @@ if (!$result) {
                         <td style="border: 1px solid black; padding: 20px 50px;">
 
                             <?php if ($V_status == 'approved'): ?>
-                                <img style="width:100%" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo $qrDataEncoded; ?>" alt="QR Code">
+                                <img style="width:80%;" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo $qrDataEncoded; ?>" alt="QR Code">
                             <?php endif; ?>
 
                         </td>

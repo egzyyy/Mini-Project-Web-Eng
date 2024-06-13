@@ -9,12 +9,6 @@ require('../../Layout/staff_layout.php');
 <div class="dashboard-container">
     <div class="dashboard-content">
         <div class="dashboard-header">
-            <div class="dashboard-title">Dashboard</div>
-            <div class="dashboard-actions">
-                <button class="action-btn">Add summon</button>
-                <a href="approve.php" class="action-btn">Approve</a>
-            </div>
-        </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
                 <div class="card-title">Total Warning</div>

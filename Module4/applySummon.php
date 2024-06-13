@@ -202,7 +202,7 @@ mysqli_close($link);
     </style>
 </head>
 <body>
-    <?php include('../../Layout/staff_layout.php'); ?>
+    <?php include('../Layout/staff_layout.php'); ?>
     <div class="content-container">
         <h2>Add Summon</h2>
         <form action="applySummon.php" method="post">

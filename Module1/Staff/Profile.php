@@ -2,7 +2,7 @@
 // Include header file
 // Start session and get staff ID
 session_start();
-require('../../Layout/staff_layout.php');
+require('../Layout/staff_layout.php');
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../../Layout/staff_layout.php');
+require('../Layout/staff_layout.php');
 ?>
 <link rel="stylesheet" href="Dashbourd.css">
 <center>

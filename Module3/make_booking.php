@@ -3,9 +3,9 @@ session_start();
 include('../Layout/student_layout.php');
 
 // Check if user is logged in
-if (!isset($_SESSION['userID'])) {
-    die('User not logged in');
-}
+// if (!isset($_SESSION['userID'])) {
+//     die('User not logged in');
+// }
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
@@ -14,7 +14,7 @@ if (!$link) {
 }
 
 // Assume user ID is stored in session
-$userID = $_SESSION['userID'];
+// $userID = $_SESSION['userID'];
 
 // Fetch user's vehicles
 $sql = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE STU_studentID = ?";

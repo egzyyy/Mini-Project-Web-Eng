@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../Layout/admin_layout.php');
+include('../../phpqrcode/qrlib.php');
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
@@ -37,13 +38,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['st
 
     $sql = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) VALUES ('$parkingSpaceID', '$location', '$status', '$type')";
     header('Content-Type: application/json');
+
+    // QR code generation
+    $qrCodeDir = "../../QRImage";
+    if (!is_dir($qrCodeDir)) {
+        mkdir($qrCodeDir, 0755, true);
+    }
+
+    // Generate QR Code with the full URL
+    $qrCodeData = "http://localhost/project_web/MINI-PROJECT-WEB-ENG/Module2/Admin/manage_parking.php";
+    $qrCodeFile = $qrCodeDir . "/parking" . $parkingSpaceID . ".png";
+    QRcode::png($qrCodeData, $qrCodeFile, QR_ECLEVEL_L, 5);
+
     if (mysqli_query($link, $sql)) {
         echo json_encode(["status" => "success", "message" => "New parking space added successfully"]);
     } else {
         echo json_encode(["status" => "error", "message" => mysqli_error($link)]);
     }
     exit;
-    }
+}
 
 // Handle delete request
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteParkingSpaceID'])) {
@@ -172,33 +185,28 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
         }
 
         function addParkingSpace(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
 
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        console.log('Response received:', response);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Data received:', data);
-        if (data.status === 'success') {
-            alert(data.message);
-            location.reload(); // Reload the page
-        } else {
-            alert('Error: ' + data.message);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    location.reload(); // Reload the page
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the parking space.');
+            });
         }
-    })
-    // .catch(error => {
-    //     console.error('Error:', error);
-    //     alert('An error occurred while adding the parking space.');
-    // });
-}
-
 
         function deleteParkingSpace(parkingSpaceID) {
             if (confirm('Are you sure you want to delete this parking space?')) {
@@ -273,8 +281,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
                 <th>Location</th>
                 <th>Status</th>
                 <th>Type</th>
-                <th>Reason</th>
-                <th>QR Link</th>
+                <th>QR Code</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -283,12 +290,15 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             // Display parking spaces from database
             if ($result) {
                 while ($row = mysqli_fetch_assoc($result)) {
+                    // Path to the QR code image
+                    $qrCodePath = "../../QRImage/parking" . $row['P_parkingSpaceID'] . ".png";
+
                     echo "<tr>
                             <td>{$row['P_parkingSpaceID']}</td>
                             <td>{$row['P_location']}</td>
                             <td>{$row['P_status']}</td>
                             <td>{$row['P_parkingType']}</td>
-                            <td>{$row['P_reason']}</td>
+                            <td><img src='$qrCodePath' alt='QR Code' width='100' height='100'></td>
                             <td>
                                 <button onclick='editParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Update</button>
                                 <button onclick='deleteParkingSpace(\"{$row['P_parkingSpaceID']}\")'>Delete</button>

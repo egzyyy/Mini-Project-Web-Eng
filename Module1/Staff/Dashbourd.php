@@ -124,18 +124,13 @@ require('../../Layout/staff_layout.php');
 </head>
 <body>
 <center>
-<h2>Hello, <?php echo $_SESSION['STU_name']; ?></h2>
+<h2  style="margin-top: 20px;">Hello, <?php echo $_SESSION['STU_name']; ?></h2>
 </center>
 <div class="dashboard-container">
     <div class="dashboard-content">
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
-            <div class="dashboard-actions">
-                <form action="../../Module1/student/addVehicle.php">
-                    <button class="action-btn">Add Vehicle</button>
-                </form>
-                <button class="action-btn">View Booking History</button>
-            </div>
+
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">

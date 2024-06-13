@@ -130,16 +130,11 @@ body {
     <div class="dashboard-content">
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
-            <div class="dashboard-actions">
-                <form action="../../Module1/student/addVehicle.php">
-                <button class="action-btn">Add Vehicle</button>
-                </form>
-                <button class="action-btn">View Booking History</button>
-            </div>
+
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
-                <div class="card-title">Total Vehicles</div>
+                <div class="card-title">Total Vehicles Registered</div>
                 <div class="card-content">150</div>
             </div>
             <div class="dashboard-card">

@@ -156,7 +156,7 @@
                     <img src="image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href=".Module1/staff/Profile.php">View Profile</a>
+                    <a href="Module1/staff/Profile.php">View Profile</a>
                     <a href="Logout.php">Logout</a>
                 </div>
             </div>
@@ -169,7 +169,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="Module1/Staff/approve.php">Registartion</a>
+                <a href="Module1/Staff/approve.php">Approve</a>
                 <a href="Module1/Staff/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking

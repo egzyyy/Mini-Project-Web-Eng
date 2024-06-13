@@ -172,8 +172,8 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../Module 4/scanSummon.php">View Summon Details</a>
-                <a href="../../Module1/student/profileUser.php">Information</a>
+                <a href="../../Module4/scanSummon.php">View Summon Details</a>
+                <a href="../../Module4/profileUser.php">My Summon</a>
             </div>        </div>
         <script>
         var dropdown = document.getElementsByClassName("dropdown-btn");

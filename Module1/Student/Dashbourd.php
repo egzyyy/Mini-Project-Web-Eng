@@ -12,7 +12,9 @@ require('../../Layout/student_layout.php');
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
             <div class="dashboard-actions">
+                <form action="../../Module1/student/addVehicle.php">
                 <button class="action-btn">Add Vehicle</button>
+                </form>
                 <button class="action-btn">View Booking History</button>
             </div>
         </div>

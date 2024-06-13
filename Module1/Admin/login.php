@@ -178,6 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $sessionId = $newSessionId . "_" . $user['A_username']; // Using STU_studentID for session ID
         session_id($sessionId);
         
+        $_SESSION["A_adminID"] = htmlspecialchars($user['A_adminID']);
         $_SESSION["user_username"] = htmlspecialchars($user['A_username']);
         $_SESSION["A_name"] = htmlspecialchars($user['A_name']); // Added STU_name to session
         $_SESSION["student_password"] = htmlspecialchars($user[' A_password']); // Adjusted to STU_password

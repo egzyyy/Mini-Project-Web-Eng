@@ -1,111 +1,80 @@
 <?php
 // Include header file
+session_start();
 require('../../Layout/admin_layout.php');
 
-$link = mysqli_connect("localhost", "root", "");
+$link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
-// Include database connection file
-mysqli_select_db($link, "web_eng");
-?>
-<body>
-<link rel="stylesheet" href="Profile.css">
-<div class="main">
-        <h2>IDENTITY</h2>
-        <div class="card">
-            <div class="card-body">
-                <i class="fa fa-pen fa-xs edit"></i>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><b>Name</b></td>
-                            <td>:</td>
-                            <td>ImDezCode</td>
-                        </tr>
-                        <tr>
-                            <td><b>Email</b></td>
-                            <td>:</td>
-                            <td>imdezcode@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <td><b>Address</b></td>
-                            <td>:</td>
-                            <td>Bali, Indonesia</td>
-                        </tr>
-                        <tr>
-                            <td><b>Hobbies</b></td>
-                            <td>:</td>
-                            <td>Diving, Reading Book</td>
-                        </tr>
-                        <tr>
-                            <td><b>Job</b></td>
-                            <td>:</td>
-                            <td>Web Developer</td>
-                        </tr>
-                        <tr>
-                            <td><b>Skill</b></td>
-                            <td>:</td>
-                            <td>PHP, HTML, CSS, Java</td>
-                        </tr>
-                        <tr>
-                        <td>
-                                <button class="btn btn-edit" >Edit</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <h2>EDUCATIONAL BACKGROUND</h2>
-        <div class="card">
-            <div class="card-body">
-                <i class="fa fa-pen fa-xs edit"></i>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><b>Name</b></td>
-                            <td>:</td>
-                            <td>ImDezCode</td>
-                        </tr>
-                        <tr>
-                            <td><b>Email</b></td>
-                            <td>:</td>
-                            <td>imdezcode@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <td><b>Address</b></td>
-                            <td>:</td>
-                            <td>Bali, Indonesia</td>
-                        </tr>
-                        <tr>
-                            <td><b>Hobbies</b></td>
-                            <td>:</td>
-                            <td>Diving, Reading Book</td>
-                        </tr>
-                        <tr>
-                            <td><b>Job</b></td>
-                            <td>:</td>
-                            <td>Web Developer</td>
-                        </tr>
-                        <tr>
-                            <td><b>Skill</b></td>
-                            <td>:</td>
-                            <td>PHP, HTML, CSS, Java</td>
-                        </tr>
-                        <tr>
-                        <td>
-                                <button class="btn btn-edit" >Edit</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
+
+$adminID = $_SESSION['A_adminID']; 
+
+// Fetch administrator details
+$query = "SELECT * FROM administrator WHERE A_adminID = ?";
+$stmt = $link->prepare($query);
+$stmt->bind_param("i", $adminID);
+$stmt->execute();
+$result = $stmt->get_result();
+$admin = $result->fetch_assoc();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+<div class="main">
+    <h1>Profile</h1>
+    <div class="card">
+        <div class="card-body">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><b>Username</b></td>
+                        <td>:</td>
+                        <td><?php echo $admin['A_username'] ?? 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td>:</td>
+                        <td><?php echo $admin['A_name'] ?? 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Email</b></td>
+                        <td>:</td>
+                        <td><?php echo $admin['A_email'] ?? 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Phone Number</b></td>
+                        <td>:</td>
+                        <td><?php echo $admin['A_phoneNum'] ?? 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Address</b></td>
+                        <td>:</td>
+                        <td><?php echo $admin['A_address'] ?? 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <form action="editProfile.php">
+                                <button type="submit" class="btn btn-edit">Edit</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
+</body>
+</html>
+
 <?php
-// Include footer and scripts
-include('../../footer/footer.php');
+// Close the database connection
+$stmt->close();
+$link->close();
 ?>

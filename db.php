@@ -48,7 +48,7 @@ if (mysqli_query($link, $sql2)) {
 
 // Create the student table
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
-    STU_studentID INT PRIMARY KEY,
+    STU_studentID INT AUTO_INCREMENT PRIMARY KEY,
     STU_username VARCHAR (50),
     STU_name VARCHAR(100),
     STU_type VARCHAR(20),
@@ -140,11 +140,6 @@ if (mysqli_query($link, $sql8)) {
     die('Error creating table: ' . mysqli_error($link));
 }
 
-// Insert sample data if flag file doesn't exist
-$flagFile = 'data_inserted.flag';
-
-if (!file_exists($flagFile)) {
-
     $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
             VALUES ('abc111', 'de', 'ford'), 
                    ('abc222', 'de', 'ranger'), 
@@ -157,19 +152,27 @@ if (!file_exists($flagFile)) {
     }
     $tab3 = "INSERT INTO administrator (A_username, A_name, A_phoneNum, A_address, A_email, A_password) 
          VALUES 
-         ('admin01', 'Gege', '01234567890', '123 Admin Street', 'admin1@example.com', 'admin123')";
+         ('admin01', 'Yuta', '01346778345', '321 Admin Street', 'admin1@example.com', '123'),
+         ('admin02', 'Gege', '01234567890', '123 Admin Street', 'admin2@example.com', '123')";
 
-if (mysqli_query($link, $tab2)) {
+if (mysqli_query($link, $tab3)) {
 echo "New records created successfully in vehicle table\n";
 } else {
-die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
+die('Error: ' . $tab3 . "<br>" . mysqli_error($link));
 }
 
-    // Create the flag file to indicate data has been inserted
-    file_put_contents($flagFile, 'Data inserted');
+$tab4 = "INSERT INTO student (STU_username, STU_name, STU_type, STU_phoneNum, STU_yearStudy, STU_address, STU_email, STU_password) 
+VALUES
+('john_doe', 'John Doe', 'Regular', '1234567890', 3, '123 Main Street, City', 'john.doe@example.com', 'password123'),
+('jane_smith', 'Jane Smith', 'Regular', '9876543210', 2, '456 Park Avenue, Town', 'jane.smith@example.com', 'letmein'),
+('sam_jackson', 'Sam Jackson', 'Admin', '5556667777', 4, '789 Elm Road, Village', 'sam.jackson@example.com', 'adminpass')";
+
+if (mysqli_query($link, $tab4)) {
+echo "New records created successfully in vehicle table\n";
 } else {
-    echo "Data already inserted. Skipping insertion.\n";
+die('Error: ' . $tab4 . "<br>" . mysqli_error($link));
 }
+
 
 // Close the database connection
 mysqli_close($link);

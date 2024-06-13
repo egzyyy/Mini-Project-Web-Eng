@@ -120,6 +120,8 @@ require('../../Layout/staff_layout.php');
         font-size: 1.6rem;
         font-weight: 600;
     }
+
+
 </style>
 </head>
 <body>
@@ -146,20 +148,6 @@ require('../../Layout/staff_layout.php');
                 <div class="card-content">10</div>
             </div>
             <!-- Add more cards as needed -->
-        </div>
-    </div>
-</div>
-<div class="announcement-container">
-    <marquee behavior="scroll" direction="left">
-        Important Announcement!!
-    </marquee>
-    <div class="announcement-content">
-        Date: 
-        <div class="display-date">
-            <span id="day"></span>,
-            <span id="daynum"></span>
-            <span id="month"></span>
-            <span id="year"></span>
         </div>
     </div>
 </div>

@@ -22,12 +22,13 @@ mysqli_close($link);
 <head>
     <title>View Parking Spaces</title>
     <style>
+        
         .location {
             margin-bottom: 30px;
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: auto auto auto auto;;
             gap: 15px;
         }
         .card {
@@ -61,22 +62,24 @@ mysqli_close($link);
     </style>
 </head>
 <body>
-    <div class="button-container">
-        <button onclick="window.location.href='view_booking.php'">View Booking List</button>
-    </div>
-    <h1>Parking Spaces</h1>
-    <?php foreach ($parkingSpaces as $location => $spaces): ?>
-        <div class="location">
-            <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
-            <div class="grid-container">
-                <?php foreach ($spaces as $space): ?>
-                    <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
-                        <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>
-                        <p>Status: <?php echo htmlspecialchars($space['P_status']); ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+    <div class="content-container">
+        <div class="button-container">
+            <button onclick="window.location.href='view_booking.php'">View Booking List</button>
         </div>
-    <?php endforeach; ?>
+        <h1>Parking Spaces</h1>
+        <?php foreach ($parkingSpaces as $location => $spaces): ?>
+            <div class="location">
+                <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
+                <div class="grid-container">
+                    <?php foreach ($spaces as $space): ?>
+                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
+                            <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>
+                            <p>Status: <?php echo htmlspecialchars($space['P_status']); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </body>
 </html>

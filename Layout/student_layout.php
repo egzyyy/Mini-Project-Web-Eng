@@ -6,6 +6,15 @@
     <title>Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -152,7 +161,13 @@
                 <a href="../../Module1/student/addVehicle.php">Registartion</a>
                 <a href="../../Module1/student/infoVehicle.php">Information</a>
             </div>
-            <a href="../../Module 3/B_homepage.php">Booking</a>
+            <button class="dropdown-btn">Booking
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../../Module3/student/B_homepage.php">View Parking Spaces</a>
+                <a href="Module3/student/view_booking.php">View Booking List</a>
+            </div>
             <button class="dropdown-btn">Summon 
                 <i class="fa fa-caret-down"></i>
             </button>

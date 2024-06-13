@@ -34,26 +34,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $startTime = $_POST['startTime'];
     $parkingSpaceID = $_POST['parkingSpaceID'];
 
-    // Insert booking with only start time
-    $query = "INSERT INTO booking (B_startTime, P_parkingSpaceID, V_vehicleID) VALUES (?, ?, ?)";
-    $stmt = mysqli_prepare($link, $query);
+    // Check for booking clash
+    $clashCheckQuery = "SELECT COUNT(*) AS count FROM booking WHERE P_parkingSpaceID = ? AND B_startTime = ?";
+    $stmt = mysqli_prepare($link, $clashCheckQuery);
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'ssi', $startTime, $parkingSpaceID, $vehicleID);
+        mysqli_stmt_bind_param($stmt, 'ss', $parkingSpaceID, $startTime);
         mysqli_stmt_execute($stmt);
-        $bookingID = mysqli_insert_id($link); // Get the inserted booking ID
-        mysqli_stmt_close($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        $stmt->close();
 
-        // Generate QR code URL
-        $qrUrl = "http://yourdomain.com/complete_booking.php?bookingID=" . $bookingID;
+        if ($row['count'] > 0) {
+            $clashError = "The selected time slot is already booked for this parking space. Please choose a different time.";
+        } else {
+            // Insert booking with only start time
+            $query = "INSERT INTO booking (B_startTime, P_parkingSpaceID, V_vehicleID) VALUES (?, ?, ?)";
+            $stmt = mysqli_prepare($link, $query);
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, 'ssi', $startTime, $parkingSpaceID, $vehicleID);
+                mysqli_stmt_execute($stmt);
+                $bookingID = mysqli_insert_id($link); // Get the inserted booking ID
+                mysqli_stmt_close($stmt);
 
-        // You need a library to generate QR codes, e.g., PHP QR Code
-        // Include the library and generate the QR code image
-        include('phpqrcode/qrlib.php');
-        $qrImagePath = 'qrcodes/' . $bookingID . '.png';
-        QRcode::png($qrUrl, $qrImagePath);
+                // Generate QR code URL
+                $qrUrl = "http://yourdomain.com/complete_booking.php?bookingID=" . $bookingID;
 
-        header("Location: view_bookings.php");
-        exit();
+                // You need a library to generate QR codes, e.g., PHP QR Code
+                // Include the library and generate the QR code image
+                include('phpqrcode/qrlib.php');
+                $qrImagePath = 'qrcodes/' . $bookingID . '.png';
+                QRcode::png($qrUrl, $qrImagePath);
+
+                header("Location: view_bookings.php");
+                exit();
+            } else {
+                die('Error preparing statement: ' . $link->error);
+            }
+        }
     } else {
         die('Error preparing statement: ' . $link->error);
     }
@@ -103,6 +120,9 @@ mysqli_close($link);
         <label for="startTime">Start Time:</label>
         <input type="datetime-local" id="startTime" name="startTime" required>
         <br>
+        <?php if (isset($clashError)): ?>
+            <p style="color: red;"><?php echo $clashError; ?></p>
+        <?php endif; ?>
         <button type="submit">Book Now</button>
     </form>
     <?php if (isset($qrImagePath)): ?>

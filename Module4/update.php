@@ -14,13 +14,13 @@ if ($conn->connect_error) {
 
 if (isset($_GET['id'])) {
     $summonID = $_GET['id'];
-    $sql = "DELETE FROM trafficSummon WHERE TF_summonID='$summonID'";
+    $sql = "UPDATE trafficSummon SET status='Paid' WHERE TF_summonID='$summonID'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record deleted successfully";
-        header("Location: ../Module 4/trafficSummon.php"); // Redirect to the main page
+        echo "Record updated successfully";
+        header("Location: ../Module4/trafficSummon.php"); // Redirect to the main page
     } else {
-        echo "Error deleting record: " . $conn->error;
+        echo "Error updating record: " . $conn->error;
     }
 }
 

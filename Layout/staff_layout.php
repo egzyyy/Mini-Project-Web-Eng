@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-                body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -66,6 +66,7 @@
             display: block;
         }
         .container {
+            display: flex;
             flex: 1;
             flex-direction: row;
         }
@@ -104,12 +105,12 @@
             flex: 1;
         }
         .active {
-            background-color: green;
+            background-color: #E0115F;
             color: white;
         }
         .dropdown-container {
             display: none;
-            background-color: #808080;
+            background-color: #FF7F7F;
             padding-left: 8px;
         }
         .fa-caret-down {
@@ -131,11 +132,9 @@
             <div class="dropdown">
                 <button class="dropbtn">
                     <img src="../../image/loginIcon.png" alt="login">
-                    Profile
-                    <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="../../Module1/Staff/Profile.php">View Profile</a>
+                    <a href="../../Module1/Student/Profile.php">View Profile</a>
                     <a href="../../Logout.php">Logout</a>
                 </div>
             </div>
@@ -143,22 +142,29 @@
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="../../Module1/Staff/Dashbourd.php">Dashboard</a>
-            <div class="dropdown">
-                <a href="#" class="dropdown-btn">Summon <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="../../Module 4/applySummon.php">Apply Summon</a>
-                <div class="dropdown-content">
-                    <a href="../../Module 4/trafficSummon.php">Traffic Summon</a>
-                </div>
+            <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <button class="dropdown-btn">Vehicle 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../../Module1/student/addVehicle.php">Registartion</a>
+                <a href="../../Module1/student/infoVehicle.php">Information</a>
             </div>
-            <a href="#">Manage Booking</a>
-            <a href="#">Vehicle</a>
-        </div>
-        <div class="main">
-        </div>
-    </div>
-    <script>
+            <button class="dropdown-btn">Booking
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../Module 4/applySummon.php">Parking Space</a>
+                <a href="../Module 4/trafficSummon.php">Booking List</a>
+            </div> 
+            <button class="dropdown-btn">Summon 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="../Module 4/applySummon.php">Apply Summon</a>
+                <a href="../Module 4/trafficSummon.php">Manage Summon</a>
+            </div> 
+        <script>
         var dropdown = document.getElementsByClassName("dropdown-btn");
         var i;
 
@@ -174,6 +180,5 @@
             });
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+    </body>
 </html>

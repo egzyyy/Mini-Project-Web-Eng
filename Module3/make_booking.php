@@ -2,9 +2,9 @@
 session_start();
 include('../Layout/student_layout.php');
 
-// Check if user is logged in
-if (!isset($_SESSION['userID'])) {
-    die('User not logged in');
+// Check if student is logged in
+if (!isset($_SESSION['STU_studentID'])) {
+    die('Student not logged in');
 }
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
@@ -13,14 +13,12 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-// Assume user ID is stored in session
-$userID = $_SESSION['userID'];
-
-// Fetch user's vehicles
+// Fetch student's vehicles using student ID
+$studentID = $_SESSION['STU_studentID'];
 $sql = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE STU_studentID = ?";
 $stmt = $link->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param("i", $userID);
+    $stmt->bind_param("i", $studentID);
     $stmt->execute();
     $result = $stmt->get_result();
     $vehicles = $result->fetch_all(MYSQLI_ASSOC);
@@ -95,40 +93,51 @@ mysqli_close($link);
 <html>
 <head>
     <title>Make Booking</title>
+    <style>
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class=content-container>
-    <h1>Booking for Parking Space: <?php echo htmlspecialchars($parkingSpaceID); ?></h1>
-    <?php if ($parkingSpace): ?>
-        <p>Location: <?php echo htmlspecialchars($parkingSpace['P_location']); ?></p>
-        <p>Status: <?php echo htmlspecialchars($parkingSpace['P_status']); ?></p>
-        <p>Type: <?php echo htmlspecialchars($parkingSpace['P_parkingType']); ?></p>
-    <?php else: ?>
-        <p>No details found for the specified parking space.</p>
-    <?php endif; ?>
-    <form method="POST">
-        <input type="hidden" name="parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpaceID); ?>">
-        <label for="vehicleID">Vehicle Number Plate:</label>
-        <select name="vehicleID" id="vehicleID" required>
-            <?php foreach ($vehicles as $vehicle): ?>
-                <option value="<?php echo htmlspecialchars($vehicle['V_vehicleID']); ?>">
-                    <?php echo htmlspecialchars($vehicle['V_plateNum']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <br>
-        <label for="startTime">Start Time:</label>
-        <input type="datetime-local" id="startTime" name="startTime" required>
-        <br>
-        <?php if (isset($clashError)): ?>
-            <p style="color: red;"><?php echo $clashError; ?></p>
+    <div class="content-container">
+        <h1>Booking for Parking Space: <?php echo htmlspecialchars($parkingSpaceID); ?></h1>
+        <?php if ($parkingSpace): ?>
+            <p>Location: <?php echo htmlspecialchars($parkingSpace['P_location']); ?></p>
+            <p>Status: <?php echo htmlspecialchars($parkingSpace['P_status']); ?></p>
+            <p>Type: <?php echo htmlspecialchars($parkingSpace['P_parkingType']); ?></p>
+        <?php else: ?>
+            <p>No details found for the specified parking space.</p>
         <?php endif; ?>
-        <button type="submit">Book Now</button>
-    </form>
-    <?php if (isset($qrImagePath)): ?>
-        <h2>Scan this QR code to complete your booking</h2>
-        <img src="<?php echo $qrImagePath; ?>" alt="QR Code">
-    <?php endif; ?>
+        <form method="POST">
+            <input type="hidden" name="parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpaceID); ?>">
+            <label for="vehicleID">Vehicle Number Plate:</label>
+            <select name="vehicleID" id="vehicleID" required>
+                <?php foreach ($vehicles as $vehicle): ?>
+                    <option value="<?php echo htmlspecialchars($vehicle['V_vehicleID']); ?>">
+                        <?php echo htmlspecialchars($vehicle['V_plateNum']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <br>
+            <label for="startTime">Start Time:</label>
+            <input type="datetime-local" id="startTime" name="startTime" required>
+            <br>
+            <?php if (isset($clashError)): ?>
+                <p style="color: red;"><?php echo $clashError; ?></p>
+            <?php endif; ?>
+            <button type="submit">Book Now</button>
+        </form>
+        <?php if (isset($qrImagePath)): ?>
+            <h2>Scan this QR code to complete your booking</h2>
+            <img src="<?php echo $qrImagePath; ?>" alt="QR Code">
+        <?php endif; ?>
     </div>
 </body>
 </html>

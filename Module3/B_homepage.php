@@ -1,6 +1,8 @@
 <?php
 include('../Layout/student_layout.php');
 
+
+
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {

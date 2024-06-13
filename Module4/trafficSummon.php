@@ -1,5 +1,5 @@
 <?php
-include('../Layout/staff_layout.php');
+include('../../Layout/staff_layout.php');
 
 $servername = "localhost";
 $username = "root"; // Replace with your MySQL username

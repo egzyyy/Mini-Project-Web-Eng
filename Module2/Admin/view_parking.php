@@ -1,94 +1,112 @@
 <?php
 include('../../Layout/admin_layout.php');
+
+$link = mysqli_connect("localhost", "root", "", "web_eng");
+
+if (!$link) {
+    die('Error connecting to the server: ' . mysqli_connect_error());
+}
+
+mysqli_select_db($link, "web_eng");
+
+// Fetch parking space information based on the ID in the query string
+$parkingSpaceID = isset($_GET['P_parkingSpaceID']) ? mysqli_real_escape_string($link, $_GET['P_parkingSpaceID']) : '';
+
+$parkingSpace = null;
+if ($parkingSpaceID) {
+    $query = "SELECT * FROM parkingSpace WHERE P_parkingSpaceID = '$parkingSpaceID'";
+    $result = mysqli_query($link, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $parkingSpace = mysqli_fetch_assoc($result);
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Car Park Booking</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>View Parking Space</title>
     <style>
-        
         .content-container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background-color: white;
+            background-color: #f4f4f4;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-
         }
         .content-container h2 {
-            text-align: center;
             margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
             text-align: center;
         }
-        table th {
+        .parking-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .parking-info div {
+            margin: 10px 0;
+        }
+        .parking-info div label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .qr-code {
+            margin-top: 20px;
+        }
+        .qr-code img {
+            width: 150px;
+            height: 150px;
+        }
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
             background-color: #333;
             color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
         }
-        .status-available {
-            color: green;
-            font-weight: bold;
+        .back-button:hover {
+            background-color: #555;
         }
-        .status-occupied {
-            color: red;
-            font-weight: bold;
-        }
-
     </style>
 </head>
 <body>
 <div class="content-container">
-        <h2>Daily Available Parking Area</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Example rows for demonstration purposes -->
-                <tr>
-                    <td>1</td>
-                    <td>A1</td>
-                    <td class="status-available">Available</td>
-                    <td>Staff</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>A2</td>
-                    <td class="status-occupied">Occupied</td>
-                    <td>Staff</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>B1</td>
-                    <td class="status-available">Available</td>
-                    <td>Student</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>B2</td>
-                    <td class="status-occupied">Occupied</td>
-                    <td>Student</td>
-                </tr>
-                <!-- Additional rows can be added here -->
-            </tbody>
-        </table>
-    </div>
-
+    <h2>Parking Space Information</h2>
+    <?php if ($parkingSpace): ?>
+        <div class="parking-info">
+            <div>
+                <label>ID:</label>
+                <span><?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?></span>
+            </div>
+            <div>
+                <label>Location:</label>
+                <span><?php echo htmlspecialchars($parkingSpace['P_location']); ?></span>
+            </div>
+            <div>
+                <label>Status:</label>
+                <span><?php echo htmlspecialchars($parkingSpace['P_status']); ?></span>
+            </div>
+            <div>
+                <label>Type:</label>
+                <span><?php echo htmlspecialchars($parkingSpace['P_parkingType']); ?></span>
+            </div>
+            <div class="qr-code">
+                <label>QR Code:</label>
+                <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
+            </div>
+        </div>
+        <a href="manage_parking.php" class="back-button">Back to Manage Parking</a>
+    <?php else: ?>
+        <p>Parking space not found. Please check the ID and try again.</p>
+    <?php endif; ?>
+</div>
 </body>
 </html>

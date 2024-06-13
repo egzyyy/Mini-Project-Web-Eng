@@ -67,7 +67,7 @@
             display: block;
         }
         .container {
-
+            margin-left: 200px;
             flex: 1;
             flex-direction: row;
         }
@@ -149,7 +149,7 @@
             </button>
             <div class="dropdown-container">
                 <a href="Module1/Staff/approve.php">Registartion</a>
-                <a href="Module1/staff/infoVehicle.php">Information</a>
+                <a href="Module1/Staff/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking
                 <i class="fa fa-caret-down"></i>

@@ -154,8 +154,8 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../Module 4/applySummon.php">Parking Space</a>
-                <a href="../Module 4/trafficSummon.php">Booking List</a>
+                <a href="../Module3/B_homepage.php">View Parking Spaces</a>
+                <a href="../Module3/view_booking.php">View Booking List</a>
             </div> 
             <button class="dropdown-btn">Summon 
                 <i class="fa fa-caret-down"></i>

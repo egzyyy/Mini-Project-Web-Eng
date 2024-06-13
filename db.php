@@ -33,12 +33,12 @@ if (mysqli_query($link, $sql1)) {
 // Create the staff table
 $sql2 = "CREATE TABLE IF NOT EXISTS staff (
     S_staffID INT AUTO_INCREMENT PRIMARY KEY,
+    S_username VARCHAR (50),
     S_name VARCHAR(100),
     S_phoneNum VARCHAR(20),
     S_address VARCHAR(250),
     S_email VARCHAR(100),
-    U_ID INT,
-    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
+    S_password VARCHAR(50)
 )";
 if (mysqli_query($link, $sql2)) {
     echo "Table staff created successfully\n";
@@ -49,6 +49,7 @@ if (mysqli_query($link, $sql2)) {
 // Create the student table
 $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_studentID INT PRIMARY KEY,
+    STU_username VARCHAR (50),
     STU_name VARCHAR(100),
     STU_type VARCHAR(20),
     STU_phoneNum VARCHAR(20),
@@ -56,8 +57,6 @@ $sql3 = "CREATE TABLE IF NOT EXISTS student (
     STU_address VARCHAR(250),
     STU_email VARCHAR(100),
     STU_password VARCHAR(50),
-    U_ID INT,
-    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
 )";
 if (mysqli_query($link, $sql3)) {
     echo "Table student created successfully\n";
@@ -68,12 +67,12 @@ if (mysqli_query($link, $sql3)) {
 // Create the administrator table
 $sql4 = "CREATE TABLE IF NOT EXISTS administrator (
     A_adminID INT AUTO_INCREMENT PRIMARY KEY,
+    A_username VARCHAR(100),
     A_name VARCHAR(100),
     A_phoneNum VARCHAR(20),
     A_address VARCHAR(250),
     A_email VARCHAR(100),
-    U_ID INT,
-    FOREIGN KEY (U_ID) REFERENCES user(U_ID)
+    A_password VARCHAR(50),
 )";
 if (mysqli_query($link, $sql4)) {
     echo "Table administrator created successfully\n";

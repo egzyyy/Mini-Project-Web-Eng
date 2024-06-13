@@ -27,6 +27,8 @@ if ($stmt) {
     die('Error preparing statement: ' . $link->error);
 }
 
+$parkingSpaceID = isset($_GET['id']) ? $_GET['id'] : '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plateNum = $_POST['plateNum'];
     $startTime = $_POST['startTime'];
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $clashCheckQuery = "SELECT COUNT(*) AS count FROM booking WHERE P_parkingSpaceID = ? AND B_startTime = ?";
         $stmt = mysqli_prepare($link, $clashCheckQuery);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'ss', $parkingSpaceID, $startTime);
+            mysqli_stmt_bind_param($stmt, 'is', $parkingSpaceID, $startTime);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($result);
@@ -73,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Generate QR code URL
                     $qrUrl = "http://yourdomain.com/complete_booking.php?bookingID=" . $bookingID;
 
-                    // You need a library to generate QR codes, e.g., PHP QR Code
                     // Include the library and generate the QR code image
                     include('phpqrcode/qrlib.php');
                     $qrImagePath = 'qrcodes/' . $bookingID . '.png';
@@ -93,11 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$parkingSpaceID = isset($_GET['id']) ? $_GET['id'] : '';
 $query = "SELECT P_location, P_status, P_parkingType FROM parkingSpace WHERE P_parkingSpaceID = ?";
 $stmt = mysqli_prepare($link, $query);
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, 's', $parkingSpaceID);
+    mysqli_stmt_bind_param($stmt, 'i', $parkingSpaceID);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $parkingSpace = mysqli_fetch_assoc($result);

@@ -163,6 +163,20 @@ echo "New records created successfully in vehicle table\n";
 die('Error: ' . $tab3 . "<br>" . mysqli_error($link));
 }
 
+// Insert data into parkingSpace table
+$tab4 = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) 
+         VALUES 
+         ('SS001', 'B1', 'Available', 'Student'),
+         ('SS002', 'B2', 'Temporary Closed', 'Student'),
+         ('PS001', 'A1', 'Available', 'Staff'),
+         ('PS002', 'A2', 'Available', 'Staff'),
+         ('PS003', 'A3', 'Temporary Closed', 'Staff')";
+if (mysqli_query($link, $tab4)) {
+    echo "New records created successfully in parkingSpace table\n";
+} else {
+    die('Error: ' . $tab4 . "<br>" . mysqli_error($link));
+}
+
 
 
 // Close the database connection

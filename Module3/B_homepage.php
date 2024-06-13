@@ -2,8 +2,6 @@
 session_start();
 include('../Layout/student_layout.php');
 
-
-
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
@@ -25,13 +23,12 @@ mysqli_close($link);
 <head>
     <title>View Parking Spaces</title>
     <style>
-        
         .location {
             margin-bottom: 30px;
         }
         .grid-container {
             display: grid;
-            grid-template-columns: auto auto auto auto;;
+            grid-template-columns: auto auto auto auto;
             gap: 15px;
         }
         .card {
@@ -49,24 +46,10 @@ mysqli_close($link);
             background-color: red;
             color: white;
         }
-        .button-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .button-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-        }
     </style>
 </head>
 <body>
     <div class="content-container">
-
         <h1>Parking Spaces</h1>
         <?php foreach ($parkingSpaces as $location => $spaces): ?>
             <div class="location">

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="http://localhost/projectWeb/Mini-Project-Web-Eng/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -66,7 +67,7 @@
             display: block;
         }
         .container {
-            display: flex;
+
             flex: 1;
             flex-direction: row;
         }
@@ -131,38 +132,38 @@
         <div class="header-right">
             <div class="dropdown">
                 <button class="dropbtn">
-                    <img src="../../image/loginIcon.png" alt="login">
+                    <img src="image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href="../../Module1/Student/Profile.php">View Profile</a>
-                    <a href="../../Logout.php">Logout</a>
+                    <a href=".Module1/staff/Profile.php">View Profile</a>
+                    <a href="Logout.php">Logout</a>
                 </div>
             </div>
         </div>
     </header>
     <div class="container">
         <div class="sidenav">
-            <a href="../../Module1/Student/Dashbourd.php">Dashboard</a>
+            <a href="Module1/staff/Dashbourd.php">Dashboard</a>
             <button class="dropdown-btn">Vehicle 
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module1/Staff/approve.php.php">Approve</a>
-                <a href="Module1/student/infoVehicle.php">Information</a>
+                <a href="Module1/Staff/approve.php">Registartion</a>
+                <a href="Module1/staff/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module3/B_homepage.php">View Parking Spaces</a>
-                <a href="../../Module3/view_booking.php">View Booking List</a>
+                <a href="Module3/B_homepage.php">View Parking Spaces</a>
+                <a href="Module3/view_booking.php">View Booking List</a>
             </div> 
             <button class="dropdown-btn">Summon 
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="../../Module4/applySummon.php">Apply Summon</a>
-                <a href="../../Module4/trafficSummon.php">Manage Summon</a>
+                <a href="Module4/applySummon.php">Apply Summon</a>
+                <a href="Module4/trafficSummon.php">Manage Summon</a>
             </div> 
           </div>
         <script>

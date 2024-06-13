@@ -2,7 +2,7 @@
 session_start();
 require('../../Layout/staff_layout.php');
 ?>
-<link rel="stylesheet" href="Dashbourd.css">
+<link rel="stylesheet" href="dashbourd.css">
 <center>
 <h2>Hello, <?php echo $_SESSION['S_name']; ?></h2>
 </center>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../Layout/student_layout.php');
 
 

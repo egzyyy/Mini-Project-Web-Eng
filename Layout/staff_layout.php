@@ -164,6 +164,7 @@
                 <a href="../../Module4/applySummon.php">Apply Summon</a>
                 <a href="../../Module4/trafficSummon.php">Manage Summon</a>
             </div> 
+          </div>
         <script>
         var dropdown = document.getElementsByClassName("dropdown-btn");
         var i;

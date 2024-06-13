@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../Layout/student_layout.php');
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
@@ -58,6 +59,7 @@ mysqli_close($link);
     </style>
 </head>
 <body>
+    <div class='content-container'>
     <h1>Booking List</h1>
     <table>
         <tr>
@@ -81,12 +83,13 @@ mysqli_close($link);
                     <td><?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?></td>
                     <td><?php echo htmlspecialchars($booking['V_vehicleID']); ?></td>
                     <td>
-                        <button class="action-button edit-button" onclick="window.location.href='make_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=edit'">Edit</button>
-                        <button class="action-button cancel-button" onclick="window.location.href='make_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=cancel'">Cancel</button>
+                        <button class="action-button edit-button" onclick="window.location.href='edit_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=edit'">Edit</button>
+                        <button class="action-button cancel-button" onclick="window.location.href='edit_booking.php?id=<?php echo $booking['B_bookingID']; ?>&action=cancel'">Cancel</button>
                     </td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
     </table>
+            </div>
 </body>
 </html>

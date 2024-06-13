@@ -163,17 +163,6 @@ echo "New records created successfully in vehicle table\n";
 die('Error: ' . $tab3 . "<br>" . mysqli_error($link));
 }
 
-$tab4 = "INSERT INTO student (STU_username, STU_name, STU_type, STU_phoneNum, STU_yearStudy, STU_address, STU_email, STU_password) 
-VALUES
-('john_doe', 'John Doe', 'Regular', '1234567890', 3, '123 Main Street, City', 'john.doe@example.com', 'password123'),
-('jane_smith', 'Jane Smith', 'Regular', '9876543210', 2, '456 Park Avenue, Town', 'jane.smith@example.com', 'letmein'),
-('sam_jackson', 'Sam Jackson', 'Admin', '5556667777', 4, '789 Elm Road, Village', 'sam.jackson@example.com', 'adminpass')";
-
-if (mysqli_query($link, $tab4)) {
-echo "New records created successfully in vehicle table\n";
-} else {
-die('Error: ' . $tab4 . "<br>" . mysqli_error($link));
-}
 
 
 // Close the database connection

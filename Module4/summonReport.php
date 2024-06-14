@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include('../Layout/staff_layout.php'); 
 // Database connection
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
@@ -53,7 +53,6 @@ mysqli_close($link);
     </style>
 </head>
 <body>
-    <?php include('../Layout/staff_layout.php'); ?>
     <div class="container">
         <h2>Violation Type Dashboard</h2>
         <!-- Violation Type Statistics Table -->

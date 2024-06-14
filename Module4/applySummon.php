@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('../Layout/staff_layout.php');
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
@@ -206,7 +207,6 @@ mysqli_close($link);
     </style>
 </head>
 <body>
-    <?php include('../Layout/staff_layout.php'); ?>
     <div class="content-container">
         <h2>Add Summon</h2>
         <form action="applySummon.php" method="post">
@@ -233,7 +233,7 @@ mysqli_close($link);
                     <option value="Accident Caused">Accident Caused</option>
                 </select>
             </div>
-            <button type="submit" name="apply-summon">Apply Summon</button>
+            <a href="module4/qrCode.php" class="button">Apply Summon</a>
         </form>
     </div>
 </body>

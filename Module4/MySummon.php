@@ -3,8 +3,8 @@ session_start();
 
 // Database connection parameters
 $servername = "localhost";
-$username = "root"; // Replace with your MySQL username
-$password = ""; // Replace with your MySQL password
+$username = "root"; 
+$password = ""; 
 $dbname = "web_eng";
 
 // Create connection
@@ -14,6 +14,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Initialize variables
+$summon = null;
+$enforcement_type = "";
 
 // Check if plate number is available in the session
 if (isset($_SESSION['summon']['plate_number'])) {
@@ -26,22 +30,21 @@ if (isset($_SESSION['summon']['plate_number'])) {
             WHERE v.V_plateNum = ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $plate_number);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($stmt) {
+        $stmt->bind_param("s", $plate_number);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        $summon = $result->fetch_assoc();
-        $demerit_points = (int) $summon['TF_demeritPoint'];
-        $enforcement_type = getEnforcementType($demerit_points);
-    } else {
-        $summon = null;
+        if ($result->num_rows > 0) {
+            $summon = $result->fetch_assoc();
+            $demerit_points = (int) $summon['TF_demeritPoint'];
+            $enforcement_type = getEnforcementType($demerit_points);
+        }
+
+        $stmt->close();
     }
-} else {
-    $summon = null;
 }
 
-$stmt->close();
 $conn->close();
 
 // Function to get enforcement type based on demerit points
@@ -95,7 +98,6 @@ function getEnforcementType($demerit_points) {
         th {
             background-color: #f2f2f2;
         }
-
     </style>
 </head>
 <body>

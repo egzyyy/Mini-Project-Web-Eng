@@ -230,7 +230,7 @@ $staff = $result->fetch_assoc();
                     </tr>
                     <tr>
                         <td>
-                        <form action="editProfile.php">
+                        <form action="Module1/Staff/editProfile.php">
                             <button type="submit" class="btn btn-edit">Edit</button>
                             </form>
                         </td>

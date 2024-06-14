@@ -60,7 +60,7 @@ mysqli_close($link);
                     <?php foreach ($spaces as $space): ?>
                         <div class="card <?php echo strtolower($space['P_status']); ?>"
                              <?php if (strtolower($space['P_status']) != 'closed'): ?>
-                                 onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'"
+                                 onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>&location=<?php echo urlencode($location); ?>&status=<?php echo urlencode($space['P_status']); ?>&type=<?php echo urlencode($space['P_parkingType']); ?>'"
                              <?php endif; ?>
                         >
                             <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>

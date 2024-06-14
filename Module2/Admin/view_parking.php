@@ -18,13 +18,7 @@ if ($parkingSpaceID) {
     $result = mysqli_query($link, $query);
     if ($result && mysqli_num_rows($result) > 0) {
         $parkingSpace = mysqli_fetch_assoc($result);
-        
-  // Verify token before proceeding
-//   $token = isset($_GET['token']) ? $_GET['token'] : '';
-//   if (!isset($_SESSION['enter_end_time_token']) || $_SESSION['enter_end_time_token'] !== $token) {
-//       die('Unauthorized access');
-// }
-}
+    }
 }
 ?>
 
@@ -32,54 +26,92 @@ if ($parkingSpaceID) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Parking Space</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
         .content-container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #fff;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
         }
         .content-container h2 {
-            margin-bottom: 20px;
             text-align: center;
+            color: #333;
         }
         .parking-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
         .parking-info div {
-            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
         }
         .parking-info div label {
             font-weight: bold;
             margin-right: 10px;
+            width: 120px;
+        }
+        .parking-info div span {
+            flex: 1;
         }
         .qr-code {
             margin-top: 20px;
+            text-align: center;
         }
         .qr-code img {
             width: 150px;
             height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        .back-button {
-            display: block;
-            margin: 20px auto;
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .action-button {
+            display: inline-block;
             padding: 10px 20px;
             background-color: #333;
             color: white;
             border: none;
             border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .action-button:hover {
+            background-color: #555;
+        }
+        .back-button {
+            display: block;
+            margin-top: 20px;
             text-align: center;
             text-decoration: none;
-            cursor: pointer;
+            color: #333;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         .back-button:hover {
-            background-color: #555;
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -108,13 +140,14 @@ if ($parkingSpaceID) {
                 <label>QR Code:</label>
                 <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
             </div>
-          
-            <a href="enter_end_time.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&token=<?php echo urlencode($_SESSION['enter_end_time_token']); ?>" class="action-button">Enter End Time and Duration</a>
-        
+            <div class="action-buttons">
+                <a href="enter_end_time.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&token=<?php echo urlencode($_SESSION['enter_end_time_token']); ?>" class="action-button">Enter End Time and Duration</a>
+                <!-- Add more action buttons here if needed -->
+            </div>
         </div>
-        <a href="manage_parking.php" class="back-button">Back to Manage Parking</a>
+        <a href="manage_parking.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to Manage Parking</a>
     <?php else: ?>
-        <p>Parking space not found. Please check the ID and try again.</p>
+        <p style="text-align: center;">Parking space not found. Please check the ID and try again.</p>
     <?php endif; ?>
 </div>
 </body>

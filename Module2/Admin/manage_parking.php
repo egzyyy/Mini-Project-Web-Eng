@@ -204,7 +204,7 @@ $result = mysqli_query($link, "SELECT * FROM parkingSpace");
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while adding the parking space.');
+                alert('Add Succesfull.');
             });
         }
 

@@ -72,7 +72,7 @@ QRcode::png($json_data, $filename);
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            height: 80%;
+            height: 50%;
             max-width: 600px;
             margin: 20px;
         }
@@ -106,6 +106,7 @@ QRcode::png($json_data, $filename);
 <body>
     <div class="qr-container">
         <h2>Summon QR Code</h2>
+        <h3>Scan QR code below to get your summon details</h3>
         <img src="<?php echo $filename; ?>" alt="Summon QR Code">
         <a href="applySummon.php" class="back-button">Back to Home</a>
     </div>

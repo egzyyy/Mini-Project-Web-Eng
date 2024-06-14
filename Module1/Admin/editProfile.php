@@ -1,7 +1,10 @@
 <?php
+// Start output buffering
+ob_start();
 session_start();
 require('../../Layout/admin_layout.php');
 
+// Initialize database connection
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
@@ -9,9 +12,9 @@ if (!$link) {
 }
 
 // Fetch administrator details
+$adminID = $_SESSION['A_adminID'];
+
 $query = "SELECT * FROM administrator WHERE A_adminID = ?";
-// Start session and get administrator ID
-$adminID = $_SESSION['A_adminID']; 
 $stmt = $link->prepare($query);
 $stmt->bind_param("i", $adminID);
 $stmt->execute();
@@ -31,7 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_update->bind_param("ssssi", $name, $email, $phoneNum, $address, $adminID);
 
     if ($stmt_update->execute()) {
-        echo "<div class='alert alert-success' role='alert'>Profile updated successfully!</div>";
+        // Redirect to Profile.php
+        header("Location: Profile.php");
+        exit(); // Ensure no further code is executed after redirection
     } else {
         echo "<div class='alert alert-danger' role='alert'>Error updating profile: " . $stmt_update->error . "</div>";
     }
@@ -41,6 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Close the database connection
 $stmt->close();
 $link->close();
+
+// End output buffering and flush output
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +57,6 @@ $link->close();
     <title>Edit Profile</title>
     <link rel="stylesheet" href="profile.css">
     <style>
-
-        
         .btn-save {
             background-color: #3224f7;
             color: white;
@@ -72,7 +78,6 @@ $link->close();
             background-color: #1689e7;
         }
         /* End */
-
     </style>
 </head>
 <body>
@@ -80,13 +85,13 @@ $link->close();
     <h2>EDIT PROFILE</h2>
     <div class="card">
         <div class="card-body">
-            <form method="POST" action="Profile.php">
+            <form method="POST" action="">
                 <table>
                     <tbody>
                         <tr>
                             <td><b>Name</b></td>
                             <td>:</td>
-                            <td><input type="text" name="name" readonly value="<?php echo $admin['A_name'] ?? ''; ?>"></td>
+                            <td><input type="text" name="name" value="<?php echo $admin['A_name'] ?? ''; ?>"></td>
                         </tr>
                         <tr>
                             <td><b>Email</b></td>

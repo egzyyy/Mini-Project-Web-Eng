@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Check for existing booking for the same parking space and overlapping time
             $clashError = '';
 
-            // Check for existing booking for the same parking space and overlapping time
+            // Check for existing booking that overlaps with the selected start time
             $existingBookingQuery = "SELECT COUNT(*) AS count 
                                     FROM booking 
                                     WHERE P_parkingSpaceID = ? 
-                                    AND ((B_startTime < ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime > ?))";
+                                    AND (? < B_endTime AND ? > B_startTime)";
             $stmt = mysqli_prepare($link, $existingBookingQuery);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'issss', $parkingSpaceID, $startTime, $startTime, $startTime, $startTime);
+                mysqli_stmt_bind_param($stmt, 'iss', $parkingSpaceID, $startTime, $startTime);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 $row = mysqli_fetch_assoc($result);
@@ -87,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $vehicleBookingQuery = "SELECT COUNT(*) AS count 
                                     FROM booking 
                                     WHERE V_vehicleID = ? 
-                                    AND ((B_startTime < ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime > ?))";
+                                    AND (? < B_endTime AND ? > B_startTime)";
             $stmt = mysqli_prepare($link, $vehicleBookingQuery);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'issss', $vehicleID, $startTime, $startTime, $startTime, $startTime);
+                mysqli_stmt_bind_param($stmt, 'iss', $vehicleID, $startTime, $startTime);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 $row = mysqli_fetch_assoc($result);

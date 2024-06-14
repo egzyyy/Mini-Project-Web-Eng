@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../Layout/student_layout.php');
-include('../phpqrcode/qrlib.php'); // Include QRcode library
+
 
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 

@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Start output buffering
 session_start();
 include('../phpqrcode/qrlib.php');
 include('../Layout/student_layout.php');
@@ -135,10 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     die('Error preparing statement: ' . $link->error);
                 }
             } else {
-                $clashError = "The selected time slot is not available. Please choose a different time or parking space.";
+                echo "<script>alert('" . $clashError . "');</script>";
             }
         } else {
-            $clashError = "Invalid vehicle selected.";
+            echo "<script>alert('Invalid vehicle selected.');</script>";
         }
     } else {
         die('Error preparing statement: ' . $link->error);
@@ -196,9 +197,6 @@ mysqli_close($link);
         <br>
         <button type="submit">Book</button>
     </form>
-    <?php if (isset($clashError) && $clashError): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($clashError); ?></p>
-    <?php endif; ?>
     </div>
 </body>
 </html>

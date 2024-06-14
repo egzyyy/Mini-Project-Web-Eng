@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="http://localhost/projectWeb/Mini-Project-Web-Eng/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -182,8 +181,8 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="Module4/applySummon.php">Apply Summon</a>
-                <a href="Module4/trafficSummon.php">Manage Summon</a>
+                <a href="applySummon.php">Apply Summon</a>
+                <a href="trafficSummon.php">Manage Summon</a>
             </div> 
           </div>
         <script>

@@ -1,23 +1,46 @@
 <?php
-require 'phpqrcode/qrlib.php';
-$link = mysqli_connect("localhost", "username", "password", "database");
+session_start();
+include('../phpqrcode/qrlib.php');
 
-$bookingID = $_GET['id'];
-$query = "SELECT * FROM booking WHERE B_bookingID = ?";
-$stmt = mysqli_prepare($link, $query);
-mysqli_stmt_bind_param($stmt, 'i', $bookingID);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$booking = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
+if (!isset($_SESSION['summon'])) {
+    echo "No summon data found.";
+    exit();
+}
 
-mysqli_close($link);
+$booking = $_SESSION['summon'];
+$plate_number = $booking['plate_number'];
+$date = $booking['date'];
+$status = $booking['status'];
+$violation_type = $summon['violation_type'];
+$demerit_points = $summon['demerit_points'];
 
-// Generate QR code
-$tempDir = "temp/";
-$qrData = "Booking ID: " . $booking['B_bookingID'] . "\nStart Time: " . $booking['B_startTime'] . "\nEnd Time: " . $booking['B_endTime'] . "\nParking Space ID: " . $booking['P_parkingSpaceID'] . "\nVehicle ID: " . $booking['V_vehicleID'];
-$qrFileName = $tempDir . 'booking_' . $bookingID . '.png';
-QRcode::png($qrData, $qrFileName, QR_ECLEVEL_L, 5);
+
+// Create an associative array with the summon data
+$data = [
+    'plate_number' => $plate_number,
+    'date' => $date,
+    'status' => $status,
+    'violation_type' => $violation_type,
+    'demerit_points' => $demerit_points
+];
+
+// Convert the array to JSON
+$json_data = json_encode($data);
+
+if ($json_data === false) {
+    echo "Error encoding summon data to JSON.";
+    exit();
+}
+
+$fileName = "QRCodeS/qrcode_" . $bookingID . ".png";
+
+// Check if the directory exists, if not create it
+if (!is_dir('QRCodeS')) {
+    mkdir('QRCodeS', 0755, true); // Create the directory with proper permissions
+}
+
+// Generate the QR code and save to file
+QRcode::png($json_data, $filename);
 
 ?>
 <!DOCTYPE html>

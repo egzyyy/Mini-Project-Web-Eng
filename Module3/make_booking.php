@@ -1,7 +1,6 @@
 <?php
 ob_start(); // Start output buffering
 session_start();
-include('../phpqrcode/qrlib.php');
 include('../Layout/student_layout.php');
 
 // Check if student is logged in
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plateNum = $_POST['plateNum'];
     $startTime = $_POST['startTime'];
     $parkingSpaceID = $_POST['parkingSpaceID'];
-    
+
     // Fetch vehicle ID based on selected plate number
     $vehicleQuery = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum = ? AND STU_studentID = ?";
     $stmt = mysqli_prepare($link, $vehicleQuery);
@@ -62,17 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $vehicleID = $vehicle['V_vehicleID'];
 
             // Check for existing booking for the same parking space and overlapping time
-            $endTime = date('Y-m-d H:i:s', strtotime($startTime . ' + 1 hour')); // Assuming 1 hour duration
             $clashError = '';
 
-            // Check for existing booking for the same parking space and overlapping time
+            // Check for existing booking that overlaps with the selected start time
             $existingBookingQuery = "SELECT COUNT(*) AS count 
                                     FROM booking 
                                     WHERE P_parkingSpaceID = ? 
-                                    AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
+                                    AND (? < B_endTime AND ? > B_startTime)";
             $stmt = mysqli_prepare($link, $existingBookingQuery);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'issss', $parkingSpaceID, $startTime, $startTime, $endTime, $endTime);
+                mysqli_stmt_bind_param($stmt, 'iss', $parkingSpaceID, $startTime, $startTime);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 $row = mysqli_fetch_assoc($result);
@@ -89,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $vehicleBookingQuery = "SELECT COUNT(*) AS count 
                                     FROM booking 
                                     WHERE V_vehicleID = ? 
-                                    AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
+                                    AND (? < B_endTime AND ? > B_startTime)";
             $stmt = mysqli_prepare($link, $vehicleBookingQuery);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'issss', $vehicleID, $startTime, $startTime, $endTime, $endTime);
+                mysqli_stmt_bind_param($stmt, 'iss', $vehicleID, $startTime, $startTime);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 $row = mysqli_fetch_assoc($result);
@@ -115,22 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $bookingID = mysqli_insert_id($link);
                     mysqli_stmt_close($stmt);
 
-                    // Generate QR code for the booking
-                    $qrCodeDir = "../../QRImage";
-                    if (!is_dir($qrCodeDir)) {
-                        mkdir($qrCodeDir, 0755, true);
-                    }
-                    $qrData = "Booking ID: $bookingID\nStart Time: $startTime\nVehicle Plate Number: $plateNum";
-                    $qrImagePath = "$qrCodeDir/booking{$bookingID}.png";
-                    QRcode::png($qrData, $qrImagePath, QR_ECLEVEL_L, 5);
-
                     // Store booking ID and token in session for verification
                     $_SESSION['bookingID'] = $bookingID;
                     $_SESSION['enter_end_time_token'] = bin2hex(random_bytes(16));
 
                     // Redirect to view_booking.php with the token
-                    header("Location: view_booking.php");
-                    ob_end_flush(); // End output buffering and flush the output
+                    header("Location: view_booking.php?token=" . $_SESSION['enter_end_time_token']);
                     exit(); // Stop further execution after redirection
                 } else {
                     die('Error preparing statement: ' . $link->error);
@@ -197,6 +185,6 @@ mysqli_close($link);
         <br>
         <button type="submit">Book</button>
     </form>
-    </div>
+</div>
 </body>
 </html>

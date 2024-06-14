@@ -7,7 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['parkingSpaceID'], $_PO
     $status = mysqli_real_escape_string($link, $_POST['status']);
     $type = mysqli_real_escape_string($link, $_POST['type']);
 
-    $sql = "UPDATE parkingSpace SET P_location = '$location', P_status = '$status', P_parkingType = '$type' WHERE P_parkingSpaceID = $parkingSpaceID";
+    // The P_parkingSpaceID should be enclosed in quotes as it is a string
+    $sql = "UPDATE parkingSpace SET P_location = '$location', P_status = '$status', P_parkingType = '$type' WHERE P_parkingSpaceID = '$parkingSpaceID'";
+    
     if (mysqli_query($link, $sql)) {
         header("Location: manage_parking.php"); // Redirect back to the parking management page after update
         exit;
@@ -17,4 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['parkingSpaceID'], $_PO
 } else {
     echo "Error: Invalid request.";
 }
+
+// Close the database connection
+mysqli_close($link);
 ?>

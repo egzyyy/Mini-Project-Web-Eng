@@ -160,5 +160,5 @@ die('Error: ' . $tab3 . "<br>" . mysqli_error($link));
 
 
 // Close the database connection
-mysqli_close($link);
+// mysqli_close($link);
 ?>

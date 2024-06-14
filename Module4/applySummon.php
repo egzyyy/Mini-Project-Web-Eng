@@ -119,8 +119,8 @@ ob_end_flush();
         }
         .content-container { 
             max-width: 800px; 
-            margin: 20px auto; 
-            margin-left: 425px; 
+            margin: 50px auto; 
+            margin-left: 280px; 
             padding: 20px; 
             background-color: white; 
             border-radius: 10px; 

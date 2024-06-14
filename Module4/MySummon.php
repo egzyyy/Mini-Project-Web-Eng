@@ -3,8 +3,8 @@ session_start();
 
 // Database connection parameters
 $servername = "localhost";
-$username = "root"; 
-$password = ""; 
+$username = "root";
+$password = "";
 $dbname = "web_eng";
 
 // Create connection
@@ -16,32 +16,47 @@ if ($conn->connect_error) {
 }
 
 // Initialize variables
-$summon = null;
-$enforcement_type = "";
+$summons = [];
 
-// Check if plate number is available in the session
-if (isset($_SESSION['summon']['plate_number'])) {
-    $plate_number = $_SESSION['summon']['plate_number'];
+// Check if student ID is available in the session (assuming student ID is stored in session when student logs in)
+if (isset($_SESSION['STU_studentID'])) {
+    $student_id = $_SESSION['STU_studentID'];
 
-    // Fetch the latest summon details using the plate number
-    $sql = "SELECT t.TF_date, t.TF_status, t.TF_violationType, t.TF_demeritPoint
-            FROM trafficSummon t
-            JOIN vehicle v ON t.V_vehicleID = v.V_vehicleID
-            WHERE v.V_plateNum = ?";
+    // Fetch all vehicles registered by the student
+    $sql_vehicles = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE STU_studentID = ?";
+    $stmt_vehicles = $conn->prepare($sql_vehicles);
+    if ($stmt_vehicles) {
+        $stmt_vehicles->bind_param("i", $student_id);
+        $stmt_vehicles->execute();
+        $result_vehicles = $stmt_vehicles->get_result();
 
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("s", $plate_number);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        // For each vehicle, fetch the latest summon details
+        while ($vehicle = $result_vehicles->fetch_assoc()) {
+            $vehicle_id = $vehicle['V_vehicleID'];
+            $plate_number = $vehicle['V_plateNum'];
 
-        if ($result->num_rows > 0) {
-            $summon = $result->fetch_assoc();
-            $demerit_points = (int) $summon['TF_demeritPoint'];
-            $enforcement_type = getEnforcementType($demerit_points);
+            $sql_summon = "SELECT TF_date, TF_status, TF_violationType, TF_demeritPoint
+                           FROM trafficSummon
+                           WHERE V_vehicleID = ?
+                           ORDER BY TF_date DESC
+                           LIMIT 1";  // Assuming you want the latest summon per vehicle
+
+            $stmt_summon = $conn->prepare($sql_summon);
+            if ($stmt_summon) {
+                $stmt_summon->bind_param("i", $vehicle_id);
+                $stmt_summon->execute();
+                $result_summon = $stmt_summon->get_result();
+
+                if ($result_summon->num_rows > 0) {
+                    $summon = $result_summon->fetch_assoc();
+                    $summon['plate_number'] = $plate_number;
+                    $summon['enforcement_type'] = getEnforcementType((int)$summon['TF_demeritPoint']);
+                    $summons[] = $summon;
+                }
+                $stmt_summon->close();
+            }
         }
-
-        $stmt->close();
+        $stmt_vehicles->close();
     }
 }
 
@@ -105,17 +120,19 @@ function getEnforcementType($demerit_points) {
     <div class="content-container">
         <h2>My Summon</h2>
         <?php
-        if ($summon) {
+        if (count($summons) > 0) {
             echo "<table>";
             echo "<tr><th>Plate Number</th><th>Date</th><th>Status</th><th>Violation Type</th><th>Demerit Points</th><th>Enforcement Type</th></tr>";
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($_SESSION['summon']['plate_number']) . "</td>";
-            echo "<td>" . htmlspecialchars($summon['TF_date']) . "</td>";
-            echo "<td>" . htmlspecialchars($summon['TF_status']) . "</td>";
-            echo "<td>" . htmlspecialchars($summon['TF_violationType']) . "</td>";
-            echo "<td>" . htmlspecialchars($summon['TF_demeritPoint']) . "</td>";
-            echo "<td>" . htmlspecialchars($enforcement_type) . "</td>";
-            echo "</tr>";
+            foreach ($summons as $summon) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($summon['plate_number']) . "</td>";
+                echo "<td>" . htmlspecialchars($summon['TF_date']) . "</td>";
+                echo "<td>" . htmlspecialchars($summon['TF_status']) . "</td>";
+                echo "<td>" . htmlspecialchars($summon['TF_violationType']) . "</td>";
+                echo "<td>" . htmlspecialchars($summon['TF_demeritPoint']) . "</td>";
+                echo "<td>" . htmlspecialchars($summon['enforcement_type']) . "</td>";
+                echo "</tr>";
+            }
             echo "</table>";
         } else {
             echo "<p>No summon details found.</p>";

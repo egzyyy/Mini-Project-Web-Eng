@@ -219,7 +219,7 @@ mysqli_close($link);
                 </div>
                 <!-- Add more cards as needed -->
             </div>
-            <div style="width: 80%; margin-top: 20px;">
+            <div style="width: 50%; margin-top: 20px; margin-left:230px;">
                 <canvas id="brandBarChart" width="400" height="200"></canvas>
                 <canvas id="brandPieChart" width="400" height="200"></canvas>
             </div>

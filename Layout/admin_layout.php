@@ -87,7 +87,6 @@
             padding-top: 20px;
             overflow-x: hidden;
             color: #000000;
-            border-bottom-right-radius: 25px;    
             left: 0;
             height: 120%
             overflow-x: hidden;

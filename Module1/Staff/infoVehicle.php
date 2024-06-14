@@ -9,6 +9,9 @@ if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
+// Get the current date
+$currentDate = date('Y-m-d');
+
 // Check if form is submitted and the delete button is clicked
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
     $vehicleID = $_POST['vehicle_id'];
@@ -157,45 +160,46 @@ if (!$stmt_all) {
     </style>
 
     <div class="table-responsive">
-        <table id="dataTable" style="margin-top: 50px; padding-right: 0; padding-bottom: 20px; margin-left: 300px; border-collapse: collapse;">
+    <div style="margin-top: 20px; text-align: center;">
+            <h4>Date: <?php echo $currentDate; ?></h4>
+        </div>
+        <table id="dataTable" style="margin-top: 50px; padding-right: 0; padding-bottom: 20px; margin-left: 200px; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th style="border: 1px solid black; padding: 8px;">No</th>
-                    <th style="border: 1px solid black; padding: 8px;">Name</th>
+                    <th style="border: 1px solid black; padding: 8px;">Brand</th>
+                    <th style="border: 1px solid black; padding: 8px;">Colour</th>
                     <th style="border: 1px solid black; padding: 8px;">Plate Number</th>
                     <th style="border: 1px solid black; padding: 8px;">Vehicle Type</th>
                     <th style="border: 1px solid black; padding: 8px;">Status</th>
-                    <th style="border: 1px solid black; padding: 8px;">Action</th>
+
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if ($result_all->num_rows > 0) {
                     while ($row = $result_all->fetch_object()) {
-                        $STU_studentID = htmlspecialchars($row->STU_studentID);
+                        $V_brand = htmlspecialchars($row->V_brand);
                         $V_plateNum = htmlspecialchars($row->V_plateNum);
                         $V_vehicleType = htmlspecialchars($row->V_vehicleType);
                         $V_status = htmlspecialchars($row->V_status);
+                        $V_colour = htmlspecialchars($row->V_colour);
                         $V_vehicleID = htmlspecialchars($row->V_vehicleID);
                         ?>
                         <tr>
                             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $cnt; ?></td>
-                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $STU_studentID; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_brand; ?></td>
+                            <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_colour; ?></td>
                             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_plateNum; ?></td>
                             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_vehicleType; ?></td>
                             <td style="border: 1px solid black; padding: 20px 50px;"><?php echo $V_status; ?></td>
-                            <td style="border: 1px solid black; padding: 20px 50px;">
-                                <form method="POST">
-                                    <input type="hidden" name="vehicle_id" value="<?php echo $V_vehicleID; ?>">
-                                    <button type="submit" name="delete" class="btn btn-warning">Delete</button>
-                                </form>
-                            </td>
+
                         </tr>
                         <?php
                         $cnt++;
                     }
                 } else {
-                    echo '<tr><td colspan="6" style="border: 1px solid black; padding: 20px 50px;"><div class="alert alert-info" role="alert">No vehicles found</div></td></tr>';
+                    echo '<tr><td colspan="7" style="border: 1px solid black; padding: 20px 50px;"><div class="alert alert-info" role="alert">No vehicles found</div></td></tr>';
                 }
                 ?>
             </tbody>

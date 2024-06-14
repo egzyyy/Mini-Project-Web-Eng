@@ -20,10 +20,10 @@ if ($parkingSpaceID) {
         $parkingSpace = mysqli_fetch_assoc($result);
         
   // Verify token before proceeding
-  $token = isset($_GET['token']) ? $_GET['token'] : '';
-  if (!isset($_SESSION['enter_end_time_token']) || $_SESSION['enter_end_time_token'] !== $token) {
-      die('Unauthorized access');
-}
+//   $token = isset($_GET['token']) ? $_GET['token'] : '';
+//   if (!isset($_SESSION['enter_end_time_token']) || $_SESSION['enter_end_time_token'] !== $token) {
+//       die('Unauthorized access');
+// }
 }
 }
 ?>

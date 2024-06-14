@@ -119,8 +119,8 @@ ob_end_flush();
         }
         .content-container { 
             max-width: 800px; 
-            margin: 20px auto; 
-            margin-left: 425px; 
+            margin: 50px auto; 
+            margin-left: 280px; 
             padding: 20px; 
             background-color: white; 
             border-radius: 10px; 
@@ -183,7 +183,7 @@ ob_end_flush();
 <body>
     <div class="content-container">
         <h2>Add Summon</h2>
-        <form action="applySummon.php" method="post">
+        <form action="Module4/applySummon.php" method="post">
             <div class="form-group">
                 <label for="plate_number">Plate Number:</label>
                 <input type="text" id="plate_number" name="plate_number" required>

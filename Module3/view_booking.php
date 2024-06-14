@@ -46,7 +46,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 }
 
 // Fetch active bookings (no end_time)
-$query = "SELECT booking.*, vehicle.V_plateNum, parkingSpace.P_parkingSpaceID 
+$query = "SELECT booking.*, vehicle.V_plateNum, parkingSpace.P_parkingSpaceID, parkingSpace.P_location, parkingSpace.P_status, parkingSpace.P_parkingType 
           FROM booking 
           JOIN vehicle ON booking.V_vehicleID = vehicle.V_vehicleID 
           JOIN parkingSpace ON booking.P_parkingSpaceID = parkingSpace.P_parkingSpaceID 
@@ -63,7 +63,7 @@ if ($stmt) {
 }
 
 // Fetch completed bookings (with end_time)
-$query = "SELECT booking.*, vehicle.V_plateNum, parkingSpace.P_parkingSpaceID 
+$query = "SELECT booking.*, vehicle.V_plateNum, parkingSpace.P_parkingSpaceID, parkingSpace.P_location, parkingSpace.P_status, parkingSpace.P_parkingType 
           FROM booking 
           JOIN vehicle ON booking.V_vehicleID = vehicle.V_vehicleID 
           JOIN parkingSpace ON booking.P_parkingSpaceID = parkingSpace.P_parkingSpaceID 
@@ -87,16 +87,46 @@ include('../Layout/student_layout.php');
 <html>
 <head>
     <title>View Bookings</title>
+    <style>
+        .content-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <div class='content-container'>
+<div class='content-container'>
     <h1>My Bookings</h1>
 
     <h2>Active Bookings</h2>
     <?php if (!empty($activeBookings)): ?>
-        <table border="1">
+        <table>
             <tr>
                 <th>Parking Space ID</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Start Date</th>
                 <th>Start Time</th>
                 <th>Vehicle Plate Number</th>
                 <th>QR Code</th>
@@ -105,7 +135,11 @@ include('../Layout/student_layout.php');
             <?php foreach ($activeBookings as $booking): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?></td>
-                    <td><?php echo htmlspecialchars($booking['B_startTime']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_location']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_status']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_parkingType']); ?></td>
+                    <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($booking['B_startTime']))); ?></td>
+                    <td><?php echo htmlspecialchars(date('H:i:s', strtotime($booking['B_startTime']))); ?></td>
                     <td><?php echo htmlspecialchars($booking['V_plateNum']); ?></td>
                     <td><img src="../../QRImage/booking<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
                     <td>
@@ -121,10 +155,15 @@ include('../Layout/student_layout.php');
 
     <h2>Completed Bookings</h2>
     <?php if (!empty($completedBookings)): ?>
-        <table border="1">
+        <table>
             <tr>
                 <th>Parking Space ID</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Start Date</th>
                 <th>Start Time</th>
+                <th>End Date</th>
                 <th>End Time</th>
                 <th>Vehicle Plate Number</th>
                 <th>QR Code</th>
@@ -132,8 +171,13 @@ include('../Layout/student_layout.php');
             <?php foreach ($completedBookings as $booking): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?></td>
-                    <td><?php echo htmlspecialchars($booking['B_startTime']); ?></td>
-                    <td><?php echo htmlspecialchars($booking['B_endTime']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_location']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_status']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['P_parkingType']); ?></td>
+                    <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($booking['B_startTime']))); ?></td>
+                    <td><?php echo htmlspecialchars(date('H:i:s', strtotime($booking['B_startTime']))); ?></td>
+                    <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($booking['B_endTime']))); ?></td>
+                    <td><?php echo htmlspecialchars(date('H:i:s', strtotime($booking['B_endTime']))); ?></td>
                     <td><?php echo htmlspecialchars($booking['V_plateNum']); ?></td>
                     <td><img src="../../QRImage/booking<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
                 </tr>
@@ -142,6 +186,6 @@ include('../Layout/student_layout.php');
     <?php else: ?>
         <p>No completed bookings found.</p>
     <?php endif; ?>
-    </div>
+</div>
 </body>
 </html>

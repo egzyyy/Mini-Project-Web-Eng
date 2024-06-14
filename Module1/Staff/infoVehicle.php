@@ -160,7 +160,11 @@ if (!$stmt_all) {
     </style>
 
     <div class="table-responsive">
+
     <div style="margin-top: 20px; text-align: center;">
+        <center>
+    <h2><b>Approved Vehicle</b></h2>
+    </center>
             <h4>Date: <?php echo $currentDate; ?></h4>
         </div>
         <table id="dataTable" style="margin-top: 50px; padding-right: 0; padding-bottom: 20px; margin-left: 200px; border-collapse: collapse;">

@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $_SESSION["S_name"] = htmlspecialchars($user['S_name']); // Added STU_name to session
         $_SESSION["student_password"] = htmlspecialchars($user['S_password']); // Adjusted to STU_password
         $_SESSION['last_regeneration'] = time();
-        header("Location: Dashbourd.php?login=success");
+        header("Location: ../../Module4/summonReport.php?login=success");
         exit();
     } else {
         $message = "Invalid username or password.";

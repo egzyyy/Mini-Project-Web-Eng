@@ -20,7 +20,8 @@ if (!$result) {
 } else {
     ?>
     <div class="table-responsive">
-        <table id="dataTable" style="margin-top: 50px; padding-right:0; padding-bottom: 20px; margin-left: 100px; border-collapse: collapse;">
+    <h2 style="margin-left: 110px"><b>Vehicle Information</b></h2>
+        <table id="dataTable" style="margin-top: 30px; padding-right:0; padding-bottom: 20px; margin-left: 100px; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th style="border: 1px solid black; padding: 8px;">No</th>
@@ -43,7 +44,12 @@ if (!$result) {
                     $V_status = htmlspecialchars($row['V_status']);
                     $V_brand = htmlspecialchars($row['V_brand']);
                     $V_colour = htmlspecialchars($row['V_colour']);
-                    $qrData = "Name: $STU_name | Email: $STU_email | No plate: $V_plateNum | Type: $V_vehicleType | Brand: $V_brand | Colour: $V_colour";
+                    $qrData = "Name: $STU_name | 
+                    Email: $STU_email | 
+                    No plate: $V_plateNum | 
+                    Type: $V_vehicleType | 
+                    Brand: $V_brand | 
+                    Colour: $V_colour";
                     $qrDataEncoded = urlencode($qrData);
                     ?>
                     <tr>
@@ -81,7 +87,7 @@ mysqli_close($link);
 <div id="qrModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeQrPopup()">&times;</span>
-        <img id="qrCodeImage" src="" alt="QR Code">
+        <img id="qrCodeImage" style="width:80%" src="" alt="QR Code">
     </div>
 </div>
 

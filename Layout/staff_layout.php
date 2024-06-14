@@ -107,6 +107,68 @@
         .sidenav a:hover, .dropdown-btn:hover {
             color: #f1f1f1;
         }
+
+        .content-container { 
+            max-width: 800px; 
+            margin: 50px auto; 
+            margin-left: 280px; 
+            padding: 20px; 
+            background-color: white; 
+            border-radius: 10px; 
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        .content-container h2 { 
+            margin-bottom: 20px; 
+        }
+        form { 
+            background: #fff; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); 
+            margin-top: 20px; 
+        }
+        form label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-weight: bold; 
+        }
+        .form-group { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+        }
+        .form-group label { 
+            flex: 1; 
+            text-align: left; 
+            margin-right: 10px; 
+        }
+        .form-group input[type="text"], 
+        .form-group input[type="date"], 
+        .form-group select { 
+            flex: 2; 
+            width: calc(100% - 22px); 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 16px; 
+        }
+        button { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            color: #fff; 
+            background-color: #800000; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        button:hover { 
+            background-color: #575757; 
+        }
         .main {
             margin-left: 200px;
             font-size: 20px;

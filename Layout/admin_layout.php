@@ -6,14 +6,66 @@
     <!-- <title>Admin Dashboard</title> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        .content-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-            text-align: center;
+        .content-container { 
+            max-width: 800px; 
+            margin: 50px auto; 
+            margin-left: 280px; 
+            padding: 20px; 
+            background-color: white; 
+            border-radius: 10px; 
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        .content-container h2 { 
+            margin-bottom: 20px; 
+        }
+        form { 
+            background: #fff; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); 
+            margin-top: 20px; 
+        }
+        form label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-weight: bold; 
+        }
+        .form-group { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+        }
+        .form-group label { 
+            flex: 1; 
+            text-align: left; 
+            margin-right: 10px; 
+        }
+        .form-group input[type="text"], 
+        .form-group input[type="date"], 
+        .form-group select { 
+            flex: 2; 
+            width: calc(100% - 22px); 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 16px; 
+        }
+        button { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            color: #fff; 
+            background-color: #800000; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        button:hover { 
+            background-color: #575757; 
         }
         body {
             font-family: Arial, sans-serif;
@@ -86,7 +138,7 @@
             background-color: #D9DDDC;
             padding-top: 20px;
             overflow-x: hidden;
-            color: #000000;
+            color: black;
             left: 0;
             height: 120%
             overflow-x: hidden;
@@ -97,7 +149,7 @@
             padding: 6px 8px 30px 16px;
             text-decoration:none ;
             font-size: 20px;
-            color: #808080;
+            color: black;
             display: block;
             background: none;
             width: 100%;
@@ -116,12 +168,12 @@
             /* padding-left: 10%; */
         }
         .active {
-            background-color: #808080;
+            background-color: white;
             color: white;
         }
         .dropdown-container {
             display: none;
-            background-color: #262626;
+            background-color: grey;
             padding-left: 8px;
         }
         .fa-caret-down {

@@ -81,6 +81,7 @@
             flex: 1;
             flex-direction: row;
         }
+        
         .sidenav {
             height: calc(200vh - 40px); /* Subtract header height */
             width: 250px;

@@ -42,15 +42,6 @@ mysqli_close($link);
     <title>Summon Report Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-            max-width: 800px;
-            margin-left: 400px;
-            margin: 20px auto;
-        }
         .dashboard-container {
             display: flex;
             flex-direction: column;

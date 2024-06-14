@@ -1,6 +1,7 @@
 <?php
 // Include header file
 // Start session and get staff ID
+ob_start();
 session_start();
 require('../../Layout/staff_layout.php');
 
@@ -11,6 +12,28 @@ if (!$link) {
 }
 
 $staffID = $_SESSION['S_staffID'];
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phoneNum = $_POST['phone'];
+    $address = $_POST['address'];
+
+    // Update staff details
+    $update_query = "UPDATE staff SET S_name = ?, S_email = ?, S_phoneNum = ?, S_address = ? WHERE S_staffID = ?";
+    $stmt_update = $link->prepare($update_query);
+    $stmt_update->bind_param("ssssi", $name, $email, $phoneNum, $address, $staffID);
+
+    if ($stmt_update->execute()) {
+        // Redirect to Profile.php
+        header("Location: Profile.php");
+        exit(); // Ensure no further code is executed after redirection
+    } else {
+        echo "<div class='alert alert-danger' role='alert'>Error updating profile: " . $stmt_update->error . "</div>";
+    }
+    $stmt_update->close();
+}
 
 // Fetch staff details
 $query = "SELECT * FROM staff WHERE S_staffID = ?";
@@ -25,7 +48,6 @@ $staff = $result->fetch_assoc();
 <head>
     <title>Edit Staff Profile</title>
     <style>
-        
         .btn-save {
             background-color: #3224f7;
             color: white;
@@ -47,186 +69,174 @@ $staff = $result->fetch_assoc();
             background-color: #1689e7;
         }
 
-        /* Import Font Dancing Script */
+        * {
+            margin: 0;
+        }
 
-* {
-    margin: 0;
-}
+        .navbar-top {
+            background-color: #fff;
+            color: #333;
+            box-shadow: 0px 4px 8px 0px grey;
+            height: 70px;
+        }
 
-/* NavbarTop */
-.navbar-top {
-    background-color: #fff;
-    color: #333;
-    box-shadow: 0px 4px 8px 0px grey;
-    height: 70px;
-}
+        .title {
+            padding-top: 15px;
+            position: absolute;
+            left: 45%;
+        }
 
-.title {
-    padding-top: 15px;
-    position: absolute;
-    left: 45%;
-}
+        .icon-count {
+            background-color: #ff0000;
+            color: #fff;
+            float: right;
+            font-size: 11px;
+            left: -25px;
+            padding: 2px;
+            position: relative;
+        }
 
+        .profile {
+            margin-bottom: 20px;
+            margin-top: -12px;
+            text-align: center;
+        }
 
-.icon-count {
-    background-color: #ff0000;
-    color: #fff;
-    float: right;
-    font-size: 11px;
-    left: -25px;
-    padding: 2px;
-    position: relative;
-}
+        .profile img {
+            border-radius: 50%;
+            box-shadow: 0px 0px 5px 1px grey;
+        }
 
-/* End */
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            padding-top: 20px;
+        }
 
-/* Sidenav */
-.profile {
-    margin-bottom: 20px;
-    margin-top: -12px;
-    text-align: center;
-}
+        .job {
+            font-size: 16px;
+            font-weight: bold;
+            padding-top: 10px;
+        }
 
-.profile img {
-    border-radius: 50%;
-    box-shadow: 0px 0px 5px 1px grey;
-}
+        .url, hr {
+            text-align: center;
+        }
 
-.name {
-    font-size: 20px;
-    font-weight: bold;
-    padding-top: 20px;
-}
+        .url hr {
+            margin-left: 20%;
+            width: 60%;
+        }
 
-.job {
-    font-size: 16px;
-    font-weight: bold;
-    padding-top: 10px;
-}
+        .url a {
+            color: #818181;
+            display: block;
+            font-size: 20px;
+            margin: 10px 0;
+            padding: 6px 8px;
+            text-decoration: none;
+        }
 
-.url, hr {
-    text-align: center;
-}
+        .url a:hover, .url .active {
+            background-color: #e8f5ff;
+            border-radius: 28px;
+            color: #000;
+            margin-left: 14%;
+            width: 65%;
+        }
 
-.url hr {
-    margin-left: 20%;
-    width: 60%;
-}
+        .main {
+            margin-top: 2%;
+            font-size: 28px;
+            padding: 0 10px;
+            width: 58%;
+        }
 
-.url a {
-    color: #818181;
-    display: block;
-    font-size: 20px;
-    margin: 10px 0;
-    padding: 6px 8px;
-    text-decoration: none;
-}
+        .main h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
 
-.url a:hover, .url .active {
-    background-color: #e8f5ff;
-    border-radius: 28px;
-    color: #000;
-    margin-left: 14%;
-    width: 65%;
-}
+        .main .card {
+            background-color: #fff;
+            border-radius: 18px;
+            box-shadow: 1px 1px 8px 0 grey;
+            height: auto;
+            margin-bottom: 20px;
+            padding: 20px 0 20px 50px;
+        }
 
-/* End */
+        .main .card table {
+            border: none;
+            font-size: 16px;
+            height: 270px;
+            width: 80%;
+        }
 
-/* Main */
-.main {
-    margin-top: 2%;
-    font-size: 28px;
-    padding: 0 10px;
-    width: 58%;
-}
+        .edit {
+            position: absolute;
+            color: #e7e7e8;
+            right: 14%;
+        }
 
-.main h2 {
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
+        .social-media {
+            text-align: center;
+            width: 90%;
+        }
 
-.main .card {
-    background-color: #fff;
-    border-radius: 18px;
-    box-shadow: 1px 1px 8px 0 grey;
-    height: auto;
-    margin-bottom: 20px;
-    padding: 20px 0 20px 50px;
-}
+        .social-media span {
+            margin: 0 10px;
+        }
 
-.main .card table {
-    border: none;
-    font-size: 16px;
-    height: 270px;
-    width: 80%;
-}
+        .fa-facebook:hover {
+            color: #4267b3 !important;
+        }
 
-.edit {
-    position: absolute;
-    color: #e7e7e8;
-    right: 14%;
-}
+        .fa-twitter:hover {
+            color: #1da1f2 !important;
+        }
 
-.social-media {
-    text-align: center;
-    width: 90%;
-}
+        .fa-instagram:hover {
+            color: #ce2b94 !important;
+        }
 
-.social-media span {
-    margin: 0 10px;
-}
+        .fa-invision:hover {
+            color: #f83263 !important;
+        }
 
-.fa-facebook:hover {
-    color: #4267b3 !important;
-}
+        .fa-github:hover {
+            color: #161414 !important;
+        }
 
-.fa-twitter:hover {
-    color: #1da1f2 !important;
-}
+        .fa-whatsapp:hover {
+            color: #25d366 !important;
+        }
 
-.fa-instagram:hover {
-    color: #ce2b94 !important;
-}
+        .fa-snapchat:hover {
+            color: #fffb01 !important;
+        }
 
-.fa-invision:hover {
-    color: #f83263 !important;
-}
+        .btn-edit {
+            background-color: #3224f7;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.40rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
 
-.fa-github:hover {
-    color: #161414 !important;
-}
+        .btn-edit:hover {
+            background-color: #3983f2;
+            border-color: #2d9af3;
+        }
 
-.fa-whatsapp:hover {
-    color: #25d366 !important;
-}
-
-.fa-snapchat:hover {
-    color: #fffb01 !important;
-}
-
-.btn-edit {
-    background-color: #3224f7;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.40rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align: center;
-}
-
-.btn-edit:hover {
-    background-color: #3983f2;
-    border-color: #2d9af3;
-}
-
-.btn-edit:active {
-    background-color: #1689e7;
-}
-/* End */
-        /* End */
+        .btn-edit:active {
+            background-color: #1689e7;
+        }
     </style>
 </head>
 <body>
@@ -234,7 +244,7 @@ $staff = $result->fetch_assoc();
     <h1>Edit Profile</h1>
     <div class="card">
         <div class="card-body">
-            <form action="updateProfile.php" method="POST">
+            <form action="Module1/Staff/editProfile.php" method="POST">
                 <table>
                     <tr>
                         <td><label for="name">Name</label></td>
@@ -247,14 +257,13 @@ $staff = $result->fetch_assoc();
                     <tr>
                         <td><label for="phone">Phone Number</label></td>
                         <td><input type="tel" id="phone" name="phone" value="<?php echo $staff['S_phoneNum']; ?>" required></td>
-
                     </tr>
                     <tr>
                         <td><label for="address">Address</label></td>
                         <td><input type="text" id="address" name="address" value="<?php echo $staff['S_address']; ?>" required></td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                              <button type="submit" class="btn btn-save">Update</button>
                         </td>
                     </tr>

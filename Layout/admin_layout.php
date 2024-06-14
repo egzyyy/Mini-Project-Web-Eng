@@ -81,7 +81,7 @@
             flex-direction: row;
         }
         .sidenav {
-            height: calc(100vh - 40px); /* Subtract header height */
+            height: calc(200vh - 40px); /* Subtract header height */
             width: 250px;
             background-color: #D9DDDC;
             padding-top: 20px;
@@ -113,7 +113,7 @@
             font-size: 20px;
             padding: 20px;
             flex: 1;
-            padding-left: 10%;
+            /* padding-left: 10%; */
         }
         .active {
             background-color: #808080;

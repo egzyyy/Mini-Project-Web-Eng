@@ -133,10 +133,8 @@
             .sidenav a {font-size: 16px;}
         }
     </style>
-    
 </head>
 <body>
-
     <header>
         <div class="header-left">
             <h1>STUDENT</h1>

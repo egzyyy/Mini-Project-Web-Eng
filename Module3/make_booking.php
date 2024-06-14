@@ -1,5 +1,7 @@
 <?php
+ob_start(); // Start output buffering
 session_start();
+include('../phpqrcode/qrlib.php');
 include('../Layout/student_layout.php');
 
 // Check if student is logged in
@@ -42,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $vehicle = mysqli_fetch_assoc($result);
-        $stmt->close();
+        mysqli_stmt_close($stmt);
     } else {
         die('Error preparing statement: ' . $link->error);
     }
@@ -50,44 +52,82 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($vehicle) {
         $vehicleID = $vehicle['V_vehicleID'];
 
-        // Check for booking clash
-        $clashCheckQuery = "SELECT COUNT(*) AS count FROM booking WHERE P_parkingSpaceID = ? AND B_startTime = ?";
-        $stmt = mysqli_prepare($link, $clashCheckQuery);
+        // Check for existing booking for the same parking space and overlapping time
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime . ' + 1 hour')); // Assuming 1 hour duration
+        $clashError = '';
+
+        // Check for existing booking for the same parking space and overlapping time
+        $existingBookingQuery = "SELECT COUNT(*) AS count 
+                                FROM booking 
+                                WHERE P_parkingSpaceID = ? 
+                                AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
+        $stmt = mysqli_prepare($link, $existingBookingQuery);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'is', $parkingSpaceID, $startTime);
+            mysqli_stmt_bind_param($stmt, 'issss', $parkingSpaceID, $startTime, $startTime, $endTime, $endTime);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($result);
-            $stmt->close();
+            mysqli_stmt_close($stmt);
 
             if ($row['count'] > 0) {
                 $clashError = "The selected time slot is already booked for this parking space. Please choose a different time.";
-            } else {
-                // Insert booking with only start time
-                $query = "INSERT INTO booking (B_startTime, P_parkingSpaceID, V_vehicleID) VALUES (?, ?, ?)";
-                $stmt = mysqli_prepare($link, $query);
-                if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, 'ssi', $startTime, $parkingSpaceID, $vehicleID);
-                    mysqli_stmt_execute($stmt);
-                    $bookingID = mysqli_insert_id($link); // Get the inserted booking ID
-                    mysqli_stmt_close($stmt);
-
-                    // Generate QR code URL
-                    $qrUrl = "http://yourdomain.com/complete_booking.php?bookingID=" . $bookingID;
-
-                    // Include the library and generate the QR code image
-                    include('phpqrcode/qrlib.php');
-                    $qrImagePath = 'qrcodes/' . $bookingID . '.png';
-                    QRcode::png($qrUrl, $qrImagePath);
-
-                    header("Location: view_bookings.php");
-                    exit();
-                } else {
-                    die('Error preparing statement: ' . $link->error);
-                }
             }
         } else {
             die('Error preparing statement: ' . $link->error);
+        }
+
+        // Check if the vehicle is already booked for the same time slot
+        $vehicleBookingQuery = "SELECT COUNT(*) AS count 
+                                FROM booking 
+                                WHERE V_vehicleID = ? 
+                                AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
+        $stmt = mysqli_prepare($link, $vehicleBookingQuery);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 'issss', $vehicleID, $startTime, $startTime, $endTime, $endTime);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
+
+            if ($row['count'] > 0) {
+                $clashError = "This vehicle is already booked for another time slot. Please choose a different vehicle or time.";
+            }
+        } else {
+            die('Error preparing statement: ' . $link->error);
+        }
+
+        if (empty($clashError)) {
+            // Proceed with booking insertion
+            $insertQuery = "INSERT INTO booking (B_startTime, P_parkingSpaceID, V_vehicleID) VALUES (?, ?, ?)";
+            $stmt = mysqli_prepare($link, $insertQuery);
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, 'ssi', $startTime, $parkingSpaceID, $vehicleID);
+                mysqli_stmt_execute($stmt);
+                $bookingID = mysqli_insert_id($link);
+                mysqli_stmt_close($stmt);
+
+                // Generate QR code for the booking
+                $qrCodeDir = "../../QRImage";
+                if (!is_dir($qrCodeDir)) {
+                    mkdir($qrCodeDir, 0755, true);
+                }
+                $qrData = "Booking ID: $bookingID\nStart Time: $startTime\nVehicle Plate Number: $plateNum";
+                $qrImagePath = "$qrCodeDir/booking{$bookingID}.png";
+                QRcode::png($qrData, $qrImagePath, QR_ECLEVEL_L, 5);
+
+                // Store booking ID and token in session for verification
+                $_SESSION['bookingID'] = $bookingID;
+                $_SESSION['enter_end_time_token'] = bin2hex(random_bytes(16));
+
+                // Redirect to view_booking.php with the token
+                header("Location: view_booking.php");
+                ob_end_flush(); // End output buffering and flush the output
+                exit(); // Stop further execution after redirection
+            } else {
+                die('Error preparing statement: ' . $link->error);
+            }
+        } else {
+            $clashError = "The selected time slot is not available. Please choose a different time or parking space.";
         }
     } else {
         $clashError = "Invalid vehicle selected.";
@@ -107,6 +147,7 @@ if ($stmt) {
 }
 
 mysqli_close($link);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -123,6 +164,15 @@ mysqli_close($link);
             text-align: center;
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var now = new Date();
+            var offset = now.getTimezoneOffset();
+            now.setMinutes(now.getMinutes() - offset);
+            var formattedDateTime = now.toISOString().slice(0, 16);
+            document.getElementById('startTime').min = formattedDateTime;
+        });
+    </script>
 </head>
 <body>
     <div class="content-container">
@@ -148,14 +198,10 @@ mysqli_close($link);
             <label for="startTime">Start Time:</label>
             <input type="datetime-local" id="startTime" name="startTime" required>
             <br>
-            <?php if (isset($clashError)): ?>
-                <p style="color: red;"><?php echo $clashError; ?></p>
-            <?php endif; ?>
-            <button type="submit">Book Now</button>
+            <button type="submit">Book</button>
         </form>
-        <?php if (isset($qrImagePath)): ?>
-            <h2>Scan this QR code to complete your booking</h2>
-            <img src="<?php echo $qrImagePath; ?>" alt="QR Code">
+        <?php if (isset($clashError) && $clashError): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($clashError); ?></p>
         <?php endif; ?>
     </div>
 </body>

@@ -18,7 +18,13 @@ if ($parkingSpaceID) {
     $result = mysqli_query($link, $query);
     if ($result && mysqli_num_rows($result) > 0) {
         $parkingSpace = mysqli_fetch_assoc($result);
-    }
+        
+  // Verify token before proceeding
+  $token = isset($_GET['token']) ? $_GET['token'] : '';
+  if (!isset($_SESSION['enter_end_time_token']) || $_SESSION['enter_end_time_token'] !== $token) {
+      die('Unauthorized access');
+}
+}
 }
 ?>
 
@@ -102,6 +108,9 @@ if ($parkingSpaceID) {
                 <label>QR Code:</label>
                 <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
             </div>
+          
+            <a href="enter_end_time.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&token=<?php echo urlencode($_SESSION['enter_end_time_token']); ?>" class="action-button">Enter End Time and Duration</a>
+        
         </div>
         <a href="manage_parking.php" class="back-button">Back to Manage Parking</a>
     <?php else: ?>

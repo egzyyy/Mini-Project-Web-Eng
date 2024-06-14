@@ -115,6 +115,7 @@ $sql7 = "CREATE TABLE IF NOT EXISTS booking (
     B_bookingID INT AUTO_INCREMENT PRIMARY KEY,
     B_startTime DATE,
     B_endTime DATE,
+    B_duration INT,
     P_parkingSpaceID VARCHAR(6),
     V_vehicleID INT,
     FOREIGN KEY (P_parkingSpaceID) REFERENCES parkingSpace(P_parkingSpaceID),

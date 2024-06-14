@@ -45,6 +45,8 @@ mysqli_close($link);
         .closed {
             background-color: red;
             color: white;
+            pointer-events: none; /* Disable pointer events for closed spaces */
+            cursor: default; /* Change cursor to default for closed spaces */
         }
     </style>
 </head>
@@ -56,7 +58,12 @@ mysqli_close($link);
                 <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
                 <div class="grid-container">
                     <?php foreach ($spaces as $space): ?>
-                        <div class="card <?php echo strtolower($space['P_status']); ?>" onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'">
+                        <div class="card <?php echo strtolower($space['P_status']); ?>
+                             <?php if (strtolower($space['P_status']) == 'closed') echo 'closed'; ?>"
+                             <?php if (strtolower($space['P_status']) != 'closed'): ?>
+                                 onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'"
+                             <?php endif; ?>
+                        >
                             <p>ID: <?php echo htmlspecialchars($space['P_parkingSpaceID']); ?></p>
                             <p>Status: <?php echo htmlspecialchars($space['P_status']); ?></p>
                         </div>

@@ -183,7 +183,7 @@ ob_end_flush();
 <body>
     <div class="content-container">
         <h2>Add Summon</h2>
-        <form action="applySummon.php" method="post">
+        <form action="Module4/applySummon.php" method="post">
             <div class="form-group">
                 <label for="plate_number">Plate Number:</label>
                 <input type="text" id="plate_number" name="plate_number" required>

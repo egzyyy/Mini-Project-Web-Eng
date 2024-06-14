@@ -120,22 +120,19 @@ require('../../Layout/staff_layout.php');
         font-size: 1.6rem;
         font-weight: 600;
     }
+
+
 </style>
 </head>
 <body>
 <center>
-<h2>Hello, <?php echo $_SESSION['STU_name']; ?></h2>
+<h2  style="margin-top: 20px;">Hello, <?php echo $_SESSION['STU_name']; ?></h2>
 </center>
 <div class="dashboard-container">
     <div class="dashboard-content">
         <div class="dashboard-header">
             <div class="dashboard-title">Dashboard</div>
-            <div class="dashboard-actions">
-                <form action="../../Module1/student/addVehicle.php">
-                    <button class="action-btn">Add Vehicle</button>
-                </form>
-                <button class="action-btn">View Booking History</button>
-            </div>
+
         </div>
         <div class="dashboard-cards">
             <div class="dashboard-card">
@@ -151,20 +148,6 @@ require('../../Layout/staff_layout.php');
                 <div class="card-content">10</div>
             </div>
             <!-- Add more cards as needed -->
-        </div>
-    </div>
-</div>
-<div class="announcement-container">
-    <marquee behavior="scroll" direction="left">
-        Important Announcement!!
-    </marquee>
-    <div class="announcement-content">
-        Date: 
-        <div class="display-date">
-            <span id="day"></span>,
-            <span id="daynum"></span>
-            <span id="month"></span>
-            <span id="year"></span>
         </div>
     </div>
 </div>

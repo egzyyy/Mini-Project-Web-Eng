@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['location'], $_POST['st
     }
 
     // Generate QR Code with the full URL
-    $qrCodeData = "http://localhost/project_web/MINI-PROJECT-WEB-ENG/Module2/Admin/view_parking.php?P_parkingSpaceID=$parkingSpaceID";    
+    $qrCodeData = "http://localhost/projectWeb/Mini-Project-Web-Eng/Module2/Admin/view_parking.php?P_parkingSpaceID=$parkingSpaceID";    
     $qrCodeFile = $qrCodeDir . "/parking" . $parkingSpaceID . ".png";
     QRcode::png($qrCodeData, $qrCodeFile, QR_ECLEVEL_L, 5);
 

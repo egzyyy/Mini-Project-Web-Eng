@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <base href="http://localhost/projectWeb/Mini-Project-Web-Eng/"> -->
+    <base href="http://localhost/projectWeb/Mini-Project-Web-Eng/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -86,8 +86,7 @@
             background-color: #D9DDDC;
             padding-top: 20px;
             overflow-x: hidden;
-            color: #000000;
-            border-bottom-right-radius: 25px;    
+            color: #000000;  
             left: 0;
             overflow-x: hidden;
             position: absolute;
@@ -156,7 +155,7 @@
                     <img src="image/loginIcon.png" alt="login">
                 </button>
                 <div class="dropdown-content">
-                    <a href=".Module1/staff/Profile.php">View Profile</a>
+                    <a href="Module1/staff/Profile.php">View Profile</a>
                     <a href="Logout.php">Logout</a>
                 </div>
             </div>
@@ -169,7 +168,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="Module1/Staff/approve.php">Registartion</a>
+                <a href="Module1/Staff/approve.php">Approve</a>
                 <a href="Module1/Staff/infoVehicle.php">Information</a>
             </div>
             <button class="dropdown-btn">Booking

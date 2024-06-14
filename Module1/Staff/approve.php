@@ -142,7 +142,7 @@ if (!$stmt_pending) {
 
 /* Styling for success message */
 .alert-success {
-    margin-left: 580px;
+    margin-left: 420px;
     width: fit-content;
     margin-bottom: 10px;
     padding: 10px;

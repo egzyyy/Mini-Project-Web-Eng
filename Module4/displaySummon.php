@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Check if summon details are available in session
 if (!isset($_SESSION['scanned_summon'])) {
     echo "No summon details available.";
     exit;
@@ -43,7 +44,7 @@ $summon = $_SESSION['scanned_summon'];
         <p><strong>Status:</strong> <?php echo htmlspecialchars($summon['status']); ?></p>
         <p><strong>Violation Type:</strong> <?php echo htmlspecialchars($summon['violation_type']); ?></p>
         <p><strong>Demerit Points:</strong> <?php echo htmlspecialchars($summon['demerit_points']); ?></p>
-        <a href="index.php" class="btn btn-primary">Back to Home</a>
+        <a href="MySummon.php" class="btn btn-primary">Back to Home</a>
     </div>
 </body>
 </html>

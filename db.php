@@ -87,6 +87,8 @@ $sql5 = "CREATE TABLE IF NOT EXISTS vehicle (
     V_vehigrant VARCHAR(255),
     V_vehicleType VARCHAR(50),
     V_status VARCHAR(50),
+    V_brand VARCHAR(50),
+    V_colour VARCHAR(50),
     STU_studentID INT,
     FOREIGN KEY (STU_studentID) REFERENCES student(STU_studentID)
 )";

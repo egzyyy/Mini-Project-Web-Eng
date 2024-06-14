@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['P_parkingSpaceID'])) {
             <label for="status">Status</label>
             <select id="status" name="status" required>
                 <option value="available" <?php echo ($row['P_status'] == 'available') ? 'selected' : ''; ?>>Available</option>
-                <option value="occupied" <?php echo ($row['P_status'] == 'occupied') ? 'selected' : ''; ?>>Occupied</option>
+                <option value="Temporary Closed" <?php echo ($row['P_status'] == 'Temporary Closed') ? 'selected' : ''; ?>>Temporary Closed</option>
             </select>
             
             <label for="type">Parking Type</label>

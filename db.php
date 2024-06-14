@@ -145,16 +145,6 @@ if (mysqli_query($link, $sql8)) {
     die('Error creating table: ' . mysqli_error($link));
 }
 
-    $tab2 = "INSERT INTO vehicle (V_plateNum, V_vehigrant, V_vehicleType) 
-            VALUES ('abc111', 'de', 'ford'), 
-                   ('abc222', 'de', 'ranger'), 
-                   ('abc333', 'de', 'rover')";
-
-    if (mysqli_query($link, $tab2)) {
-        echo "New records created successfully in vehicle table\n";
-    } else {
-        die('Error: ' . $tab2 . "<br>" . mysqli_error($link));
-    }
     $tab3 = "INSERT INTO administrator (A_username, A_name, A_phoneNum, A_address, A_email, A_password) 
          VALUES 
          ('admin01', 'Yuta', '01346778345', '321 Admin Street', 'admin1@example.com', '123'),
@@ -166,19 +156,6 @@ echo "New records created successfully in vehicle table\n";
 die('Error: ' . $tab3 . "<br>" . mysqli_error($link));
 }
 
-// Insert data into parkingSpace table
-$tab4 = "INSERT INTO parkingSpace (P_parkingSpaceID, P_location, P_status, P_parkingType) 
-         VALUES 
-         ('SS001', 'B1', 'Available', 'Student'),
-         ('SS002', 'B2', 'Temporary Closed', 'Student'),
-         ('PS001', 'A1', 'Available', 'Staff'),
-         ('PS002', 'A2', 'Available', 'Staff'),
-         ('PS003', 'A3', 'Temporary Closed', 'Staff')";
-if (mysqli_query($link, $tab4)) {
-    echo "New records created successfully in parkingSpace table\n";
-} else {
-    die('Error: ' . $tab4 . "<br>" . mysqli_error($link));
-}
 
 
 

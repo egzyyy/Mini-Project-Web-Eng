@@ -1,9 +1,8 @@
 <?php
+// Start output buffering
+ob_start();
 session_start();
 require('../../Layout/admin_layout.php');
-
-// Initialize output buffering
-ob_start();
 
 // Initialize database connection
 $link = mysqli_connect("localhost", "root", "", "web_eng");

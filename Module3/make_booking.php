@@ -30,12 +30,38 @@ if ($stmt) {
 }
 
 $parkingSpaceID = isset($_GET['id']) ? $_GET['id'] : '';
+if ($parkingSpaceID === '') {
+    die('Invalid parking space ID');
+}
+
+// Debugging: Print the received P_parkingSpaceID
+error_log("Received P_parkingSpaceID: " . $parkingSpaceID);
+
+$query = "SELECT P_location, P_status, P_parkingType FROM parkingSpace WHERE P_parkingSpaceID = ?";
+$stmt = mysqli_prepare($link, $query);
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, 'i', $parkingSpaceID);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $parkingSpace = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt);
+
+    // Debugging: Print the fetched parking space details
+    error_log("Fetched parking space details: " . print_r($parkingSpace, true));
+} else {
+    die('Error preparing statement: ' . $link->error);
+}
+
+// Check if parking space details are fetched successfully
+if (!$parkingSpace) {
+    die('No details found for the specified parking space ID');
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plateNum = $_POST['plateNum'];
     $startTime = $_POST['startTime'];
     $parkingSpaceID = $_POST['parkingSpaceID'];
-
+    
     // Fetch vehicle ID based on selected plate number
     $vehicleQuery = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum = ? AND STU_studentID = ?";
     $stmt = mysqli_prepare($link, $vehicleQuery);
@@ -134,18 +160,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$query = "SELECT P_location, P_status, P_parkingType FROM parkingSpace WHERE P_parkingSpaceID = ?";
-$stmt = mysqli_prepare($link, $query);
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, 'i', $parkingSpaceID);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $parkingSpace = mysqli_fetch_assoc($result);
-    mysqli_stmt_close($stmt);
-} else {
-    die('Error preparing statement: ' . $link->error);
-}
-
 mysqli_close($link);
 
 ?>
@@ -175,34 +189,34 @@ mysqli_close($link);
     </script>
 </head>
 <body>
-    <div class="content-container">
-        <h1>Booking for Parking Space: <?php echo htmlspecialchars($parkingSpaceID); ?></h1>
-        <?php if ($parkingSpace): ?>
-            <p>Location: <?php echo htmlspecialchars($parkingSpace['P_location']); ?></p>
-            <p>Status: <?php echo htmlspecialchars($parkingSpace['P_status']); ?></p>
-            <p>Type: <?php echo htmlspecialchars($parkingSpace['P_parkingType']); ?></p>
-        <?php else: ?>
-            <p>No details found for the specified parking space.</p>
-        <?php endif; ?>
-        <form method="POST">
-            <input type="hidden" name="parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpaceID); ?>">
-            <label for="plateNum">Vehicle Number Plate:</label>
-            <select name="plateNum" id="plateNum" required>
-                <?php foreach ($vehicles as $vehicle): ?>
-                    <option value="<?php echo htmlspecialchars($vehicle['V_plateNum']); ?>">
-                        <?php echo htmlspecialchars($vehicle['V_plateNum']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <br>
-            <label for="startTime">Start Time:</label>
-            <input type="datetime-local" id="startTime" name="startTime" required>
-            <br>
-            <button type="submit">Book</button>
-        </form>
-        <?php if (isset($clashError) && $clashError): ?>
-            <p style="color: red;"><?php echo htmlspecialchars($clashError); ?></p>
-        <?php endif; ?>
-    </div>
+<div class="content-container">
+    <h1>Booking for Parking Space: <?php echo htmlspecialchars($parkingSpaceID); ?></h1>
+    <?php if ($parkingSpace): ?>
+        <p>Location: <?php echo htmlspecialchars($parkingSpace['P_location']); ?></p>
+        <p>Status: <?php echo htmlspecialchars($parkingSpace['P_status']); ?></p>
+        <p>Type: <?php echo htmlspecialchars($parkingSpace['P_parkingType']); ?></p>
+    <?php else: ?>
+        <p>No details found for the specified parking space.</p>
+    <?php endif; ?>
+    <form method="POST">
+        <input type="hidden" name="parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpaceID); ?>">
+        <label for="plateNum">Vehicle Number Plate:</label>
+        <select name="plateNum" id="plateNum" required>
+            <?php foreach ($vehicles as $vehicle): ?>
+                <option value="<?php echo htmlspecialchars($vehicle['V_plateNum']); ?>">
+                    <?php echo htmlspecialchars($vehicle['V_plateNum']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <br>
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" id="startTime" name="startTime" required>
+        <br>
+        <button type="submit">Book</button>
+    </form>
+    <?php if (isset($clashError) && $clashError): ?>
+        <p style="color: red;"><?php echo htmlspecialchars($clashError); ?></p>
+    <?php endif; ?>
+</div>
 </body>
 </html>

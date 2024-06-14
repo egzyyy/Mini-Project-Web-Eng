@@ -58,8 +58,7 @@ mysqli_close($link);
                 <h2>Location: <?php echo htmlspecialchars($location); ?></h2>
                 <div class="grid-container">
                     <?php foreach ($spaces as $space): ?>
-                        <div class="card <?php echo strtolower($space['P_status']); ?>
-                             <?php if (strtolower($space['P_status']) == 'closed') echo 'closed'; ?>"
+                        <div class="card <?php echo strtolower($space['P_status']); ?>"
                              <?php if (strtolower($space['P_status']) != 'closed'): ?>
                                  onclick="window.location.href='Module3/make_booking.php?id=<?php echo $space['P_parkingSpaceID']; ?>'"
                              <?php endif; ?>

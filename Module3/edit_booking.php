@@ -2,157 +2,81 @@
 session_start();
 include('../Layout/student_layout.php');
 
-
 $link = mysqli_connect("localhost", "root", "", "web_eng");
 
 if (!$link) {
     die('Error connecting to the server: ' . mysqli_connect_error());
 }
 
-$bookingID = isset($_GET['id']) ? $_GET['id'] : '';
+// Check if student is logged in
+if (!isset($_SESSION['STU_studentID'])) {
+    die('Student not logged in');
+}
 
+$studentID = $_SESSION['STU_studentID'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $vehicleID = $_POST['vehicleID'];
-    $startTime = $_POST['startTime'];
-    $parkingSpaceID = $_POST['parkingSpaceID'];
-    $bookingID = $_POST['bookingID'];
+// Fetch student's bookings
+$sql = "SELECT b.B_bookingID, b.B_startTime, b.B_endTime, p.P_parkingSpaceID, p.P_location, p.P_status, p.P_parkingType, v.V_vehicleID, v.V_plateNum
+        FROM booking b
+        JOIN parkingSpace p ON b.P_parkingSpaceID = p.P_parkingSpaceID
+        JOIN vehicle v ON b.V_vehicleID = v.V_vehicleID
+        WHERE v.STU_studentID = ? AND b.B_endTime IS NULL";
+$stmt = $link->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("i", $studentID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $bookings = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
+} else {
+    die('Error preparing statement: ' . $link->error);
+}
 
-    $vehicleQuery = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum = ? AND STU_studentID = ?";
-    $stmt = mysqli_prepare($link, $vehicleQuery);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'si', $plateNum, $studentID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $vehicle = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
+// Fetch distinct parking locations
+$locations = [];
+$sqlLocations = "SELECT DISTINCT P_location FROM parkingSpace ORDER BY P_location";
+$resultLocations = mysqli_query($link, $sqlLocations);
+if ($resultLocations) {
+    while ($row = mysqli_fetch_assoc($resultLocations)) {
+        $locations[] = $row['P_location'];
+    }
+} else {
+    die('Error fetching parking locations: ' . mysqli_error($link));
+}
+
+// Fetch all parking spaces grouped by location
+$dropdownOptions = [];
+foreach ($locations as $location) {
+    $sqlSpaces = "SELECT P_parkingSpaceID FROM parkingSpace WHERE P_location = ?";
+    $stmtSpaces = $link->prepare($sqlSpaces);
+    if ($stmtSpaces) {
+        $stmtSpaces->bind_param("s", $location);
+        $stmtSpaces->execute();
+        $resultSpaces = $stmtSpaces->get_result();
+        $dropdownOptions[$location] = [];
+        while ($row = $resultSpaces->fetch_assoc()) {
+            $dropdownOptions[$location][] = $row['P_parkingSpaceID'];
+        }
+        $stmtSpaces->close();
     } else {
         die('Error preparing statement: ' . $link->error);
     }
+}
 
-    if ($vehicle) {
-        $vehicleID = $vehicle['V_vehicleID'];
-
-        // Check for existing booking for the same parking space and overlapping time
-        $endTime = date('Y-m-d H:i:s', strtotime($startTime . ' + 1 hour')); // Assuming 1 hour duration
-        $clashError = '';
-
-        // Check for existing booking for the same parking space and overlapping time
-        $existingBookingQuery = "SELECT COUNT(*) AS count 
-                                FROM booking 
-                                WHERE P_parkingSpaceID = ? 
-                                AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
-        $stmt = mysqli_prepare($link, $existingBookingQuery);
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'issss', $parkingSpaceID, $startTime, $startTime, $endTime, $endTime);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row = mysqli_fetch_assoc($result);
-            mysqli_stmt_close($stmt);
-
-            if ($row['count'] > 0) {
-                $clashError = "The selected time slot is already booked for this parking space. Please choose a different time.";
-            }
-        } else {
-            die('Error preparing statement: ' . $link->error);
-        }
-
-        // Check if the vehicle is already booked for the same time slot
-        $vehicleBookingQuery = "SELECT COUNT(*) AS count 
-                                FROM booking 
-                                WHERE V_vehicleID = ? 
-                                AND ((B_startTime <= ? AND B_endTime > ?) OR (B_startTime < ? AND B_endTime >= ?))";
-        $stmt = mysqli_prepare($link, $vehicleBookingQuery);
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'issss', $vehicleID, $startTime, $startTime, $endTime, $endTime);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row = mysqli_fetch_assoc($result);
-            mysqli_stmt_close($stmt);
-
-            if ($row['count'] > 0) {
-                $clashError = "This vehicle is already booked for another time slot. Please choose a different vehicle or time.";
-            }
-        } else {
-            die('Error preparing statement: ' . $link->error);
-        }
-
-        if (empty($clashError)) {     
-            // Update booking information
-            $updateQuery = "UPDATE booking SET B_startTime = ?, P_parkingSpaceID = ?, V_vehicleID = ? WHERE B_bookingID = ?";
-            $stmt = mysqli_prepare($link, $updateQuery);
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'siii', $startTime, $parkingSpaceID, $vehicleID, $bookingID);
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_close($stmt);
-
-                // Generate QR code for the updated booking
-                $qrCodeDir = "../../QRImage";
-                if (!is_dir($qrCodeDir)) {
-                    mkdir($qrCodeDir, 0755, true);
-                }
-                $qrData = "Booking ID: $bookingID\nStart Time: $startTime\nVehicle ID: $vehicleID\nParking Space ID: $parkingSpaceID";
-                $qrImagePath = "$qrCodeDir/booking{$bookingID}.png";
-                QRcode::png($qrData, $qrImagePath, QR_ECLEVEL_L, 5);
-
-                // Store booking ID and token in session for verification
-                $_SESSION['bookingID'] = $bookingID;
-                $_SESSION['enter_end_time_token'] = bin2hex(random_bytes(16));
-
-                // Redirect to view booking page
-                header('Location: view_booking.php');
-                exit();
-            } else {
-                die('Error preparing statement: ' . mysqli_error($link));
-            }
-        } else {
-            $clashError = "The selected time slot is not available. Please choose a different time or parking space.";
-        }
-        } else {
-        $clashError = "Invalid vehicle selected.";
-        }
-        }
-
-$booking = null;
-if (!empty($bookingID)) {
-    $query = "SELECT * FROM booking WHERE B_bookingID = ?";
-    $stmt = mysqli_prepare($link, $query);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'i', $bookingID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $booking = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
-    } else {
-        die('Error preparing statement: ' . mysqli_error($link));
+// Fetch registered vehicle plate numbers for the logged-in student
+$vehicleOptions = [];
+$sqlVehicles = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE STU_studentID = ?";
+$stmtVehicles = $link->prepare($sqlVehicles);
+if ($stmtVehicles) {
+    $stmtVehicles->bind_param("i", $studentID);
+    $stmtVehicles->execute();
+    $resultVehicles = $stmtVehicles->get_result();
+    while ($row = $resultVehicles->fetch_assoc()) {
+        $vehicleOptions[] = $row;
     }
-}
-
-$vehicles = [];
-$query = "SELECT V_vehicleID, V_plateNum FROM vehicle WHERE STU_studentID = ?";
-$stmt = mysqli_prepare($link, $query);
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, 'i', $_SESSION['STU_studentID']);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $vehicles[] = $row;
-    }
-    mysqli_stmt_close($stmt);
-}
-
-$locations = [];
-$query = "SELECT DISTINCT P_location FROM parkingSpace";
-$result = mysqli_query($link, $query);
-while ($row = mysqli_fetch_assoc($result)) {
-    $locations[] = $row['P_location'];
-}
-
-$parkingSpaces = [];
-$query = "SELECT P_parkingSpaceID, P_location FROM parkingSpace WHERE P_status = 'available'";
-$result = mysqli_query($link, $query);
-while ($row = mysqli_fetch_assoc($result)) {
-    $parkingSpaces[$row['P_location']][] = $row;
+    $stmtVehicles->close();
+} else {
+    die('Error preparing statement: ' . $link->error);
 }
 
 mysqli_close($link);
@@ -162,60 +86,109 @@ mysqli_close($link);
 <html>
 <head>
     <title>Edit Booking</title>
+    <style>
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .location-section {
+            display: none; /* Hide all location-specific sections initially */
+        }
+    </style>
     <script>
-        function updateParkingSpaces() {
-            const location = document.getElementById('location').value;
-            const parkingSpaces = <?php echo json_encode($parkingSpaces); ?>;
-            const parkingSpaceSelect = document.getElementById('parkingSpaceID');
-            parkingSpaceSelect.innerHTML = '';
+        function showParkingSpaces(location) {
+            // Hide all location-specific sections
+            var locationSections = document.querySelectorAll('.location-section');
+            locationSections.forEach(function(section) {
+                section.style.display = 'none';
+            });
 
-            if (parkingSpaces[location]) {
-                parkingSpaces[location].forEach(space => {
-                    const option = document.createElement('option');
-                    option.value = space.P_parkingSpaceID;
-                    option.textContent = space.P_parkingSpaceID;
-                    parkingSpaceSelect.appendChild(option);
-                });
+            // Show selected location section
+            var selectedSection = document.getElementById('location-' + location);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
             }
         }
+
+        window.onload = function () {
+            var locationSelect = document.getElementById("location");
+            locationSelect.addEventListener("change", function () {
+                var selectedLocation = this.value;
+                showParkingSpaces(selectedLocation);
+            });
+
+            // Trigger initial display based on selected location
+            var initialLocation = locationSelect.value;
+            showParkingSpaces(initialLocation);
+        };
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            var now = new Date();
+            var offset = now.getTimezoneOffset();
+            now.setMinutes(now.getMinutes() - offset);
+            var formattedDateTime = now.toISOString().slice(0, 16);
+            document.getElementById('startTime').min = formattedDateTime;
+        });
     </script>
 </head>
 <body>
-    <div class='content-container'>
-    <?php if ($booking): ?>
-        <form method="POST">
-            <input type="hidden" name="bookingID" value="<?php echo htmlspecialchars($bookingID); ?>">
-            <label for="vehicleID">Vehicle:</label>
-            <select name="vehicleID" id="vehicleID" required>
-                <?php foreach ($vehicles as $vehicle): ?>
-                    <option value="<?php echo htmlspecialchars($vehicle['V_vehicleID']); ?>" <?php echo ($vehicle['V_vehicleID'] == $booking['V_vehicleID']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($vehicle['V_plateNum']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <br>
-            <label for="startTime">Start Time:</label>
-            <input type="datetime-local" name="startTime" id="startTime" value="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($booking['B_startTime']))); ?>" required>
-            <br>
-            <label for="location">Location:</label>
-            <select name="location" id="location" onchange="updateParkingSpaces()" required>
-                <option value="">Select a location</option>
+<div class="content-container">
+    <h1>Edit Booking</h1>
+    <?php if (!empty($bookings)): ?>
+        <?php foreach ($bookings as $booking): ?>
+            <form method="POST" action="module3/update.php"> <!-- Changed action to update.php -->
+                <p>Booking ID: <?php echo htmlspecialchars($booking['B_bookingID']); ?></p>
+                <p>Location:
+                    <select id="location" name="P_location" required>
+                        <?php foreach ($locations as $location): ?>
+                            <option value="<?php echo htmlspecialchars($location); ?>" <?php if ($booking['P_location'] == $location) echo 'selected'; ?>>
+                                <?php echo htmlspecialchars($location); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </p>
+                <p>Status: <?php echo htmlspecialchars($booking['P_status']); ?></p>
+                <p>Type: <?php echo htmlspecialchars($booking['P_parkingType']); ?></p>
+                <p>Start Time: <?php echo htmlspecialchars($booking['B_startTime']); ?></p>
+                <label for="startTime">New Start Time:</label>
+                <input type="datetime-local" id="startTime" name="startTime" value="<?php echo date('Y-m-d\TH:i', strtotime($booking['B_startTime'])); ?>" required>
+                <br>
+                <label for="V_vehicleID">Select Vehicle Plate Number:</label>
+                <select id="V_vehicleID" name="V_vehicleID" required>
+                    <?php foreach ($vehicleOptions as $option): ?>
+                        <option value="<?php echo htmlspecialchars($option['V_vehicleID']); ?>" <?php if ($booking['V_vehicleID'] == $option['V_vehicleID']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($option['V_plateNum']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <br>
+
+                <!-- Hidden sections for parking spaces based on location -->
                 <?php foreach ($locations as $location): ?>
-                    <option value="<?php echo htmlspecialchars($location); ?>"><?php echo htmlspecialchars($location); ?></option>
+                    <div id="location-<?php echo htmlspecialchars($location); ?>" class="location-section">
+                        <label for="parkingSpaceID">New Parking Space:</label>
+                        <select name="parkingSpaceID" required>
+                            <?php foreach ($dropdownOptions[$location] as $option): ?>
+                                <option value="<?php echo htmlspecialchars($option); ?>" <?php if ($booking['P_parkingSpaceID'] == $option) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($option); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 <?php endforeach; ?>
-            </select>
-            <br>
-            <label for="parkingSpaceID">Parking Space:</label>
-            <select name="parkingSpaceID" id="parkingSpaceID" required>
-                <!-- Options will be populated based on location selection -->
-            </select>
-            <br>
-            <button type="submit">Update Booking</button>
-        </form>
+                
+                <input type="hidden" name="bookingID" value="<?php echo htmlspecialchars($booking['B_bookingID']); ?>">
+                <button type="submit">Update Booking</button>
+            </form>
+        <?php endforeach; ?>
     <?php else: ?>
-        <p>Invalid booking ID.</p>
+        <p>No active bookings found.</p>
     <?php endif; ?>
-    </div>
+</div>
 </body>
 </html>
-

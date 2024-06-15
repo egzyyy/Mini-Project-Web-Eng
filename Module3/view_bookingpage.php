@@ -1,7 +1,51 @@
+<?php
+ob_start(); // Start output buffering
+session_start();
+include('../Layout/student_layout.php');
+
+// Fetch booking details from QR code data
+if (isset($_GET['qrText'])) {
+    $qrText = $_GET['qrText'];
+    $bookingData = json_decode($qrText, true);
+
+    $bookingID = $bookingData['B_bookingID'];
+    $vehicleID = $bookingData['V_vehicleID'];
+    $startTime = $bookingData['B_startTime'];
+    $parkingSpaceID = $bookingData['P_parkingSpaceID'];
+
+    // Fetch additional booking details from database if needed
+    $link = mysqli_connect("localhost", "root", "", "web_eng");
+    if (!$link) {
+        die('Error connecting to the server: ' . mysqli_connect_error());
+    }
+
+    $sql = "SELECT b.B_startTime, b.P_parkingSpaceID, p.P_location, p.P_status, p.P_parkingType, v.V_plateNum
+            FROM booking b
+            JOIN parkingSpace p ON b.P_parkingSpaceID = p.P_parkingSpaceID
+            JOIN vehicle v ON b.V_vehicleID = v.V_vehicleID
+            WHERE b.B_bookingID = ?";
+            
+    $stmt = $link->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $bookingID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $booking = $result->fetch_assoc();
+        $stmt->close();
+    } else {
+        die('Error preparing statement: ' . $link->error);
+    }
+
+    mysqli_close($link);
+} else {
+    die('Booking data not found');
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Bookings</title>
+    <title>Booking Confirmation</title>
     <style>
         .content-container {
             max-width: 800px;
@@ -12,78 +56,22 @@
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
             text-align: center;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .button {
-            display: inline-block;
-            padding: 8px 16px;
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
+        .qr-code img {
+            width: 200px;
+            height: 200px;
         }
     </style>
 </head>
 <body>
-    <div class="content-container">
-        <h1>My Bookings</h1>
-        <?php if (empty($bookings)): ?>
-            <p>No bookings found.</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>Start Time</th>
-                        <th>Parking Location</th>
-                        <th>Parking Type</th>
-                        <th>Vehicle Plate Number</th>
-                        <th>QR Code</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($bookings as $booking): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($booking['B_bookingID']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['B_startTime']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['P_location']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['P_parkingType']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['V_plateNum']); ?></td>
-                            <td>
-                                <?php
-                                $qrImagePath = "../../QRImage/booking{$booking['B_bookingID']}.png";
-                                if (file_exists($qrImagePath)) {
-                                    echo '<img src="' . $qrImagePath . '" alt="QR Code" style="width: 100px;">';
-                                } else {
-                                    echo '<a href="generate_qr.php?id=' . urlencode($booking['B_bookingID']) . '" class="button">Generate QR</a>';
-                                }
-                                ?>
-                            </td>
-                            <td><a href="cancel_booking.php?id=<?php echo urlencode($booking['B_bookingID']); ?>" class="button">Cancel</a></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-        <a href="make_booking.php" class="button">Make New Booking</a>
-    </div>
+<div class="content-container">
+    <h1>Booking Confirmation</h1>
+    <p>Booking ID: <?php echo htmlspecialchars($bookingID); ?></p>
+    <p>Vehicle Number Plate: <?php echo htmlspecialchars($booking['V_plateNum']); ?></p>
+    <p>Parking Space: <?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?></p>
+    <p>Location: <?php echo htmlspecialchars($booking['P_location']); ?></p>
+    <p>Status: <?php echo htmlspecialchars($booking['P_status']); ?></p>
+    <p>Type: <?php echo htmlspecialchars($booking['P_parkingType']); ?></p>
+    <p>Start Time: <?php echo htmlspecialchars($booking['B_startTime']); ?></p>
+</div>
 </body>
 </html>

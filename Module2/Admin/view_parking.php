@@ -141,7 +141,7 @@ if ($parkingSpaceID) {
                 <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
             </div>
             <div class="action-buttons">
-                <a href="enter_end_time.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&token=<?php echo urlencode($_SESSION['enter_end_time_token']); ?>" class="action-button">Enter End Time and Duration</a>
+                <a href="../../Module3/parking.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>" class="action-button">Enter End Time and Duration</a>
                 <!-- Add more action buttons here if needed -->
             </div>
         </div>

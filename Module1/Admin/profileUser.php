@@ -29,7 +29,6 @@ if (isset($_GET['del'])) {
 <link rel="stylesheet" href="manageUser.css">
 <div id="content-wrapper">
     <div class="container-fluid mt-4">
-
         <!-- DataTables Example -->
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -55,11 +54,93 @@ if (isset($_GET['del'])) {
                             echo $deleteMessage;
                         }
                         ?>
+                        <style>
+                            /* Table styling */
+                            #dataTable {
+                                width: 80%;
+                                border-collapse: collapse;
+                                margin-top: 15px;
+                                margin-bottom: 20px;
+                                padding-right: 0;
+                                margin-left: auto;
+                                margin-right: auto;
+                            }
+
+                            #dataTable th, #dataTable td {
+                                border: 1px solid #ddd;
+                                padding: 8px;
+                                text-align: center;
+                            }
+
+                            #dataTable th {
+                                padding-top: 12px;
+                                padding-bottom: 12px;
+                                background-color: #f2f2f2;
+                                color: black;
+                            }
+
+                            #dataTable tr:nth-child(even) {
+                                background-color: #f9f9f9;
+                            }
+
+                            #dataTable tr:hover {
+                                background-color: #ddd;
+                            }
+
+                            .badge {
+                                padding: 5px 10px;
+                                border-radius: 5px;
+                                text-decoration: none;
+                            }
+
+                            .bg-success {
+                                background-color: #28a745;
+                            }
+
+                            .bg-danger {
+                                background-color: #dc3545;
+                            }
+
+                            .text-white {
+                                color: white;
+                            }
+
+                            /* Responsive styling */
+                            @media screen and (max-width: 600px) {
+                                #dataTable thead {
+                                    display: none;
+                                }
+
+                                #dataTable, #dataTable tbody, #dataTable tr, #dataTable td {
+                                    display: block;
+                                    width: 100%;
+                                }
+
+                                #dataTable tr {
+                                    margin-bottom: 15px;
+                                }
+
+                                #dataTable td {
+                                    text-align: right;
+                                    padding-left: 50%;
+                                    position: relative;
+                                }
+
+                                #dataTable td:before {
+                                    content: attr(data-label);
+                                    position: absolute;
+                                    left: 0;
+                                    width: 20%;
+                                    padding-left: 15px;
+                                    font-weight: bold;
+                                    text-align: left;
+                                }
+                            }
+                        </style>
                         <div class="table-responsive">
-                            <table id="dataTable" style="padding-top: 15px; padding-right:0; padding-bottom: 20px;">
+                            <table id="dataTable" style="padding-top: 15px; padding-bottom: 20px;">
                                 <thead>
                                     <tr>
-
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>ID</th>
@@ -68,7 +149,6 @@ if (isset($_GET['del'])) {
                                         <th>Level Of Study</th>
                                         <th>Year Of Study</th>
                                         <th>Action</th>
-
                                     </tr>
                                 </thead>
                                 <tbody >
@@ -81,21 +161,19 @@ if (isset($_GET['del'])) {
                                     while ($row = $res->fetch_object()) {
                                     ?>
                                         <tr>
-                                            <center>
-                                            <td><?php echo $cnt; ?></td>
-                                            <td><?php echo $row->STU_name; ?></td>
-                                            <td><?php echo $row->STU_studentID; ?></td>
-                                            <td><?php echo $row->STU_phoneNum; ?></td>
-                                            <td><?php echo $row->STU_email; ?></td>
-                                            <td><?php echo $row->STU_type; ?></td>
-                                            <td><?php echo $row->STU_yearStudy; ?></td>
-                                            <td>
-                                                <a href="Profile.php?u_id=<?php echo $row->STU_studentID; ?>" class="badge bg-success text-white"><i class="fas fa-user-edit"></i>View</a>
+                                            <td data-label="#"><?php echo $cnt; ?></td>
+                                            <td data-label="Name"><?php echo $row->STU_name; ?></td>
+                                            <td data-label="ID"><?php echo $row->STU_studentID; ?></td>
+                                            <td data-label="Phone Number"><?php echo $row->STU_phoneNum; ?></td>
+                                            <td data-label="Email"><?php echo $row->STU_email; ?></td>
+                                            <td data-label="Level Of Study"><?php echo $row->STU_type; ?></td>
+                                            <td data-label="Year Of Study"><?php echo $row->STU_yearStudy; ?></td>
+                                            <td data-label="Action">
+                                            <a href="viewProfile.php?u_id=<?php echo $row->STU_studentID; ?>" class="badge bg-success text-white"><i class="fas fa-user"></i> View</a>
                                             </td>
-                                            </center>
                                         </tr>
                                     <?php
-                                        $cnt = $cnt + 1;
+                                        $cnt++;
                                     }
                                     ?>
                                 </tbody>
@@ -107,5 +185,12 @@ if (isset($_GET['del'])) {
         </div>
     </div>
     <!-- /.container-fluid -->
-
     <!-- Footer -->
+</div>
+
+<!-- Include your footer and other scripts here -->
+
+<?php
+// Close the database connection
+mysqli_close($link);
+?>

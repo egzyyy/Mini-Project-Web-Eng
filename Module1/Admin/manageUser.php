@@ -55,8 +55,89 @@ if (isset($_GET['del'])) {
                             echo $deleteMessage;
                         }
                         ?>
+                            <style>
+        /* Table styling */
+        #dataTable {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            padding-right: 0;
+        }
+
+        #dataTable th, #dataTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #dataTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #f2f2f2;
+            color: black;
+        }
+
+        #dataTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #dataTable tr:hover {
+            background-color: #ddd;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .bg-success {
+            background-color: #28a745;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+        }
+
+        .text-white {
+            color: white;
+        }
+
+        /* Responsive styling */
+        @media screen and (max-width: 600px) {
+            #dataTable thead {
+                display: none;
+            }
+
+            #dataTable, #dataTable tbody, #dataTable tr, #dataTable td {
+                display: block;
+                width: 100%;
+            }
+
+            #dataTable tr {
+                margin-bottom: 15px;
+            }
+
+            #dataTable td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            #dataTable td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 20%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+    </style>
                         <div class="table-responsive">
-                            <table id="dataTable" style="padding-top: 15px; padding-right:0; padding-bottom: 20px;">
+                            <table id="dataTable" style="padding-top: 15px; padding-bottom: 20px; margin-left:150px">
                                 <thead>
                                     <tr>
 
@@ -65,7 +146,6 @@ if (isset($_GET['del'])) {
                                         <th>ID</th>
                                         <th>Phone Number</th>
                                         <th>Email</th>
-                                        <th>Level Of Study</th>
                                         <th>Year Of Study</th>
                                         <th>Action</th>
 
@@ -84,10 +164,9 @@ if (isset($_GET['del'])) {
                                             <center>
                                             <td><?php echo $cnt; ?></td>
                                             <td><?php echo $row->STU_name; ?></td>
-                                            <td><?php echo $row->STU_studentID; ?></td>
+                                            <td><?php echo $row->STU_username; ?></td>
                                             <td><?php echo $row->STU_phoneNum; ?></td>
                                             <td><?php echo $row->STU_email; ?></td>
-                                            <td><?php echo $row->STU_type; ?></td>
                                             <td><?php echo $row->STU_yearStudy; ?></td>
                                             <td>
                                                 <a href="editUser.php?u_id=<?php echo $row->STU_studentID; ?>" class="badge bg-success text-white"><i class="fas fa-user-edit"></i> Update</a>

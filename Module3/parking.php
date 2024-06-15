@@ -10,6 +10,7 @@ if (!$link) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plateNum = $_POST['plateNum'];
     $endTime = $_POST['endTime'];
+    $parkingSpaceID = $_POST['P_parkingSpaceID'];
 
     // Check if the vehicle exists
     $vehicleQuery = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum = ?";
@@ -72,11 +73,47 @@ mysqli_close($link);
 <html>
 <head>
     <title>Parking</title>
+    <style>
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        .content-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
     <div class='content-container'>
         <h2>Parking</h2>
         <form method="POST">
+            <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($_GET['P_parkingSpaceID']); ?>">
             <label for="plateNum">Vehicle Plate Number:</label>
             <input type="text" name="plateNum" id="plateNum" required>
             <br>

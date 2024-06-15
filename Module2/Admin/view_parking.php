@@ -12,6 +12,15 @@ mysqli_select_db($link, "web_eng");
 // Fetch parking space information based on the ID in the query string
 $parkingSpaceID = isset($_GET['P_parkingSpaceID']) ? mysqli_real_escape_string($link, $_GET['P_parkingSpaceID']) : '';
 
+// Fetch booking information if BookingID is provided
+$bookingID = isset($_GET['BookingID']) ? mysqli_real_escape_string($link, $_GET['BookingID']) : '';
+$vehicleID = isset($_GET['V_vehicleID']) ? $_GET['V_vehicleID'] : '';
+$startTime = isset($_GET['B_startTime']) ? $_GET['B_startTime'] : '';
+$plateNum = isset($_GET['V_plateNum']) ? $_GET['V_plateNum'] : '';
+$location = isset($_GET['P_location']) ? $_GET['P_location'] : '';
+$status = isset($_GET['P_status']) ? $_GET['P_status'] : '';
+$type = isset($_GET['P_parkingType']) ? $_GET['P_parkingType'] : '';
+
 $parkingSpace = null;
 if ($parkingSpaceID) {
     $query = "SELECT * FROM parkingSpace WHERE P_parkingSpaceID = '$parkingSpaceID'";
@@ -141,7 +150,8 @@ if ($parkingSpaceID) {
                 <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
             </div>
             <div class="action-buttons">
-                <a href="../../Module3/parking.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>" class="action-button">Enter End Time and Duration</a>
+            <a href="../../module3/parking.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&BookingID=<?php echo urlencode($bookingID); ?>&V_vehicleID=<?php echo urlencode($vehicleID); ?>&B_startTime=<?php echo urlencode($startTime); ?>&V_plateNum=<?php echo urlencode($plateNum); ?>&P_location=<?php echo urlencode($location); ?>&P_status=<?php echo urlencode($status); ?>&P_parkingType=<?php echo urlencode($type); ?>" class="action-button">Enter End Time</a>
+                <!-- Add more action buttons here if needed -->
                 <!-- Add more action buttons here if needed -->
             </div>
         </div>

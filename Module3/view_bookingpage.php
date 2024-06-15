@@ -72,6 +72,7 @@ if (isset($_GET['qrText'])) {
     <p>Status: <?php echo htmlspecialchars($booking['P_status']); ?></p>
     <p>Type: <?php echo htmlspecialchars($booking['P_parkingType']); ?></p>
     <p>Start Time: <?php echo htmlspecialchars($booking['B_startTime']); ?></p>
+    <a href="view_parking.php?P_parkingSpaceID=<?php echo urlencode($booking['P_parkingSpaceID']); ?>&BookingID=<?php echo urlencode($bookingID); ?>&V_vehicleID=<?php echo urlencode($vehicleID); ?>&B_startTime=<?php echo urlencode($startTime); ?>&V_plateNum=<?php echo urlencode($booking['V_plateNum']); ?>&P_location=<?php echo urlencode($booking['P_location']); ?>&P_status=<?php echo urlencode($booking['P_status']); ?>&P_parkingType=<?php echo urlencode($booking['P_parkingType']); ?>" class="action-button">Proceed to Parking</a>
 </div>
 </body>
 </html>

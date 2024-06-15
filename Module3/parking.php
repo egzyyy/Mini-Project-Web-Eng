@@ -10,6 +10,7 @@ if (!$link) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plateNum = $_POST['plateNum'];
     $endTime = $_POST['endTime'];
+    $bookingID = isset($_POST['bookingID']) ? $_POST['bookingID'] : null;
 
     // Check if the vehicle exists
     $vehicleQuery = "SELECT V_vehicleID FROM vehicle WHERE V_plateNum = ?";
@@ -23,39 +24,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($vehicle) {
             $vehicleID = $vehicle['V_vehicleID'];
-            $startTime = date('Y-m-d H:i:s'); // Current time as start time
 
-            // Check for existing booking for the same parking space and overlapping time
-            $existingBookingQuery = "SELECT COUNT(*) AS count 
-                                    FROM booking 
-                                    WHERE P_parkingSpaceID = ? 
-                                    AND (? < B_endTime AND ? > B_startTime)";
-            $stmt = mysqli_prepare($link, $existingBookingQuery);
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'iss', $parkingSpaceID, $startTime, $endTime);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                $row = mysqli_fetch_assoc($result);
-                mysqli_stmt_close($stmt);
+            if ($bookingID) {
+                // If booking ID is provided, update the existing booking with the end time
+                $updateBookingQuery = "UPDATE booking SET B_endTime = ?, B_duration = TIMESTAMPDIFF(MINUTE, B_startTime, ?) WHERE B_bookingID = ? AND B_endTime IS NULL";
+                $stmt = mysqli_prepare($link, $updateBookingQuery);
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, 'ssi', $endTime, $endTime, $bookingID);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
 
-                if ($row['count'] > 0) {
-                    die('The selected time slot is already booked for this parking space.');
+                    echo 'Booking updated successfully';
                 } else {
-                    // Insert booking information
-                    $insertQuery = "INSERT INTO booking (B_startTime, B_endTime, P_parkingSpaceID, V_vehicleID) VALUES (?, ?, ?, ?)";
-                    $stmt = mysqli_prepare($link, $insertQuery);
-                    if ($stmt) {
-                        mysqli_stmt_bind_param($stmt, 'ssii', $startTime, $endTime, $parkingSpaceID, $vehicleID);
-                        mysqli_stmt_execute($stmt);
-                        mysqli_stmt_close($stmt);
-
-                        echo 'Booking created successfully';
-                    } else {
-                        die('Error preparing statement: ' . mysqli_error($link));
-                    }
+                    die('Error preparing statement: ' . mysqli_error($link));
                 }
             } else {
-                die('Error preparing statement: ' . $link->error);
+                // If booking ID is not provided, create a new booking
+                $startTime = date('Y-m-d H:i:s'); // Current time as start time
+
+                // Check for existing booking for the same parking space and overlapping time
+                $existingBookingQuery = "SELECT COUNT(*) AS count 
+                                         FROM booking 
+                                         WHERE P_parkingSpaceID = ? 
+                                         AND (? < B_endTime AND ? > B_startTime)";
+                $stmt = mysqli_prepare($link, $existingBookingQuery);
+                if ($stmt) {
+                    $parkingSpaceID = 1; // Set to the current parking space ID (replace this with your logic to get the correct ID)
+                    mysqli_stmt_bind_param($stmt, 'iss', $parkingSpaceID, $startTime, $endTime);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
+                    $row = mysqli_fetch_assoc($result);
+                    mysqli_stmt_close($stmt);
+
+                    if ($row['count'] > 0) {
+                        die('The selected time slot is already booked for this parking space.');
+                    } else {
+                        // Insert booking information
+                        $insertQuery = "INSERT INTO booking (B_startTime, B_endTime, P_parkingSpaceID, V_vehicleID, B_duration) VALUES (?, ?, ?, ?, TIMESTAMPDIFF(MINUTE, ?, ?))";
+                        $stmt = mysqli_prepare($link, $insertQuery);
+                        if ($stmt) {
+                            mysqli_stmt_bind_param($stmt, 'ssii', $startTime, $endTime, $parkingSpaceID, $vehicleID);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+
+                            echo 'Booking created successfully';
+                        } else {
+                            die('Error preparing statement: ' . mysqli_error($link));
+                        }
+                    }
+                } else {
+                    die('Error preparing statement: ' . $link->error);
+                }
             }
         } else {
             die('Vehicle not found');
@@ -67,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 mysqli_close($link);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,6 +95,9 @@ mysqli_close($link);
     <div class='content-container'>
         <h2>Parking</h2>
         <form method="POST">
+            <label for="bookingID">Booking ID (if applicable):</label>
+            <input type="text" name="bookingID" id="bookingID">
+            <br>
             <label for="plateNum">Vehicle Plate Number:</label>
             <input type="text" name="plateNum" id="plateNum" required>
             <br>

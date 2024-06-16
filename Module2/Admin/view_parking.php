@@ -21,9 +21,11 @@ if (isset($_POST['BookingID'], $_POST['P_parkingSpaceID'], $_POST['B_startTime']
     $parkingLocation = $_POST['P_location'];
     $parkingStatus = $_POST['P_status'];
     $parkingType = $_POST['P_parkingType'];
- 
-} 
 
+   
+} else {
+    echo "Required parameters are missing.";
+}
 
 $parkingSpace = null;
 if ($parkingSpaceID) {

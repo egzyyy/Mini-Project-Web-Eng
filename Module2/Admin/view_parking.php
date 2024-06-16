@@ -21,19 +21,9 @@ if (isset($_POST['BookingID'], $_POST['P_parkingSpaceID'], $_POST['B_startTime']
     $parkingLocation = $_POST['P_location'];
     $parkingStatus = $_POST['P_status'];
     $parkingType = $_POST['P_parkingType'];
+ 
+} 
 
-    // Example of using the fetched parameters
-    echo "<h1>View Parking Page</h1>";
-    echo "<p>Booking ID: " . htmlspecialchars($bookingID) . "</p>";
-    echo "<p>Parking Space ID: " . htmlspecialchars($parkingSpaceID) . "</p>";
-    echo "<p>Start Time: " . htmlspecialchars($startTime) . "</p>";
-    echo "<p>Vehicle Plate Number: " . htmlspecialchars($vehiclePlateNum) . "</p>";
-    echo "<p>Parking Location: " . htmlspecialchars($parkingLocation) . "</p>";
-    echo "<p>Parking Status: " . htmlspecialchars($parkingStatus) . "</p>";
-    echo "<p>Parking Type: " . htmlspecialchars($parkingType) . "</p>";
-} else {
-    echo "Required parameters are missing.";
-}
 
 $parkingSpace = null;
 if ($parkingSpaceID) {

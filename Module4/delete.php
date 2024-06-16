@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
 
     if ($conn->query($sql) === TRUE) {
         echo "Record deleted successfully";
-        header("Location: ../Module4/trafficSummon.php"); // Redirect to the main page
+        header("Location: Module4/trafficSummon.php"); // Redirect to the main page
     } else {
         echo "Error deleting record: " . $conn->error;
     }

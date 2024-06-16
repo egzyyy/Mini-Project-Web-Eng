@@ -230,10 +230,10 @@ $result = $conn->query($sql);
                         echo "<td>" . $row["TF_demeritPoint"] . "</td>";
                         echo '<td>';
                         if ($row["TF_status"] == "Unpaid") {
-                            echo '<a href="trafficSummon.php?action=update&id=' . $row["TF_summonID"] . '" class="btn btn-update">Update</a>';
-                            echo '<a href="trafficSummon.php?action=cancel&id=' . $row["TF_summonID"] . '" class="btn btn-cancel">Cancel</a>';
+                            echo '<a href="Module4/trafficSummon.php?action=update&id=' . $row["TF_summonID"] . '" class="btn btn-update">Update</a>';
+                            echo '<a href="Module4/trafficSummon.php?action=cancel&id=' . $row["TF_summonID"] . '" class="btn btn-cancel">Cancel</a>';
                         } else {
-                            echo '<a href="trafficSummon.php?action=delete&id=' . $row["TF_summonID"] . '" class="btn btn-delete">Delete</a>';
+                            echo '<a href="Module4/trafficSummon.php?action=delete&id=' . $row["TF_summonID"] . '" class="btn btn-delete">Delete</a>';
                         }
                         echo '</td>';
                         echo "</tr>";

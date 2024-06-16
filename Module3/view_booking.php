@@ -142,7 +142,7 @@ include('../Layout/student_layout.php');
                     <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($booking['B_startTime']))); ?></td>
                     <td><?php echo htmlspecialchars(date('H:i:s', strtotime($booking['B_startTime']))); ?></td>
                     <td><?php echo htmlspecialchars($booking['V_plateNum']); ?></td>
-                    <td><img src="QRImage/booking<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
+                    <td><img src="../QRImage/booking<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
                     <td>
                     <a href="module3/edit_booking.php?id=<?php echo htmlspecialchars($booking['B_bookingID']); ?>">Edit</a>
                         <a href="module3/view_booking.php?action=delete&id=<?php echo htmlspecialchars($booking['B_bookingID']); ?>" onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
@@ -180,7 +180,7 @@ include('../Layout/student_layout.php');
                     <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($booking['B_endTime']))); ?></td>
                     <td><?php echo htmlspecialchars(date('H:i:s', strtotime($booking['B_endTime']))); ?></td>
                     <td><?php echo htmlspecialchars($booking['V_plateNum']); ?></td>
-                    <td><img src= $filePath<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
+                    <td><img src="../QRImage/booking<?php echo htmlspecialchars($booking['B_bookingID']); ?>.png" alt="QR Code" width="100"></td>
                 </tr>
             <?php endforeach; ?>
         </table>

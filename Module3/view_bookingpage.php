@@ -1,24 +1,18 @@
 <?php
-ob_start(); // Start output buffering
 session_start();
 include('../Layout/student_layout.php');
 
-// Fetch booking details from QR code data
-if (isset($_GET['qrText'])) {
-    $qrText = $_GET['qrText'];
-    $bookingData = json_decode($qrText, true);
+// Fetch booking details using booking ID from the QR code
+if (isset($_GET['bookingID'])) {
+    $bookingID = $_GET['bookingID'];
 
-    $bookingID = $bookingData['B_bookingID'];
-    $vehicleID = $bookingData['V_vehicleID'];
-    $startTime = $bookingData['B_startTime'];
-    $parkingSpaceID = $bookingData['P_parkingSpaceID'];
-
-    // Fetch additional booking details from database if needed
+    // Connect to the database
     $link = mysqli_connect("localhost", "root", "", "web_eng");
     if (!$link) {
         die('Error connecting to the server: ' . mysqli_connect_error());
     }
 
+    // Fetch booking details from the database
     $sql = "SELECT b.B_startTime, b.P_parkingSpaceID, p.P_location, p.P_status, p.P_parkingType, v.V_plateNum
             FROM booking b
             JOIN parkingSpace p ON b.P_parkingSpaceID = p.P_parkingSpaceID
@@ -38,7 +32,7 @@ if (isset($_GET['qrText'])) {
 
     mysqli_close($link);
 } else {
-    die('Booking data not found');
+    die('Booking ID not found');
 }
 ?>
 
@@ -56,10 +50,6 @@ if (isset($_GET['qrText'])) {
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .qr-code img {
-            width: 200px;
-            height: 200px;
-        }
     </style>
 </head>
 <body>
@@ -72,7 +62,18 @@ if (isset($_GET['qrText'])) {
     <p>Status: <?php echo htmlspecialchars($booking['P_status']); ?></p>
     <p>Type: <?php echo htmlspecialchars($booking['P_parkingType']); ?></p>
     <p>Start Time: <?php echo htmlspecialchars($booking['B_startTime']); ?></p>
-    <a href="view_parking.php?P_parkingSpaceID=<?php echo urlencode($booking['P_parkingSpaceID']); ?>&BookingID=<?php echo urlencode($bookingID); ?>&V_vehicleID=<?php echo urlencode($vehicleID); ?>&B_startTime=<?php echo urlencode($startTime); ?>&V_plateNum=<?php echo urlencode($booking['V_plateNum']); ?>&P_location=<?php echo urlencode($booking['P_location']); ?>&P_status=<?php echo urlencode($booking['P_status']); ?>&P_parkingType=<?php echo urlencode($booking['P_parkingType']); ?>" class="action-button">Proceed to Parking</a>
+    
+    <form action="module2/Admin/view_parking.php" method="post">
+        <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?>">
+        <input type="hidden" name="BookingID" value="<?php echo htmlspecialchars($bookingID); ?>">
+        <input type="hidden" name="V_vehicleID" value="<?php echo htmlspecialchars($vehicleID); ?>">
+        <input type="hidden" name="B_startTime" value="<?php echo htmlspecialchars($startTime); ?>">
+        <input type="hidden" name="V_plateNum" value="<?php echo htmlspecialchars($booking['V_plateNum']); ?>">
+        <input type="hidden" name="P_location" value="<?php echo htmlspecialchars($booking['P_location']); ?>">
+        <input type="hidden" name="P_status" value="<?php echo htmlspecialchars($booking['P_status']); ?>">
+        <input type="hidden" name="P_parkingType" value="<?php echo htmlspecialchars($booking['P_parkingType']); ?>">
+        <button type="submit" class="action-button">Proceed to Parking</button>
+    </form>
 </div>
 </body>
 </html>

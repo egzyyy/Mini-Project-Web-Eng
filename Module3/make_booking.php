@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Store booking ID 
                     $_SESSION['bookingID'] = $bookingID;
                   
-                    // Redirect to view_booking.php with the token
+                  
                      header("Location: generate_qr_.php?bookingID=" . $bookingID);
                     exit(); // Stop further execution after redirection
                 } else {

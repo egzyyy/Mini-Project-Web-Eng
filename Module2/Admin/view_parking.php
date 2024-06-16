@@ -12,14 +12,31 @@ mysqli_select_db($link, "web_eng");
 // Fetch parking space information based on the ID in the query string
 $parkingSpaceID = isset($_GET['P_parkingSpaceID']) ? mysqli_real_escape_string($link, $_GET['P_parkingSpaceID']) : '';
 
-// Fetch booking information if BookingID is provided
-$bookingID = isset($_GET['BookingID']) ? mysqli_real_escape_string($link, $_GET['BookingID']) : '';
-$vehicleID = isset($_GET['V_vehicleID']) ? $_GET['V_vehicleID'] : '';
-$startTime = isset($_GET['B_startTime']) ? $_GET['B_startTime'] : '';
-$plateNum = isset($_GET['V_plateNum']) ? $_GET['V_plateNum'] : '';
-$location = isset($_GET['P_location']) ? $_GET['P_location'] : '';
-$status = isset($_GET['P_status']) ? $_GET['P_status'] : '';
-$type = isset($_GET['P_parkingType']) ? $_GET['P_parkingType'] : '';
+if (isset($_GET['BookingID'], $_GET['P_parkingSpaceID'], $_GET['V_vehicleID'], $_GET['B_startTime'], $_GET['V_plateNum'], $_GET['P_location'], $_GET['P_status'], $_GET['P_parkingType'])) {
+    // Fetch parameters from $_GET
+    $bookingID = $_GET['BookingID'];
+    $parkingSpaceID = $_GET['P_parkingSpaceID'];
+    $vehicleID = $_GET['V_vehicleID'];
+    $startTime = $_GET['B_startTime'];
+    $vehiclePlateNum = $_GET['V_plateNum'];
+    $parkingLocation = $_GET['P_location'];
+    $parkingStatus = $_GET['P_status'];
+    $parkingType = $_GET['P_parkingType'];
+
+    // Example of using the fetched parameters
+    echo "<h1>View Parking Page</h1>";
+    echo "<p>Booking ID: " . htmlspecialchars($bookingID) . "</p>";
+    echo "<p>Parking Space ID: " . htmlspecialchars($parkingSpaceID) . "</p>";
+    echo "<p>Vehicle ID: " . htmlspecialchars($vehicleID) . "</p>";
+    echo "<p>Start Time: " . htmlspecialchars($startTime) . "</p>";
+    echo "<p>Vehicle Plate Number: " . htmlspecialchars($vehiclePlateNum) . "</p>";
+    echo "<p>Parking Location: " . htmlspecialchars($parkingLocation) . "</p>";
+    echo "<p>Parking Status: " . htmlspecialchars($parkingStatus) . "</p>";
+    echo "<p>Parking Type: " . htmlspecialchars($parkingType) . "</p>";
+
+} else {
+    echo "Required parameters are missing.";
+}
 
 $parkingSpace = null;
 if ($parkingSpaceID) {
@@ -155,7 +172,15 @@ if ($parkingSpaceID) {
                 <!-- Add more action buttons here if needed -->
             </div>
         </div>
-        <a href="manage_parking.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to Manage Parking</a>
+    <form id="endTimeForm" action="../../module3/parking.php" method="GET">
+    <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>">
+    <input type="hidden" name="BookingID" value="<?php echo urlencode($bookingID); ?>">
+    <input type="hidden" name="V_vehicleID" value="<?php echo urlencode($vehicleID); ?>">
+    <input type="hidden" name="B_startTime" value="<?php echo urlencode($startTime); ?>">
+    <input type="hidden" name="V_plateNum" value="<?php echo urlencode($plateNum); ?>">
+    <input type="hidden" name="P_location" value="<?php echo urlencode($location); ?>">
+    <input type="hidden" name="P_status" value="<?php echo urlencode($status); ?>">
+    <input type="hidden" name="P_parkingType" value="<?php echo urlencode($type); ?>">
     <?php else: ?>
         <p style="text-align: center;">Parking space not found. Please check the ID and try again.</p>
     <?php endif; ?>

@@ -12,15 +12,14 @@ $vehicleID = isset($_GET['V_vehicleID']) ? $_GET['V_vehicleID'] : '';
 $startTime = isset($_GET['B_startTime']) ? $_GET['B_startTime'] : '';
 $plateNum = isset($_GET['V_plateNum']) ? $_GET['V_plateNum'] : '';
 $bookingID = isset($_GET['BookingID']) ? mysqli_real_escape_string($link, $_GET['BookingID']) : '';
-
-
+$parkingSpace= isset($_GET['P_parkingSpaceID']) ? $_GET['P_parkingSpaceID'] : '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $bookingID = isset($_POST['bookingID']) ? $_POST['bookingID'] : '';
+$bookingID = isset($_POST['bookingID']) ? $_POST['bookingID'] : '';
 $plateNum = isset($_POST['plateNum']) ? $_POST['plateNum'] : '';
 $endTime = isset($_POST['endTime']) ? $_POST['endTime'] : '';
-
+$parkingSpace= isset($_GET['P_parkingSpaceID']) ? $_GET['P_parkingSpaceID'] : '';
 
     if (!empty($bookingID)) {
         // Update existing booking
@@ -220,25 +219,52 @@ mysqli_close($link);
         .action-buttons button {
             margin: 0 10px;
         }
+        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($bookingID)) : ?>
+        .booking-info {
+            display: none;
+        }
+        <?php endif; ?>
     </style>
 </head>
 <body>
-    <div class="content-container">
-        <h2>Parking Booking</h2>
-        <form method="POST">
-            <input type="hidden" name="bookingID" value="<?= isset($booking['B_bookingID']) ? htmlspecialchars($booking['B_bookingID']) : '' ?>">
-            <label for="plateNum">Plate Number:</label>
-            <input type="text" name="plateNum" id="plateNum" value="<?= isset($booking['V_plateNum']) ? htmlspecialchars($booking['V_plateNum']) : '' ?>" required>
+  <div class="content-container">
+    <?php if (isset($booking)): ?>
+        <div class="booking-info">
+            <h2>Parking Booking</h2>
+            <form method="POST">
+                <input type="hidden" name="bookingID" value="<?= isset($booking['B_bookingID']) ? htmlspecialchars($booking['B_bookingID']) : '' ?>">
+                <label for="plateNum">Plate Number:</label>
+                <input type="text" name="plateNum" id="plateNum" value="<?= isset($booking['V_plateNum']) ? htmlspecialchars($booking['V_plateNum']) : '' ?>" required>
 
-            <label for="endTime">End Time:</label>
-            <input type="datetime-local" name="endTime" id="endTime" value="<?= isset($booking['B_endTime']) ? htmlspecialchars($booking['B_endTime']) : '' ?>" required>
+                <label for="endTime">End Time:</label>
+                <input type="datetime-local" name="endTime" id="endTime" value="<?= isset($booking['B_endTime']) ? htmlspecialchars($booking['B_endTime']) : '' ?>" required>
 
-            <label for="P_parkingSpaceID">Parking Space ID:</label>
-            <input type="text" name="P_parkingSpaceID" id="P_parkingSpaceID" value="<?= isset($booking['P_parkingSpaceID']) ? htmlspecialchars($booking['P_parkingSpaceID']) : '' ?>" required>
+                <label for="P_parkingSpaceID">Parking Space ID:</label>
+                <input type="text" name="P_parkingSpaceID" id="P_parkingSpaceID" value="<?= isset($booking['P_parkingSpaceID']) ? htmlspecialchars($booking['P_parkingSpaceID']) : '' ?>" required>
 
-            <button type="submit">Submit</button>
-        </form>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    <?php else: ?>
+        <div class="booking-info">
+            <h2>Parking Booking</h2>
+            <form method="POST">
+                <input type="hidden" name="bookingID" value="">
+                <label for="plateNum">Plate Number:</label>
+                <input type="text" name="plateNum" id="plateNum" value="<?= isset($plateNum) ? htmlspecialchars($plateNum) : '' ?>" required>
 
+                <label for="endTime">End Time:</label>
+                <input type="datetime-local" name="endTime" id="endTime" value="<?= date('Y-m-d\TH:i:s') ?>" required>
+
+                <label for="P_parkingSpaceID">Parking Space ID:</label>
+                <input type="text" name="P_parkingSpaceID" id="P_parkingSpaceID" value="<?= isset($parkingSpace) ? htmlspecialchars($parkingSpace) : '' ?>" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    <?php endif; ?>
+</div>
+        
         <?php if (isset($booking)): ?>
             <div class="parking-info">
                 <div>
@@ -264,10 +290,6 @@ mysqli_close($link);
             </div>
         <?php endif; ?>
 
-        <div class="action-buttons">
-            <button onclick="window.location.href='view_parking.php'">View Parking</button>
-            <button onclick="window.location.href='view_bookingpage.php'">View Bookings</button>
-        </div>
     </div>
 </body>
 </html>

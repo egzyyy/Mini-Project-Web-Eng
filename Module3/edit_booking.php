@@ -99,6 +99,66 @@ mysqli_close($link);
         .location-section {
             display: none; /* Hide all location-specific sections initially */
         }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        .content-container h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        form p {
+            font-weight: bold;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        form input, form select {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .location-section {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        @media (min-width: 600px) {
+            form p, form label, form input, form select {
+                max-width: 50%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
     </style>
     <script>
         function showParkingSpaces(location) {
@@ -143,15 +203,6 @@ mysqli_close($link);
         <?php foreach ($bookings as $booking): ?>
             <form method="POST" action="module3/update.php"> <!-- Changed action to update.php -->
                 <p>Booking ID: <?php echo htmlspecialchars($booking['B_bookingID']); ?></p>
-                <p>Location:
-                    <select id="location" name="P_location" required>
-                        <?php foreach ($locations as $location): ?>
-                            <option value="<?php echo htmlspecialchars($location); ?>" <?php if ($booking['P_location'] == $location) echo 'selected'; ?>>
-                                <?php echo htmlspecialchars($location); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </p>
                 <p>Status: <?php echo htmlspecialchars($booking['P_status']); ?></p>
                 <p>Type: <?php echo htmlspecialchars($booking['P_parkingType']); ?></p>
                 <p>Start Time: <?php echo htmlspecialchars($booking['B_startTime']); ?></p>
@@ -167,7 +218,14 @@ mysqli_close($link);
                     <?php endforeach; ?>
                 </select>
                 <br>
-
+                <label for="location">Location:</label>
+                    <select id="location" name="P_location" required>
+                        <?php foreach ($locations as $location): ?>
+                            <option value="<?php echo htmlspecialchars($location); ?>" <?php if ($booking['P_location'] == $location) echo 'selected'; ?>>
+                                <?php echo htmlspecialchars($location); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 <!-- Hidden sections for parking spaces based on location -->
                 <?php foreach ($locations as $location): ?>
                     <div id="location-<?php echo htmlspecialchars($location); ?>" class="location-section">

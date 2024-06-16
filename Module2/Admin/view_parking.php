@@ -163,21 +163,21 @@ if ($parkingSpaceID) {
                 <label>QR Code:</label>
                 <img src="../../QRImage/parking<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>.png" alt="QR Code">
             </div>
-            <div class="action-buttons">
-            <a href="../../module3/parking.php?P_parkingSpaceID=<?php echo urlencode($parkingSpaceID); ?>&BookingID=<?php echo urlencode($bookingID); ?>&V_vehicleID=<?php echo urlencode($vehicleID); ?>&B_startTime=<?php echo urlencode($startTime); ?>&V_plateNum=<?php echo urlencode($plateNum); ?>&P_location=<?php echo urlencode($location); ?>&P_status=<?php echo urlencode($status); ?>&P_parkingType=<?php echo urlencode($type); ?>" class="action-button">Enter End Time</a>
-                <!-- Add more action buttons here if needed -->
-                <!-- Add more action buttons here if needed -->
-            </div>
+           
+            <form id="endTimeForm" action="../../module3/parking.php" method="GET">
+            <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>">
+            <input type="hidden" name="BookingID" value="<?php echo urlencode($bookingID); ?>">
+            <input type="hidden" name="V_vehicleID" value="<?php echo urlencode($vehicleID); ?>">
+            <input type="hidden" name="B_startTime" value="<?php echo urlencode($startTime); ?>">
+            <input type="hidden" name="V_plateNum" value="<?php echo urlencode($plateNum); ?>">
+            <input type="hidden" name="P_location" value="<?php echo urlencode($location); ?>">
+            <input type="hidden" name="P_status" value="<?php echo urlencode($status); ?>">
+            <input type="hidden" name="P_parkingType" value="<?php echo urlencode($type); ?>">
+            <button type="submit" class="action-button">Enter End Time</button>
+            </form>
+        
         </div>
-    <form id="endTimeForm" action="../../module3/parking.php" method="GET">
-    <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($parkingSpace['P_parkingSpaceID']); ?>">
-    <input type="hidden" name="BookingID" value="<?php echo urlencode($bookingID); ?>">
-    <input type="hidden" name="V_vehicleID" value="<?php echo urlencode($vehicleID); ?>">
-    <input type="hidden" name="B_startTime" value="<?php echo urlencode($startTime); ?>">
-    <input type="hidden" name="V_plateNum" value="<?php echo urlencode($plateNum); ?>">
-    <input type="hidden" name="P_location" value="<?php echo urlencode($location); ?>">
-    <input type="hidden" name="P_status" value="<?php echo urlencode($status); ?>">
-    <input type="hidden" name="P_parkingType" value="<?php echo urlencode($type); ?>">
+
     <?php else: ?>
         <p style="text-align: center;">Parking space not found. Please check the ID and try again.</p>
     <?php endif; ?>

@@ -66,8 +66,7 @@ if (isset($_GET['bookingID'])) {
     <form action="module2/Admin/view_parking.php" method="post">
         <input type="hidden" name="P_parkingSpaceID" value="<?php echo htmlspecialchars($booking['P_parkingSpaceID']); ?>">
         <input type="hidden" name="BookingID" value="<?php echo htmlspecialchars($bookingID); ?>">
-        <input type="hidden" name="V_vehicleID" value="<?php echo htmlspecialchars($vehicleID); ?>">
-        <input type="hidden" name="B_startTime" value="<?php echo htmlspecialchars($startTime); ?>">
+        <input type="hidden" name="B_startTime" value="<?php echo htmlspecialchars($booking['B_startTime']); ?>">
         <input type="hidden" name="V_plateNum" value="<?php echo htmlspecialchars($booking['V_plateNum']); ?>">
         <input type="hidden" name="P_location" value="<?php echo htmlspecialchars($booking['P_location']); ?>">
         <input type="hidden" name="P_status" value="<?php echo htmlspecialchars($booking['P_status']); ?>">

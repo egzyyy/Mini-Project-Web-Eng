@@ -12,28 +12,25 @@ mysqli_select_db($link, "web_eng");
 // Fetch parking space information based on the ID in the query string
 $parkingSpaceID = isset($_GET['P_parkingSpaceID']) ? mysqli_real_escape_string($link, $_GET['P_parkingSpaceID']) : '';
 
-if (isset($_GET['BookingID'], $_GET['P_parkingSpaceID'], $_GET['V_vehicleID'], $_GET['B_startTime'], $_GET['V_plateNum'], $_GET['P_location'], $_GET['P_status'], $_GET['P_parkingType'])) {
-    // Fetch parameters from $_GET
-    $bookingID = $_GET['BookingID'];
-    $parkingSpaceID = $_GET['P_parkingSpaceID'];
-    $vehicleID = $_GET['V_vehicleID'];
-    $startTime = $_GET['B_startTime'];
-    $vehiclePlateNum = $_GET['V_plateNum'];
-    $parkingLocation = $_GET['P_location'];
-    $parkingStatus = $_GET['P_status'];
-    $parkingType = $_GET['P_parkingType'];
+if (isset($_POST['BookingID'], $_POST['P_parkingSpaceID'], $_POST['B_startTime'], $_POST['V_plateNum'], $_POST['P_location'], $_POST['P_status'], $_POST['P_parkingType'])) {
+    // Fetch parameters from $_POS
+    $bookingID = $_POST['BookingID'];
+    $parkingSpaceID = $_POST['P_parkingSpaceID'];
+    $startTime = $_POST['B_startTime'];
+    $vehiclePlateNum = $_POST['V_plateNum'];
+    $parkingLocation = $_POST['P_location'];
+    $parkingStatus = $_POST['P_status'];
+    $parkingType = $_POST['P_parkingType'];
 
     // Example of using the fetched parameters
     echo "<h1>View Parking Page</h1>";
     echo "<p>Booking ID: " . htmlspecialchars($bookingID) . "</p>";
     echo "<p>Parking Space ID: " . htmlspecialchars($parkingSpaceID) . "</p>";
-    echo "<p>Vehicle ID: " . htmlspecialchars($vehicleID) . "</p>";
     echo "<p>Start Time: " . htmlspecialchars($startTime) . "</p>";
     echo "<p>Vehicle Plate Number: " . htmlspecialchars($vehiclePlateNum) . "</p>";
     echo "<p>Parking Location: " . htmlspecialchars($parkingLocation) . "</p>";
     echo "<p>Parking Status: " . htmlspecialchars($parkingStatus) . "</p>";
     echo "<p>Parking Type: " . htmlspecialchars($parkingType) . "</p>";
-
 } else {
     echo "Required parameters are missing.";
 }
